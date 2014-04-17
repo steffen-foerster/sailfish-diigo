@@ -14,21 +14,27 @@ TARGET = diigo
 
 CONFIG += sailfishapp
 
-SOURCES += src/diigo.cpp
+SOURCES += src/diigo.cpp \
+    src/sail_util.cpp
 
 OTHER_FILES += qml/diigo.qml \
     qml/cover/CoverPage.qml \
-    qml/pages/FirstPage.qml \
     qml/pages/SecondPage.qml \
     rpm/diigo.changes.in \
     rpm/diigo.spec \
     rpm/diigo.yaml \
     translations/*.ts \
     diigo.desktop \
-    qml/pages/SettingPage.qml
+    qml/pages/SettingPage.qml \
+    qml/pages/Bookmark.qml \
+    qml/pages/StartPage.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line
 CONFIG += sailfishapp_i18n
 TRANSLATIONS += translations/diigo-de.ts
+
+HEADERS += \
+    src/config.h \
+    src/sail_util.h
 

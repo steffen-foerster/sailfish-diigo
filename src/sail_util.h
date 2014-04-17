@@ -22,14 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import QtQuick 2.0
-import Sailfish.Silica 1.0
-import "pages"
+#ifndef SAIL_UTIL_H
+#define SAIL_UTIL_H
 
-ApplicationWindow
+#include <QObject>
+
+class SailUtil : public QObject
 {
-    initialPage: Component { StartPage { } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
-}
+    Q_OBJECT
 
+    Q_PROPERTY(QString apiKey READ getApiKey CONSTANT)
 
+public:
+    explicit SailUtil(QObject *parent = 0);
+
+    QString getApiKey() const;
+
+};
+
+#endif // SAIL_UTIL_H

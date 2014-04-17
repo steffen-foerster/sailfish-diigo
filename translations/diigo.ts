@@ -2,17 +2,25 @@
 <!DOCTYPE TS>
 <TS version="2.0">
 <context>
-    <name>FirstPage</name>
+    <name>Bookmark</name>
     <message>
-        <source>Show Page 2</source>
+        <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add Bookmark to Diigo</source>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Enter or paste bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -24,19 +32,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bookmark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save bookmark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Clear</source>
+        <source>Add Bookmark</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -44,6 +40,13 @@
     <name>SecondPage</name>
     <message>
         <source>Nested Page</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>StartPage</name>
+    <message>
+        <source>Add bookmark</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

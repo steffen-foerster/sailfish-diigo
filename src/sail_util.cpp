@@ -22,14 +22,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import QtQuick 2.0
-import Sailfish.Silica 1.0
-import "pages"
+#include "sail_util.h"
+#include "config.h"
 
-ApplicationWindow
+SailUtil::SailUtil(QObject *parent) :
+    QObject(parent)
 {
-    initialPage: Component { StartPage { } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
 }
 
-
+QString SailUtil::getApiKey() const
+{
+#ifndef CONFIG
+#error "Please define API_KEY"
+#else
+    return API_KEY;
+#endif
+}

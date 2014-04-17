@@ -24,12 +24,28 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "pages"
 
-ApplicationWindow
-{
-    initialPage: Component { StartPage { } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
+/**
+ * Startpage shows the last 5 created Bookmarks.
+ */
+Page {
+    id: page
+
+    SilicaFlickable {
+        anchors.fill: parent
+
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Add bookmark")
+                onClicked: pageStack.push(Qt.resolvedUrl("Bookmark.qml"))
+            }
+        }
+
+        // contentHeight: column.height
+
+        Label {
+            text: SailUtil.apiKey
+            width: 100
+        }
+    }
 }
-
-
