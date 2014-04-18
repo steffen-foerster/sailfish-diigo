@@ -65,10 +65,6 @@ Page {
             PageHeader {
                 title: qsTr("Add Bookmark")
             }
-            Label {
-                text: Util.getApiKey()
-                width: column.width
-            }
 
             TextField {
                 id: bookmark

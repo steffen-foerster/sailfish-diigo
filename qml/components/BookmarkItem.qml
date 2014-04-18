@@ -24,13 +24,22 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "pages"
 
-ApplicationWindow
-{
-    initialPage: Component { StartPage { } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
+Item {
 
+    id: parent
+
+    height: label.height
+
+    property string title: ""
+
+    property string url: ""
+
+    Label {
+        id: label
+        color: Theme.primaryColor
+        wrapMode: Text.Wrap
+        text: title
+        width: parent.width
+    }
 }
-
-

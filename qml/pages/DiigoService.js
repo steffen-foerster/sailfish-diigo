@@ -22,15 +22,50 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import QtQuick 2.0
-import Sailfish.Silica 1.0
-import "pages"
+.pragma library
+.import "HttpClient.js" as HttpClient
+.import "Settings.js" as Settings
 
-ApplicationWindow
-{
-    initialPage: Component { StartPage { } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
+/**
+ * Documentation of the Diigo API: https://www.diigo.com/api_dev
+ */
+var Instance = {
 
+    URL_FETCH_BOOKMARK : "https://secure.diigo.com/api/v2/bookmarks",
+
+    SORT_CREATED_AT : 0,
+
+    SORT_UPDATED_AT : 1,
+
+    SORT_POPULARITY : 2,
+
+    SORT_HOT : 3,
+
+    FILTER_ALL : "all",
+
+    FILTER_PUBLIC : "public",
+
+    /**
+     * Returns the last created bookmarks.
+     */
+    getLastBookmarks : function(count, onSuccess, onFailure, apiKey) {
+        var queryParams = {
+            user : Settings.Instance.getUser(),
+            start : 0,
+            count : count,
+            sort : this.SORT_CREATED_AT,
+            filter : this.FILTER_ALL
+        }
+
+        HttpClient.Instance.performGetRequest(
+                    this.URL_FETCH_BOOKMARK,
+                    queryParams,
+                    onSuccess,
+                    onFailure,
+                    Settings.Instance.getUser(),
+                    Settings.Instance.getPassword(),
+                    apiKey);
+    }
 }
 
 

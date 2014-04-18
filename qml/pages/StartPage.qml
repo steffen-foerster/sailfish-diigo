@@ -24,6 +24,8 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import "../components"
+import "DiigoService.js" as DiigoService
 
 /**
  * Startpage shows the last 5 created Bookmarks.
@@ -31,7 +33,12 @@ import Sailfish.Silica 1.0
 Page {
     id: page
 
-    SilicaFlickable {
+    Component.onCompleted: {
+        //DiigoService.Instance.getLastBookmarks(5, showBookmarks, showError);
+    }
+
+    SilicaListView {
+        id: bookmarkList
         anchors.fill: parent
 
         PullDownMenu {
@@ -39,13 +46,107 @@ Page {
                 text: qsTr("Add bookmark")
                 onClicked: pageStack.push(Qt.resolvedUrl("Bookmark.qml"))
             }
+            MenuItem {
+                text: qsTr("Show recent bookmarks")
+                onClicked: DiigoService.Instance.getLastBookmarks(
+                               2, showBookmarks, showError, SailUtil.apiKey)
+            }
         }
 
-        // contentHeight: column.height
-
-        Label {
-            text: SailUtil.apiKey
-            width: 100
+        header: PageHeader {
+            title: qsTr("Your recent bookmarks")
         }
+
+        //height: page.height
+        width: page.width
+        spacing: Theme.paddingLarge
+        model: ListModel {
+            id: bookmarkModel
+        }
+        delegate: Item {
+            id: wrapper
+            height: itemColumn.height //Theme.itemSizeSmall
+            property string url: url
+
+            Column {
+                id: itemColumn
+                anchors {
+                    left: wrapper.left
+                    //right: parent.right
+                    margins: Theme.paddingLarge
+                }
+                Label {
+                    id: lbTitle
+                    color: Theme.primaryColor
+                    font.pixelSize: Theme.fontSizeSmall
+                    wrapMode: Text.Wrap
+                    text: title
+                    width: wrapper.ListView.view.width - (2 * Theme.paddingLarge)
+                    //truncationMode: TruncationMode.Fade
+                }
+                Label {
+                    id: lbCreated
+                    anchors {
+                        left: lbTitle.left
+                    }
+                    color: Theme.secondaryColor
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    text: formatTimestamp(created_at)
+                }
+                MouseArea {
+                    anchors.fill: lbTitle
+                    onClicked: {
+                        console.log("opening URL: " + wrapper.url)
+                        SailUtil.openBrowser("http://www.heise.de")
+                    }
+                }
+            }
+
+        }
+        VerticalScrollDecorator {}
     }
+
+    function formatTimestamp(timestamp) {
+        return timestamp.substr(0, 10);
+    }
+
+    // "title":"Diigo API Help",
+    // "url":"http://www.diigo.com/help/api.html",
+    // "user":"foo",
+    // "desc":"",
+    // "tags":"test,diigo,help",
+    // "shared":"yes",
+    // "created_at":"2008/04/30 06:28:54 +0800",
+    // "updated_at":"2008/04/30 06:28:54 +0800",
+    // "comments":[],
+    // "annotations":[]
+
+
+    function showBookmarks(bookmarks) {
+        bookmarkModel.clear();
+
+        for (var i = 0; i < bookmarks.length; i++) {
+            bookmarkModel.append(bookmarks[i]);
+        }
+
+        /*
+        var component = Qt.createComponent("../components/BookmarkItem.qml");
+        if (component.status === Component.Ready) {
+            for (var i = 0; i < bookmarks.length; i++) {
+                var item = component.createObject(column);
+                item.title = bookmarks[i].title;
+                item.url = bookmarks[i].url;
+                item.width = column.width
+            }
+        }
+        else {
+            console.log("Error loading component:", component.errorString());
+        }
+        */
+    }
+
+    function showError(error) {
+        console.error(error.message);
+    }
+
 }

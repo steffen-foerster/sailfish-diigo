@@ -22,15 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import QtQuick 2.0
-import Sailfish.Silica 1.0
-import "pages"
+.pragma library
+.import "test.js" as Test
 
-ApplicationWindow
-{
-    initialPage: Component { StartPage { } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
+var Instance = {
+    getUser : function() {
+        return Test.Credentials.user;
+    },
 
+    getPassword : function() {
+        return Test.Credentials.password;
+    }
 }
-
-

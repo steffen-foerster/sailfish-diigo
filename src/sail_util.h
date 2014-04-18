@@ -26,6 +26,8 @@ THE SOFTWARE.
 #define SAIL_UTIL_H
 
 #include <QObject>
+#include <QDesktopServices>
+#include <QUrl>
 
 class SailUtil : public QObject
 {
@@ -35,6 +37,8 @@ class SailUtil : public QObject
 
 public:
     explicit SailUtil(QObject *parent = 0);
+
+    Q_INVOKABLE bool openBrowser(QString url);
 
     QString getApiKey() const;
 

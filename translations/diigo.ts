@@ -49,5 +49,13 @@
         <source>Add bookmark</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Your recent bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show recent bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

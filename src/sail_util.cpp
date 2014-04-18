@@ -30,11 +30,14 @@ SailUtil::SailUtil(QObject *parent) :
 {
 }
 
-QString SailUtil::getApiKey() const
-{
+QString SailUtil::getApiKey() const {
 #ifndef CONFIG
 #error "Please define API_KEY"
 #else
     return API_KEY;
 #endif
+}
+
+bool SailUtil::openBrowser(QString url) {
+    return QDesktopServices::openUrl(QUrl(url));
 }
