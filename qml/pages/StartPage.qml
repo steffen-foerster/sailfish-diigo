@@ -34,7 +34,8 @@ Page {
     id: page
 
     Component.onCompleted: {
-        //DiigoService.Instance.getLastBookmarks(5, showBookmarks, showError);
+        DiigoService.Instance.getLastBookmarks(
+                    8, showBookmarks, showError, SailUtil.apiKey);
     }
 
     SilicaListView {
@@ -57,48 +58,45 @@ Page {
             title: qsTr("Your recent bookmarks")
         }
 
-        //height: page.height
         width: page.width
         spacing: Theme.paddingLarge
         model: ListModel {
             id: bookmarkModel
         }
-        delegate: Item {
+        delegate: ListItem {
             id: wrapper
-            height: itemColumn.height //Theme.itemSizeSmall
+            contentHeight: itemColumn.height
             property string url: url
+
+            onClicked: {
+                console.log("opening URL: " + wrapper.url)
+                Qt.openUrlExternally("http://www.heise.de")
+            }
 
             Column {
                 id: itemColumn
-                anchors {
-                    left: wrapper.left
-                    //right: parent.right
-                    margins: Theme.paddingLarge
-                }
                 Label {
+                    anchors {
+                        left: parent.left
+                        //right: parent.right
+                        margins: Theme.paddingLarge
+                    }
                     id: lbTitle
                     color: Theme.primaryColor
                     font.pixelSize: Theme.fontSizeSmall
                     wrapMode: Text.Wrap
                     text: title
                     width: wrapper.ListView.view.width - (2 * Theme.paddingLarge)
-                    //truncationMode: TruncationMode.Fade
                 }
                 Label {
                     id: lbCreated
                     anchors {
-                        left: lbTitle.left
+                        left: parent.left
+                        margins: Theme.paddingLarge
                     }
                     color: Theme.secondaryColor
                     font.pixelSize: Theme.fontSizeExtraSmall
                     text: formatTimestamp(created_at)
-                }
-                MouseArea {
-                    anchors.fill: lbTitle
-                    onClicked: {
-                        console.log("opening URL: " + wrapper.url)
-                        SailUtil.openBrowser("http://www.heise.de")
-                    }
                 }
             }
 
