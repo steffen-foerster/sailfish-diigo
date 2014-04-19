@@ -34,12 +34,14 @@ Page {
     id: page
 
     Component.onCompleted: {
+        console.log("completedCallback");
         if (isSignedIn()) {
+            console.log("signed in");
             DiigoService.getRecentBookmarks(
                         8, showBookmarksCallback, showErrorCallback, getApiKey());
         }
         else {
-            pageStack.push(Qt.resolvedUrl("SettingPage.qml"));
+            console.log("not signed in");
         }
     }
 
@@ -57,10 +59,39 @@ Page {
                 onClicked: DiigoService.getRecentBookmarks(
                                2, showBookmarksCallback, showErrorCallback, getApiKey())
             }
+            MenuItem {
+                text: qsTr("Sign in / Settings")
+                onClicked: pageStack.push(Qt.resolvedUrl("SettingPage.qml"));
+            }
         }
 
         header: PageHeader {
-            title: qsTr("Your recent public bookmarks")
+            title: qsTr("Your recent bookmarks")
+        }
+
+        Item {
+            id: message
+            anchors.fill: parent
+            visible: bookmarkModel.count == 0
+
+            Label {
+                id: messageFirstLine
+                anchors.centerIn: parent
+                horizontalAlignment: Text.AlignHCenter
+                text: "Maybe not signed in"
+                color: Theme.highlightColor
+                font.pixelSize: Theme.fontSizeLarge
+            }
+            Label {
+                anchors {
+                    top: messageFirstLine.bottom
+                    horizontalCenter: messageFirstLine.horizontalCenter
+                }
+                horizontalAlignment: Text.AlignHCenter
+                text: "Pull down to sign in"
+                color: Theme.highlightColor
+                font.pixelSize: Theme.fontSizeSmall
+            }
         }
 
         width: page.width

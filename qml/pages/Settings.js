@@ -75,8 +75,8 @@ function setPassword(password, save, appContext) {
 function isSignedIn(appContext) {
     var user = get(keys.USER);
     var password = getPassword(appContext);
-    var hasUser = (user !== undefined && user.length() > 0);
-    var hasPassword = (password !== undefined && password.length() > 0);
+    var hasUser = (user !== undefined && user.length > 0);
+    var hasPassword = (password !== undefined && password.length > 0);
     return hasUser && hasPassword;
 }
 

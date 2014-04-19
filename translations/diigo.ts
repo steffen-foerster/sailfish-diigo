@@ -53,10 +53,6 @@
 <context>
     <name>SettingPage</name>
     <message>
-        <source>Reset to defaults</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -72,6 +68,10 @@
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Reset to defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StartPage</name>
@@ -84,7 +84,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Your recent public bookmarks</source>
+        <source>Sign in / Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your recent bookmarks</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

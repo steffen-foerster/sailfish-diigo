@@ -63,7 +63,9 @@ function getRecentBookmarks(count, onSuccess, onFailure, apiKey) {
                 URL_FETCH_BOOKMARK,
                 queryParams,
                 onSuccess,
-                onFailure);
+                onFailure,
+                Settings.get(Settings.keys.USER),
+                Settings.getPassword());
 }
 
 

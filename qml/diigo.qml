@@ -29,8 +29,6 @@ import "pages/Settings.js" as Settings
 
 ApplicationWindow
 {
-    property var
-
     initialPage: Component { StartPage { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
