@@ -24,8 +24,100 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import "Settings.js" as Settings
 
-Rectangle {
-    width: 100
-    height: 62
+/**
+ * Page to save user settings.
+ */
+Dialog {
+    id: page
+
+    onAccepted: {
+        Settings.set(Settings.keys.COUNT_RECENT_BOOKMARKS, recentBookmarks.value);
+        Settings.setBoolean(Settings.keys.SAVE_PASSWORD, savePassword.checked);
+        Settings.setPassword(password.text, savePassword.checked, getAppContext());
+        Settings.set(Settings.keys.USER, user.text);
+    }
+
+    SilicaFlickable {
+        anchors.fill: parent
+
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Reset to defaults")
+                onClicked: {
+                    bookmark.user = ""
+                    password.text = ""
+                    savePassword.checked = false
+                    recentBookmarks.value = 5
+                }
+            }
+        }
+
+        contentHeight: column.height
+
+        Column {
+            id: column
+
+            x: Theme.paddingLarge
+            width: parent.width - 2 * Theme.paddingLarge
+            spacing: Theme.paddingMedium
+
+            PageHeader {
+                id: header
+                title: qsTr("Settings")
+            }
+
+            TextField {
+                id: user
+                placeholderText: qsTr("Username")
+                label: qsTr("Username")
+                width: parent.width
+                EnterKey.enabled: text.length > 0
+                EnterKey.iconSource: "image://theme/icon-m-enter-next"
+                EnterKey.onClicked: password.focus = true
+                text: Settings.get(Settings.keys.USER)
+            }
+
+            TextField {
+                id: password
+                placeholderText: qsTr("Password")
+                label: qsTr("Password")
+                width: parent.width
+                echoMode: TextInput.Password
+                EnterKey.enabled: false
+                text: Settings.get(Settings.keys.PASSWORD)
+            }
+
+            Label {
+                anchors {
+                    right: header.right
+                    rightMargin: Theme.paddingLarge
+                }
+                text: qsTr("It's comfortable but not save")
+                width: parent.width
+                color: Theme.highlightColor
+                font.pixelSize: Theme.fontSizeExtraSmall
+                horizontalAlignment: Text.AlignRight
+            }
+
+            TextSwitch {
+                id: savePassword
+                text: "Save password"
+                description: "Save password on your phone"
+                checked: Settings.getBoolean(Settings.keys.SAVE_PASSWORD)
+            }
+
+            Slider {
+                id: recentBookmarks
+                label: qsTrId("Recent bookmarks")
+                width: parent.width
+                minimumValue: 5
+                maximumValue: 50
+                stepSize: 5
+                valueText: value
+                value: Settings.get(Settings.keys.COUNT_RECENT_BOOKMARKS)
+            }
+        }
+    }
 }

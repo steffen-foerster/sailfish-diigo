@@ -29,10 +29,10 @@ THE SOFTWARE.
 /**
  * Documentation of the Diigo API: https://www.diigo.com/api_dev
  */
-var Instance = {
 
-    URL_FETCH_BOOKMARK : "https://secure.diigo.com/api/v2/bookmarks",
+var URL_FETCH_BOOKMARK = "https://secure.diigo.com/api/v2/bookmarks";
 
+var searchParam = {
     SORT_CREATED_AT : 0,
 
     SORT_UPDATED_AT : 1,
@@ -43,29 +43,28 @@ var Instance = {
 
     FILTER_ALL : "all",
 
-    FILTER_PUBLIC : "public",
-
-    /**
-     * Returns the last created bookmarks.
-     */
-    getLastBookmarks : function(count, onSuccess, onFailure, apiKey) {
-        var queryParams = {
-            user : Settings.Instance.getUser(),
-            start : 0,
-            count : count,
-            sort : this.SORT_CREATED_AT,
-            filter : this.FILTER_ALL
-        }
-
-        HttpClient.Instance.performGetRequest(
-                    this.URL_FETCH_BOOKMARK,
-                    queryParams,
-                    onSuccess,
-                    onFailure,
-                    Settings.Instance.getUser(),
-                    Settings.Instance.getPassword(),
-                    apiKey);
-    }
+    FILTER_PUBLIC : "public"
 }
+
+/**
+ * Returns the recent created bookmarks.
+ */
+function getRecentBookmarks(count, onSuccess, onFailure, apiKey) {
+    var queryParams = {
+        key: apiKey,
+        user: Settings.get(Settings.keys.USER),
+        start: 0,
+        count: count,
+        sort: searchParam.SORT_CREATED_AT,
+        filter: searchParam.FILTER_ALL
+    }
+
+    HttpClient.performGetRequest(
+                URL_FETCH_BOOKMARK,
+                queryParams,
+                onSuccess,
+                onFailure);
+}
+
 
 

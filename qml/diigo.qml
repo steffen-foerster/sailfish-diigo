@@ -25,12 +25,35 @@ THE SOFTWARE.
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "pages"
+import "pages/Settings.js" as Settings
 
 ApplicationWindow
 {
+    property var
+
     initialPage: Component { StartPage { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
+    Component.onCompleted: {
+        Settings.initialize()
+    }
+
+    QtObject {
+        id: appContext
+        property string password: ""
+    }
+
+    function getApiKey() {
+        return SailUtil.apiKey;
+    }
+
+    function getAppContext() {
+        return appContext;
+    }
+
+    function isSignedIn() {
+        Settings.isSignedIn(appContext)
+    }
 }
 
 

@@ -33,7 +33,8 @@ OTHER_FILES += qml/diigo.qml \
     qml/pages/DiigoService.js \
     qml/pages/test.js \
     qml/pages/Settings.js \
-    qml/components/BookmarkItem.qml
+    qml/components/BookmarkItem.qml \
+    qml/pages/LocalStore.js
 
 # to disable building translations every time, comment out the
 # following CONFIG line

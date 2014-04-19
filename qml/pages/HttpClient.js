@@ -3,6 +3,10 @@ The MIT License (MIT)
 
 Copyright (c) 2014 Steffen Förster
 
+I used some ideas of the file
+https://github.com/tworaz/sailfish-ytplayer/pages/YoutubeClientV3.js
+from Peter Tworek for the below JavaScript.
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -24,49 +28,49 @@ THE SOFTWARE.
 
 .pragma library
 
-var Instance = {
+/**
+ * Performs an async GET request.
+ * It's mandatory to send the credentails for the method "GET", too.
+ */
+function performGetRequest(url, queryParams, onSuccess, onFailure, user, password) {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+        private.onReady(request, onSuccess, onFailure);
+    }
 
-    /**
-     * Performs an async GET request.
-     */
-    performGetRequest: function(url, queryParams, onSuccess, onFailure, user, password, apiKey) {
-        var request = new XMLHttpRequest();
-        request.onreadystatechange = function() {
-            Instance.onReady(request, onSuccess, onFailure);
-        }
+    url += ("?");
+    for (var paramKey in queryParams) {
+        url += ("&" + paramKey + "=" + queryParams[paramKey])
+    }
+    console.log("URL: ", url);
 
-        url += ("?key=" + apiKey);
-        for (var paramKey in queryParams) {
-            url += ("&" + paramKey + "=" + queryParams[paramKey])
-        }
-        console.log("URL: ", url);
+    request.open("GET", url, true, user, password);
+    request.send();
+}
 
-        request.open("GET", url, true, user, password);
-        request.send();
-    },
-
-    asyncFormPost: function (url, content, onSuccess, onFailure) {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    onSuccess(response);
-                } else {
-                    var details = xhr.responseText ? JSON.parse(xhr.responseText) : undefined;
-                    onFailure({ "code" : xhr.status, "details" : details });
-                }
+function asyncFormPost (url, content, onSuccess, onFailure) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                onSuccess(response);
+            } else {
+                var details = xhr.responseText ? JSON.parse(xhr.responseText) : undefined;
+                onFailure({ "code" : xhr.status, "details" : details });
             }
         }
-        xhr.open("POST", url);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Content-Length', content.length);
-        if (isAuthEnabled()) {
-            xhr.setRequestHeader("Authorization", _getAuthHeader());
-        }
-        xhr.send(content);
-    },
+    }
+    xhr.open("POST", url);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('Content-Length', content.length);
+    if (isAuthEnabled()) {
+        xhr.setRequestHeader("Authorization", _getAuthHeader());
+    }
+    xhr.send(content);
+};
 
+var private = {
     onReady : function(request, onSuccess, onFailure) {
         if (request.readyState === XMLHttpRequest.DONE) {
             if (request.status === 200) {
@@ -74,7 +78,7 @@ var Instance = {
                 console.log("response: ", response)
                 onSuccess(response);
             } else {
-                var errorResponse = Instance.handleError(request);
+                var errorResponse = this.handleError(request);
                 onFailure(errorResponse);
             }
         }
@@ -118,5 +122,4 @@ var Instance = {
         }
         return result;
     }
-
 }

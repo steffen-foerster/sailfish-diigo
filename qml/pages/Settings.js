@@ -23,14 +23,73 @@ THE SOFTWARE.
 */
 
 .pragma library
-.import "test.js" as Test
+.import "LocalStore.js" as LocalStore
 
-var Instance = {
-    getUser : function() {
-        return Test.Credentials.user;
-    },
+var keys = {
+    USER: "user",
+    PASSWORD: "password",
+    SAVE_PASSWORD: "save_password",
+    COUNT_RECENT_BOOKMARKS: "count_recent_bookmarks"
+}
 
-    getPassword : function() {
-        return Test.Credentials.password;
+var dBValues = {
+    B_TRUE: "true",
+    B_FALSE: "false"
+}
+
+function get(key) {
+    return LocalStore.get(key);
+}
+
+function getBoolean(key) {
+    return LocalStore.get(key) === dBValues.B_TRUE;
+}
+
+function set(key, value) {
+    LocalStore.set(key, value);
+}
+
+function setBoolean(key, value) {
+    var booleanStr = value ? dBValues.B_TRUE : dBValues.B_FALSE;
+    LocalStore.set(key, booleanStr);
+}
+
+function getPassword(appContext) {
+    if (getBoolean(keys.SAVE_PASSWORD)) {
+        return get(keys.PASSWORD);
     }
+    else {
+        return appContext.password;
+    }
+}
+
+function setPassword(password, save, appContext) {
+    if (save) {
+        set(keys.PASSWORD, password);
+    }
+    else {
+        appContext.password = password;
+    }
+}
+
+function isSignedIn(appContext) {
+    var user = get(keys.USER);
+    var password = getPassword(appContext);
+    var hasUser = (user !== undefined && user.length() > 0);
+    var hasPassword = (password !== undefined && password.length() > 0);
+    return hasUser && hasPassword;
+}
+
+/**
+ * Should be invoked after application start.
+ */
+function initialize() {
+    var defaultValues = {
+        user: "",
+        password: "",
+        save_password: dBValues.DISABLED,
+        count_recent_bookmarks: 10
+    }
+
+    LocalStore.initializeDatabase(defaultValues);
 }

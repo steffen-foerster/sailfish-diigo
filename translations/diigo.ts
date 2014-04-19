@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.0">
 <context>
+    <name></name>
+    <message id="Recent bookmarks">
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Bookmark</name>
     <message>
         <source>Search</source>
@@ -44,17 +51,40 @@
     </message>
 </context>
 <context>
+    <name>SettingPage</name>
+    <message>
+        <source>Reset to defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>It&apos;s comfortable but not save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>StartPage</name>
     <message>
         <source>Add bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Your recent bookmarks</source>
+        <source>Show recent bookmarks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show recent bookmarks</source>
+        <source>Your recent public bookmarks</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

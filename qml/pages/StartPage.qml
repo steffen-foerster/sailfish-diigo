@@ -28,14 +28,19 @@ import "../components"
 import "DiigoService.js" as DiigoService
 
 /**
- * Startpage shows the last 5 created Bookmarks.
+ * Startpage shows the recentenly created Bookmarks.
  */
 Page {
     id: page
 
     Component.onCompleted: {
-        DiigoService.Instance.getLastBookmarks(
-                    8, showBookmarks, showError, SailUtil.apiKey);
+        if (isSignedIn()) {
+            DiigoService.getRecentBookmarks(
+                        8, showBookmarksCallback, showErrorCallback, getApiKey());
+        }
+        else {
+            pageStack.push(Qt.resolvedUrl("SettingPage.qml"));
+        }
     }
 
     SilicaListView {
@@ -49,13 +54,13 @@ Page {
             }
             MenuItem {
                 text: qsTr("Show recent bookmarks")
-                onClicked: DiigoService.Instance.getLastBookmarks(
-                               2, showBookmarks, showError, SailUtil.apiKey)
+                onClicked: DiigoService.getRecentBookmarks(
+                               2, showBookmarksCallback, showErrorCallback, getApiKey())
             }
         }
 
         header: PageHeader {
-            title: qsTr("Your recent bookmarks")
+            title: qsTr("Your recent public bookmarks")
         }
 
         width: page.width
@@ -70,7 +75,7 @@ Page {
 
             onClicked: {
                 console.log("opening URL: " + wrapper.url)
-                Qt.openUrlExternally("http://www.heise.de")
+                Qt.openUrlExternally(wrapper.url)
             }
 
             Column {
@@ -120,7 +125,7 @@ Page {
     // "annotations":[]
 
 
-    function showBookmarks(bookmarks) {
+    function showBookmarksCallback(bookmarks) {
         bookmarkModel.clear();
 
         for (var i = 0; i < bookmarks.length; i++) {
@@ -143,7 +148,7 @@ Page {
         */
     }
 
-    function showError(error) {
+    function showErrorCallback(error) {
         console.error(error.message);
     }
 

@@ -60,7 +60,7 @@ Page {
         Column {
             id: column
 
-            width: page.width
+            width: parent.width
             spacing: Theme.paddingLarge
             PageHeader {
                 title: qsTr("Add Bookmark")
@@ -82,7 +82,7 @@ Page {
                 width: column.width
             }
             TextSwitch {
-                id: privaty
+                id: privacy
                 text: "Private"
                 description: "Save the bookmark as private"
                 onCheckedChanged: {
@@ -98,7 +98,7 @@ Page {
     function anyFieldChanged() {
         return bookmark.text.length > 0
                 || tags.text.length > 0
-                || privaty.checked;
+                || privacy.checked;
     }
 }
 
