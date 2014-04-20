@@ -35,7 +35,7 @@ THE SOFTWARE.
 function performGetRequest(url, queryParams, onSuccess, onFailure, user, password) {
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
-        private.onReady(request, onSuccess, onFailure);
+        private.onReady(request, onSuccess, onFailure, "GET");
     }
 
     url += ("?");
@@ -54,7 +54,7 @@ function performGetRequest(url, queryParams, onSuccess, onFailure, user, passwor
 function performPostRequest (url, queryParams, onSuccess, onFailure, user, password) {
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
-        private.onReady(request, onSuccess, onFailure);
+        private.onReady(request, onSuccess, onFailure, "POST");
     }
 
     var content = private.createPostBody(queryParams);
@@ -77,7 +77,7 @@ var private = {
         return content;
     },
 
-    onReady : function(request, onSuccess, onFailure) {
+    onReady : function(request, onSuccess, onFailure, method) {
         if (request.readyState === XMLHttpRequest.DONE) {
             if (request.status === 200) {
                 var response = JSON.parse(request.responseText);
@@ -85,6 +85,9 @@ var private = {
                 onSuccess(response);
             } else {
                 var errorResponse = this.handleError(request);
+                errorResponse.errorMessage = (method === "GET"
+                        ? qsTr("Cannot fetch bookmarks")
+                        : qsTr("Cannot save bookmark"));
                 onFailure(errorResponse);
             }
         }
@@ -94,7 +97,7 @@ var private = {
      * Performs logging of the error and returns an error message for the user.
      */
     handleError : function(request) {
-        var result = {message : "Service is unavailable"};
+        var result = {detailMessage : qsTr("Service request failed")};
 
         if (request.status === 400) {
             console.log("status ", request.status,
@@ -103,12 +106,12 @@ var private = {
         else if (request.status === 401) {
             console.log("status ", request.status,
                         " - Authentication credentials are missing or invalid");
-            result = {message : "Authentication failed"};
+            result = {detailMessage : qsTr("Authentication failed")};
         }
         else if (request.status === 403) {
             console.log("status ", request.status,
                         " - The request has been refused because of the lack of proper permission");
-            result = {message : "Authentication failed"};
+            result = {detailMessage : qsTr("Authentication failed")};
         }
         else if (request.status === 404) {
             console.log("status ", request.status,
