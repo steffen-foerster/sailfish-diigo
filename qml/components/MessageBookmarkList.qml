@@ -32,7 +32,7 @@ Item {
 
     property bool serviceError: false
 
-    property string errorMessage: ""
+    property variant serviceResult: undefined
 
     anchors.fill: parent
 
@@ -77,8 +77,8 @@ Item {
             messageSecondLine.text = qsTr("Pull down to sign in");
         }
         else if (serviceError) {
-            messageFirstLine.text = qsTr("Cannot fetch bookmarks");
-            messageSecondLine.text = errorMessage;
+            messageFirstLine.text = serviceResult.errorMessage;
+            messageSecondLine.text = serviceResult.detailMessage;
         }
         else {
             messageFirstLine.text = qsTr("No bookmarks found");
