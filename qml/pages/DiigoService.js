@@ -30,7 +30,7 @@ THE SOFTWARE.
  * Documentation of the Diigo API: https://www.diigo.com/api_dev
  */
 
-var URL_FETCH_BOOKMARK = "https://secure.diigo.com/api/v2/bookmarks";
+var URL_BOOKMARK = "https://secure.diigo.com/api/v2/bookmarks";
 
 var searchParam = {
     SORT_CREATED_AT : 0,
@@ -49,9 +49,9 @@ var searchParam = {
 /**
  * Returns the recent created bookmarks.
  */
-function getRecentBookmarks(count, onSuccess, onFailure, apiKey) {
+function getRecentBookmarks(count, onSuccess, onFailure, appContext) {
     var queryParams = {
-        key: apiKey,
+        key: appContext.apiKey,
         user: Settings.get(Settings.keys.USER),
         start: 0,
         count: count,
@@ -60,13 +60,47 @@ function getRecentBookmarks(count, onSuccess, onFailure, apiKey) {
     }
 
     HttpClient.performGetRequest(
-                URL_FETCH_BOOKMARK,
+                URL_BOOKMARK,
                 queryParams,
                 onSuccess,
                 onFailure,
                 Settings.get(Settings.keys.USER),
-                Settings.getPassword());
+                Settings.getPassword(appContext));
 }
 
+/**
+ * Saves the given bookmark.
+ *
+ * bookmark.title:      required, string, 1-250
+ * bookmark.url:        required, string, 1-250
+ * bookmark.shared:     optional, string (yes/no)
+ * bookmarks.tags:      optional, string, 1-250, comma separated
+ * bookmarks.desc:      optional, string, 1-250
+ * bookmarks.readLater: optional, string (yes/no)
+ */
+function addBookmark(bookmark, onSuccess, onFailure, appContext) {
+    var queryParams = {
+        key: appContext.apiKey,
+        user: Settings.get(Settings.keys.USER),
+        title: bookmark.title,
+        url: bookmark.url,
+        shared: bookmark.shared ? "yes" : "no",
+        readLater: bookmark.readLater ? "yes" : "no"
+    }
+    if (bookmark.tags !== undefined) {
+        queryParams.tags = bookmark.tags
+    }
+    if (bookmark.desc !== undefined) {
+        queryParams.desc = bookmark.desc
+    }
+
+    HttpClient.performPostRequest(
+                URL_BOOKMARK,
+                queryParams,
+                onSuccess,
+                onFailure,
+                Settings.get(Settings.keys.USER),
+                Settings.getPassword(appContext));
+}
 
 

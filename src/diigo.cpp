@@ -31,7 +31,6 @@ THE SOFTWARE.
 #include <QQuickView>
 #include <QtQml>
 #include <QDebug>
-#include <sailfishapp.h>
 
 #include "sail_util.h"
 

@@ -48,29 +48,35 @@ function performGetRequest(url, queryParams, onSuccess, onFailure, user, passwor
     request.send();
 }
 
-function asyncFormPost (url, content, onSuccess, onFailure) {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                onSuccess(response);
-            } else {
-                var details = xhr.responseText ? JSON.parse(xhr.responseText) : undefined;
-                onFailure({ "code" : xhr.status, "details" : details });
-            }
-        }
+/**
+ * Performs an async POST request.
+ */
+function performPostRequest (url, queryParams, onSuccess, onFailure, user, password) {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+        private.onReady(request, onSuccess, onFailure);
     }
-    xhr.open("POST", url);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.setRequestHeader('Content-Length', content.length);
-    if (isAuthEnabled()) {
-        xhr.setRequestHeader("Authorization", _getAuthHeader());
-    }
-    xhr.send(content);
+
+    var content = private.createPostBody(queryParams);
+    request.open("POST", url, true, user, password);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    request.setRequestHeader('Content-Length', content.length);
+    request.send(content);
 };
 
 var private = {
+
+    createPostBody : function(queryParams) {
+        var content = "";
+        for (var paramKey in queryParams) {
+            if (content.length > 0) {
+                content += "&";
+            }
+            content += (paramKey + "=" + escape(queryParams[paramKey]))
+        }
+        return content;
+    },
+
     onReady : function(request, onSuccess, onFailure) {
         if (request.readyState === XMLHttpRequest.DONE) {
             if (request.status === 200) {
@@ -88,7 +94,7 @@ var private = {
      * Performs logging of the error and returns an error message for the user.
      */
     handleError : function(request) {
-        var result = {message : "Diigo service is unavailable. Please try again later."};
+        var result = {message : "Service is unavailable"};
 
         if (request.status === 400) {
             console.log("status ", request.status,
@@ -97,12 +103,12 @@ var private = {
         else if (request.status === 401) {
             console.log("status ", request.status,
                         " - Authentication credentials are missing or invalid");
-            result = {message : "Authentication failed."};
+            result = {message : "Authentication failed"};
         }
         else if (request.status === 403) {
             console.log("status ", request.status,
                         " - The request has been refused because of the lack of proper permission");
-            result = {message : "Authentication failed."};
+            result = {message : "Authentication failed"};
         }
         else if (request.status === 404) {
             console.log("status ", request.status,

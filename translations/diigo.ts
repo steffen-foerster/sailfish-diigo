@@ -9,37 +9,64 @@
     </message>
 </context>
 <context>
-    <name>Bookmark</name>
-    <message>
-        <source>Search</source>
-        <translation type="unfinished"></translation>
-    </message>
+    <name>AddBookmarkPage</name>
     <message>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Save bookmark</source>
+        <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enter or paste bookmark</source>
+        <source>Add bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bookmark</source>
+        <source>Enter or paste URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enter your tags</source>
+        <source>URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tags</source>
+        <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add Bookmark</source>
+        <source>The bookmark is &quot;unread&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags, comma separated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MessageBookmarkList</name>
+    <message>
+        <source>Not signed in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pull down to sign in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot fetch bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No bookmarks found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pull down to add</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -72,6 +99,10 @@
         <source>Reset to defaults</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StartPage</name>
@@ -80,15 +111,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show recent bookmarks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Sign in / Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Your recent bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

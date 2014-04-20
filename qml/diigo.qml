@@ -33,16 +33,15 @@ ApplicationWindow
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
     Component.onCompleted: {
-        Settings.initialize()
+    }
+
+    Component.onDestruction: {
     }
 
     QtObject {
         id: appContext
         property string password: ""
-    }
-
-    function getApiKey() {
-        return SailUtil.apiKey;
+        property string apiKey: SailUtil.apiKey
     }
 
     function getAppContext() {
@@ -50,7 +49,7 @@ ApplicationWindow
     }
 
     function isSignedIn() {
-        Settings.isSignedIn(appContext)
+        return Settings.isSignedIn(appContext)
     }
 }
 

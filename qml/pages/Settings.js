@@ -55,19 +55,25 @@ function setBoolean(key, value) {
 }
 
 function getPassword(appContext) {
+    var password;
     if (getBoolean(keys.SAVE_PASSWORD)) {
-        return get(keys.PASSWORD);
+        console.log("return password from store");
+        password = get(keys.PASSWORD);
     }
     else {
-        return appContext.password;
+        console.log("return password from context");
+        password = appContext.password;
     }
+    return password;
 }
 
 function setPassword(password, save, appContext) {
     if (save) {
         set(keys.PASSWORD, password);
+        appContext.password = "";
     }
     else {
+        set(keys.PASSWORD, "");
         appContext.password = password;
     }
 }
@@ -76,7 +82,9 @@ function isSignedIn(appContext) {
     var user = get(keys.USER);
     var password = getPassword(appContext);
     var hasUser = (user !== undefined && user.length > 0);
+    console.log("hasUser: " + hasUser);
     var hasPassword = (password !== undefined && password.length > 0);
+    console.log("hasPassword: " + hasPassword);
     return hasUser && hasPassword;
 }
 
@@ -87,7 +95,7 @@ function initialize() {
     var defaultValues = {
         user: "",
         password: "",
-        save_password: dBValues.DISABLED,
+        save_password: dBValues.B_FALSE,
         count_recent_bookmarks: 10
     }
 

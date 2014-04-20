@@ -63,8 +63,8 @@ Dialog {
             width: parent.width - 2 * Theme.paddingLarge
             spacing: Theme.paddingMedium
 
-            PageHeader {
-                id: header
+            DialogHeader {
+                acceptText: qsTr("Save")
                 title: qsTr("Settings")
             }
 
@@ -85,8 +85,10 @@ Dialog {
                 label: qsTr("Password")
                 width: parent.width
                 echoMode: TextInput.Password
-                EnterKey.enabled: false
-                text: Settings.get(Settings.keys.PASSWORD)
+                EnterKey.enabled: text.length > 0
+                EnterKey.iconSource: "image://theme/icon-m-enter-accept"
+                EnterKey.onClicked: page.accept()
+                text: Settings.getPassword(getAppContext())
             }
 
             Label {

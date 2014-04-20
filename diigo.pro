@@ -26,15 +26,14 @@ OTHER_FILES += qml/diigo.qml \
     translations/*.ts \
     diigo.desktop \
     qml/pages/SettingPage.qml \
-    qml/pages/Bookmark.qml \
     qml/pages/StartPage.qml \
-    qml/pages/RecentBookmarks.js \
     qml/pages/HttpClient.js \
     qml/pages/DiigoService.js \
-    qml/pages/test.js \
     qml/pages/Settings.js \
     qml/components/BookmarkItem.qml \
-    qml/pages/LocalStore.js
+    qml/pages/LocalStore.js \
+    qml/components/MessageBookmarkList.qml \
+    qml/pages/AddBookmarkPage.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

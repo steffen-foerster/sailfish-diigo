@@ -26,22 +26,39 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "../components"
 import "DiigoService.js" as DiigoService
+import "Settings.js" as Settings
 
 /**
- * Startpage shows the recentenly created Bookmarks.
+ * Startpage shows the recentenly created bookmarks.
  */
 Page {
     id: page
 
-    Component.onCompleted: {
-        console.log("completedCallback");
-        if (isSignedIn()) {
-            console.log("signed in");
-            DiigoService.getRecentBookmarks(
-                        8, showBookmarksCallback, showErrorCallback, getApiKey());
-        }
-        else {
-            console.log("not signed in");
+    property bool signedIn: false
+
+    property bool settingsInitialized: false
+
+    onStatusChanged: {
+        if (status === PageStatus.Activating) {
+            if (!settingsInitialized) {
+                Settings.initialize();
+            }
+
+            message.visible = false;
+
+            signedIn = isSignedIn();
+            message.signedIn = signedIn;
+            if (signedIn) {
+                console.log("signed in");
+                var count = Settings.get(Settings.keys.COUNT_RECENT_BOOKMARKS);
+                DiigoService.getRecentBookmarks(
+                            count, showBookmarksCallback, showErrorCallback, getAppContext());
+            }
+            else {
+                console.log("not signed in");
+                bookmarkModel.clear();
+                message.visible = true;
+            }
         }
     }
 
@@ -52,15 +69,10 @@ Page {
         PullDownMenu {
             MenuItem {
                 text: qsTr("Add bookmark")
-                onClicked: pageStack.push(Qt.resolvedUrl("Bookmark.qml"))
+                onClicked: pageStack.push(Qt.resolvedUrl("AddBookmarkPage.qml"))
             }
             MenuItem {
-                text: qsTr("Show recent bookmarks")
-                onClicked: DiigoService.getRecentBookmarks(
-                               2, showBookmarksCallback, showErrorCallback, getApiKey())
-            }
-            MenuItem {
-                text: qsTr("Sign in / Settings")
+                text: (page.signedIn ? qsTr("Settings") : qsTr("Sign in / Settings"))
                 onClicked: pageStack.push(Qt.resolvedUrl("SettingPage.qml"));
             }
         }
@@ -69,33 +81,14 @@ Page {
             title: qsTr("Your recent bookmarks")
         }
 
-        Item {
+        MessageBookmarkList {
             id: message
-            anchors.fill: parent
-            visible: bookmarkModel.count == 0
-
-            Label {
-                id: messageFirstLine
-                anchors.centerIn: parent
-                horizontalAlignment: Text.AlignHCenter
-                text: "Maybe not signed in"
-                color: Theme.highlightColor
-                font.pixelSize: Theme.fontSizeLarge
-            }
-            Label {
-                anchors {
-                    top: messageFirstLine.bottom
-                    horizontalCenter: messageFirstLine.horizontalCenter
-                }
-                horizontalAlignment: Text.AlignHCenter
-                text: "Pull down to sign in"
-                color: Theme.highlightColor
-                font.pixelSize: Theme.fontSizeSmall
-            }
+            count: bookmarkModel.count
         }
 
         width: page.width
         spacing: Theme.paddingLarge
+
         model: ListModel {
             id: bookmarkModel
         }
@@ -140,6 +133,32 @@ Page {
         VerticalScrollDecorator {}
     }
 
+    function preparePage() {
+        /**
+         * TODO: Find better place to initialize the database.
+         */
+        if (!page.settingsInitialized) {
+            Settings.initialize();
+            page.settingsInitialized = true;
+        }
+
+        message.visible = false;
+
+        page.signedIn = isSignedIn();
+        message.signedIn = page.signedIn;
+        if (page.signedIn) {
+            console.log("signed in");
+            var count = Settings.get(Settings.keys.COUNT_RECENT_BOOKMARKS);
+            DiigoService.getRecentBookmarks(
+                        count, showBookmarksCallback, showErrorCallback, getAppContext());
+        }
+        else {
+            console.log("not signed in");
+            bookmarkModel.clear();
+            message.visible = true;
+        }
+    }
+
     function formatTimestamp(timestamp) {
         return timestamp.substr(0, 10);
     }
@@ -157,30 +176,21 @@ Page {
 
 
     function showBookmarksCallback(bookmarks) {
+        message.serviceError = false;
         bookmarkModel.clear();
 
         for (var i = 0; i < bookmarks.length; i++) {
             bookmarkModel.append(bookmarks[i]);
         }
 
-        /*
-        var component = Qt.createComponent("../components/BookmarkItem.qml");
-        if (component.status === Component.Ready) {
-            for (var i = 0; i < bookmarks.length; i++) {
-                var item = component.createObject(column);
-                item.title = bookmarks[i].title;
-                item.url = bookmarks[i].url;
-                item.width = column.width
-            }
-        }
-        else {
-            console.log("Error loading component:", component.errorString());
-        }
-        */
+        message.visible = bookmarkModel.count === 0;
     }
 
     function showErrorCallback(error) {
         console.error(error.message);
+        bookmarkModel.clear();
+        message.errorMessage = error.message;
+        message.serviceError = true;
+        message.visible = true;
     }
-
 }
