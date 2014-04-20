@@ -36,10 +36,19 @@ Dialog {
 
     onAccepted: {
         var bookmark = createBookmarkObj();
+        var previous = pageStack.previousPage(page);
+        previous.waitForServiceResult();
+
         DiigoService.addBookmark(bookmark,
-                                 showBookmarksCallback,
-                                 showErrorCallback,
+                                 previous.showBookmarksAfterAddCallback,
+                                 previous.showErrorCallback,
                                  getAppContext())
+    }
+
+    onRejected: {
+        // dont't refresh the StartPage
+        var previous = pageStack.previousPage(page);
+        previous.refresh = false;
     }
 
     SilicaFlickable {
