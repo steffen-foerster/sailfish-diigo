@@ -37,6 +37,16 @@ Dialog {
         Settings.setBoolean(Settings.keys.SAVE_PASSWORD, savePassword.checked);
         Settings.setPassword(password.text, savePassword.checked, getAppContext());
         Settings.set(Settings.keys.USER, user.text);
+
+        // refresh the StartPage
+        var previous = pageStack.previousPage(page);
+        previous.refresh = true;
+    }
+
+    onRejected: {
+        // dont't refresh the StartPage
+        var previous = pageStack.previousPage(page);
+        previous.refresh = false;
     }
 
     SilicaFlickable {
@@ -46,7 +56,7 @@ Dialog {
             MenuItem {
                 text: qsTr("Reset to defaults")
                 onClicked: {
-                    bookmark.user = ""
+                    user.text = ""
                     password.text = ""
                     savePassword.checked = false
                     recentBookmarks.value = 5
@@ -64,6 +74,7 @@ Dialog {
             spacing: Theme.paddingMedium
 
             DialogHeader {
+                id: header
                 acceptText: qsTr("Save")
                 title: qsTr("Settings")
             }
@@ -96,7 +107,7 @@ Dialog {
                     right: header.right
                     rightMargin: Theme.paddingLarge
                 }
-                text: qsTr("It's comfortable but not save")
+                text: qsTr("Note: It's comfortable but not save")
                 width: parent.width
                 color: Theme.highlightColor
                 font.pixelSize: Theme.fontSizeExtraSmall

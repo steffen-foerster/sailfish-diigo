@@ -34,31 +34,27 @@ import "Settings.js" as Settings
 Page {
     id: page
 
+    // Result of the last check
     property bool signedIn: false
 
     property bool settingsInitialized: false
 
+    // Flag controls if the page content should be updated on activation
+    property bool refresh: true;
+
     onStatusChanged: {
-        if (status === PageStatus.Activating) {
-            if (!settingsInitialized) {
-                Settings.initialize();
-            }
+        if (status === PageStatus.Active) {
+            preparePage();
+        }
+    }
 
-            message.visible = false;
-
-            signedIn = isSignedIn();
-            message.signedIn = signedIn;
-            if (signedIn) {
-                console.log("signed in");
-                var count = Settings.get(Settings.keys.COUNT_RECENT_BOOKMARKS);
-                DiigoService.getRecentBookmarks(
-                            count, showBookmarksCallback, showErrorCallback, getAppContext());
-            }
-            else {
-                console.log("not signed in");
-                bookmarkModel.clear();
-                message.visible = true;
-            }
+    Item {
+        anchors.fill: parent
+        BusyIndicator {
+            id: busyIndicator
+            anchors.centerIn: parent
+            running: false
+            size: BusyIndicatorSize.Large
         }
     }
 
@@ -68,12 +64,13 @@ Page {
 
         PullDownMenu {
             MenuItem {
-                text: qsTr("Add bookmark")
-                onClicked: pageStack.push(Qt.resolvedUrl("AddBookmarkPage.qml"))
-            }
-            MenuItem {
                 text: (page.signedIn ? qsTr("Settings") : qsTr("Sign in / Settings"))
                 onClicked: pageStack.push(Qt.resolvedUrl("SettingPage.qml"));
+            }
+            MenuItem {
+                text: qsTr("Add bookmark")
+                onClicked: pageStack.push(Qt.resolvedUrl("AddBookmarkPage.qml"))
+                visible: page.signedIn
             }
         }
 
@@ -95,11 +92,10 @@ Page {
         delegate: ListItem {
             id: wrapper
             contentHeight: itemColumn.height
-            property string url: url
 
             onClicked: {
-                console.log("opening URL: " + wrapper.url)
-                Qt.openUrlExternally(wrapper.url)
+                console.log("opening URL: " + url)
+                Qt.openUrlExternally(url)
             }
 
             Column {
@@ -134,6 +130,11 @@ Page {
     }
 
     function preparePage() {
+        // User has rejected a dialog or the page is waiting for a service result
+        if (!refresh) {
+            return;
+        }
+
         /**
          * TODO: Find better place to initialize the database.
          */
@@ -142,6 +143,7 @@ Page {
             page.settingsInitialized = true;
         }
 
+        busyIndicator.running = false;
         message.visible = false;
 
         page.signedIn = isSignedIn();
@@ -157,6 +159,13 @@ Page {
             bookmarkModel.clear();
             message.visible = true;
         }
+    }
+
+    function waitForServiceResult () {
+        bookmarkModel.clear();
+        message.visible = false;
+        busyIndicator.running = true;
+        refresh = false;
     }
 
     function formatTimestamp(timestamp) {
@@ -186,11 +195,18 @@ Page {
         message.visible = bookmarkModel.count === 0;
     }
 
+    function showBookmarksAfterAddCallback() {
+        busyIndicator.running = false;
+        refresh = true;
+        preparePage();
+    }
+
     function showErrorCallback(error) {
-        console.error(error.message);
+        console.error(error.detailMessage);
         bookmarkModel.clear();
-        message.errorMessage = error.message;
+        busyIndicator.running = false;
         message.serviceError = true;
+        message.serviceResult = error;
         message.visible = true;
     }
 }

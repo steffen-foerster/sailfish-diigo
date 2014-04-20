@@ -48,6 +48,25 @@
     </message>
 </context>
 <context>
+    <name>HttpClient</name>
+    <message>
+        <source>Cannot fetch bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot save bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Service request failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Authentication failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MessageBookmarkList</name>
     <message>
         <source>Not signed in</source>
@@ -55,10 +74,6 @@
     </message>
     <message>
         <source>Pull down to sign in</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot fetch bookmarks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -88,10 +103,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>It&apos;s comfortable but not save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
@@ -101,6 +112,10 @@
     </message>
     <message>
         <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note: It&apos;s comfortable but not save</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
