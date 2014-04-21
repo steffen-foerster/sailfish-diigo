@@ -34,6 +34,8 @@ Item {
 
     property variant serviceResult: undefined
 
+    property string mode: "";
+
     anchors.fill: parent
 
     onSignedInChanged: {
@@ -69,7 +71,7 @@ Item {
     }
 
     function computeText() {
-        if (! signedIn) {
+        if (mode === "START_PAGE" && !signedIn) {
             messageFirstLine.text = qsTr("Not signed in");
             messageSecondLine.text = qsTr("Pull down to sign in");
         }
@@ -77,9 +79,16 @@ Item {
             messageFirstLine.text = serviceResult.errorMessage;
             messageSecondLine.text = serviceResult.detailMessage;
         }
-        else {
+        else if (mode === "START_PAGE" && count === 0) {
             messageFirstLine.text = qsTr("No bookmarks found");
             messageSecondLine.text = qsTr("Pull down to add");
+        }
+        else if (mode === "RESULT_PAGE" && count === 0) {
+            messageFirstLine.text = qsTr("No bookmarks found");
+            messageSecondLine.text = qsTr("");
+        }
+        else {
+            console.assert(false, "Undefined State, mode: " + mode);
         }
     }
 }

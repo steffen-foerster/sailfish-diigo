@@ -28,13 +28,18 @@ THE SOFTWARE.
 var S_START = "s_start";
 var S_SETTINGS = "s_settings";
 var S_ADD = "s_add";
+var S_SEARCH = "s_search";
+var S_SEARCH_RESULT = "s_search_result";
 var S_ADD_WAIT_SERVICE = "s_add_wait_service";
+var S_SEARCH_WAIT_SERVICE = "s_search_wait_service";
 
 // Transitions
 var T_MAIN_START = "t_main_start";
 var T_START_SETTINGS = "t_start_settings";
 var T_START_ADD = "t_start_add";
+var T_START_SEARCH = "t_start_search";
 var T_SETTINGS_ACCEPTED = "t_settings_accepted";
 var T_SETTINGS_REJECTED = "t_settings_rejected";
 var T_ADD_REJECTED = "t_add_rejected";
 var T_ADD_SERVICE_RESULT_RECIEVED = "t_add_service_result_recieved";
+var T_SEARCH_REJECTED = "t_search_rejected";

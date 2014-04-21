@@ -111,7 +111,7 @@ Dialog {
                 placeholderText: qsTr("Tags, comma separated")
                 label: qsTr("Tags, comma separated")
                 width: column.width
-                EnterKey.enabled: text.length > 0
+                EnterKey.enabled: true
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
                 EnterKey.onClicked: description.focus = true
             }
@@ -120,7 +120,7 @@ Dialog {
                 placeholderText: qsTr("Description")
                 label: qsTr("Description")
                 width: column.width
-                EnterKey.enabled: text.length > 0
+                EnterKey.enabled: true
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
                 EnterKey.onClicked: shared.focus = true
             }

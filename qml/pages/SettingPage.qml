@@ -110,7 +110,7 @@ Dialog {
                     right: header.right
                     rightMargin: Theme.paddingLarge
                 }
-                text: qsTr("Note: It's comfortable but not save")
+                text: qsTr("Note: It's comfortable but not secure")
                 width: parent.width
                 color: Theme.highlightColor
                 font.pixelSize: Theme.fontSizeExtraSmall

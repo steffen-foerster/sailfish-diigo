@@ -30,22 +30,22 @@ import "Settings.js" as Settings
 import "AppState.js" as AppState
 
 /**
- * Startpage shows the recentenly created bookmarks.
+ * Startpage shows the searched bookmarks.
  */
 Page {
     id: page
 
-    // Result of the last check
-    property bool signedIn: false
+    property variant criteria
 
     onStatusChanged: {
         if (status === PageStatus.Active) {
-            // TODO: Find better place to initialize the database.
-            if (getAppContext().state === AppState.T_MAIN_START) {
-                Settings.initialize();
-            }
+            busyIndicator.running = true;
+            getAppContext().state = AppState.S_SEARCH_WAIT_SERVICE;
 
-            preparePage();
+            DiigoService.fetchBookmarks(criteria,
+                                     successCallback,
+                                     serviceErrorCallback,
+                                     getAppContext())
         }
     }
 
@@ -63,40 +63,15 @@ Page {
         id: bookmarkList
         anchors.fill: parent
 
-        PullDownMenu {
-            MenuItem {
-                text: (page.signedIn ? qsTr("Settings") : qsTr("Sign in / Settings"))
-                onClicked: {
-                    getAppContext().state = AppState.T_START_SETTINGS;
-                    pageStack.push(Qt.resolvedUrl("SettingPage.qml"));
-                }
-            }
-            MenuItem {
-                text: qsTr("Search")
-                onClicked: {
-                    getAppContext().state = AppState.T_START_SEARCH;
-                    pageStack.push(Qt.resolvedUrl("SearchPage.qml"))
-                }
-                visible: page.signedIn
-            }
-            MenuItem {
-                text: qsTr("Add bookmark")
-                onClicked: {
-                    getAppContext().state = AppState.T_START_ADD;
-                    pageStack.push(Qt.resolvedUrl("AddBookmarkPage.qml"))
-                }
-                visible: page.signedIn
-            }
-        }
-
         header: PageHeader {
-            title: qsTr("Your recent bookmarks")
+            title: qsTr("Search result")
         }
 
         MessageBookmarkList {
             id: message
+            visible: false;
             count: bookmarkModel.count
-            mode: "START_PAGE"
+            mode: "RESULT_PAGE"
         }
 
         width: page.width
@@ -145,51 +120,6 @@ Page {
         VerticalScrollDecorator {}
     }
 
-    function preparePage() {
-        var state = getAppContext().state;
-        console.log("preparePage, state: " + state);
-
-        // a dialog as rejected -> page isn't refreshed
-        if (state === AppState.T_ADD_REJECTED
-                || state === AppState.T_SETTINGS_REJECTED
-                || state === AppState.T_SEARCH_REJECTED) {
-            getAppContext().state = AppState.S_START;
-            return;
-        }
-        // we are waiting for the service result
-        if (state === AppState.S_ADD_WAIT_SERVICE) {
-            return;
-        }
-        // page was refreshed -> service has finished before page transition
-        if (state === AppState.S_START) {
-            return;
-        }
-
-        message.visible = false;
-
-        page.signedIn = isSignedIn();
-        message.signedIn = page.signedIn;
-        if (page.signedIn) {
-            console.log("signed in");
-            var count = Settings.get(Settings.keys.COUNT_RECENT_BOOKMARKS);
-            DiigoService.getRecentBookmarks(
-                        count, fetchBookmarksSuccessCallback, serviceErrorCallback, getAppContext());
-        }
-        else {
-            console.log("not signed in");
-            bookmarkModel.clear();
-            message.visible = true;
-        }
-        getAppContext().state = AppState.S_START;
-    }
-
-    function waitForServiceResult () {
-        bookmarkModel.clear();
-        message.visible = false;
-        busyIndicator.running = true;
-        getAppContext().state = AppState.S_ADD_WAIT_SERVICE;
-    }
-
     function formatTimestamp(timestamp) {
         return timestamp.substr(0, 10);
     }
@@ -198,31 +128,24 @@ Page {
     // callbacks
     // ---------------------------------------------------------
 
-    function fetchBookmarksSuccessCallback(bookmarks) {
-        message.serviceError = false;
-        bookmarkModel.clear();
+    function successCallback(bookmarks) {
+        busyIndicator.running = false;
 
         for (var i = 0; i < bookmarks.length; i++) {
             bookmarkModel.append(bookmarks[i]);
         }
 
         message.visible = bookmarkModel.count === 0;
-    }
-
-    function addBookmarkSuccessCallback() {
-        busyIndicator.running = false;
-        getAppContext().state = AppState.T_ADD_SERVICE_RESULT_RECIEVED;
-        preparePage();
+        getAppContext().state = AppState.S_SEARCH_RESULT;
     }
 
     function serviceErrorCallback(error) {
         console.error(error.detailMessage);
-        bookmarkModel.clear();
         busyIndicator.running = false;
         message.serviceError = true;
         message.serviceResult = error;
         message.visible = true;
-        getAppContext().state = AppState.S_START;
+        getAppContext().state = AppState.S_SEARCH_RESULT;
     }
 
 }

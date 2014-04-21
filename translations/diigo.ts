@@ -7,6 +7,10 @@
         <source></source>
         <translation type="unfinished"></translation>
     </message>
+    <message id="Returned bookmarks">
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddBookmarkPage</name>
@@ -107,6 +111,60 @@
         <source>Pull down to add</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source></source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>SearchPage</name>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags, comma separated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>List name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Public and private</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show public and private bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sort by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Created at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Updated at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Popularity</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SearchResultPage</name>
+    <message>
+        <source>Search result</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SettingPage</name>
@@ -131,7 +189,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Note: It&apos;s comfortable but not save</source>
+        <source>Note: It&apos;s comfortable but not secure</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -151,6 +209,10 @@
     </message>
     <message>
         <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

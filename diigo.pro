@@ -34,7 +34,9 @@ OTHER_FILES += qml/diigo.qml \
     qml/components/MessageBookmarkList.qml \
     qml/pages/AddBookmarkPage.qml \
     qml/pages/AppState.js \
-    qml/pages/Utils.js
+    qml/pages/Utils.js \
+    qml/pages/SearchPage.qml \
+    qml/pages/SearchResultPage.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

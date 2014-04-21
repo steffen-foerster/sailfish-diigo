@@ -69,6 +69,34 @@ function getRecentBookmarks(count, onSuccess, onFailure, appContext) {
 }
 
 /**
+ * Returns the bookmarks to the given criteria.
+ */
+function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
+    var queryParams = {
+        key: appContext.apiKey,
+        user: Settings.get(Settings.keys.USER),
+        start: 0,
+        count: searchCriteria.count,
+        sort: searchCriteria.sort,
+        filter: searchCriteria.filter ? searchParam.FILTER_ALL : searchParam.FILTER_PUBLIC,
+    }
+    if (searchCriteria.tags !== undefined && searchCriteria.tags.length > 0) {
+        queryParams.tags = searchCriteria.tags
+    }
+    if (searchCriteria.list !== undefined && searchCriteria.list.length > 0) {
+        queryParams.list = searchCriteria.list
+    }
+
+    HttpClient.performGetRequest(
+                URL_BOOKMARK,
+                queryParams,
+                onSuccess,
+                onFailure,
+                Settings.get(Settings.keys.USER),
+                Settings.getPassword(appContext));
+}
+
+/**
  * Saves the given bookmark.
  *
  * bookmark.title:      required, string, 1-250
@@ -87,10 +115,10 @@ function addBookmark(bookmark, onSuccess, onFailure, appContext) {
         shared: bookmark.shared ? "yes" : "no",
         readLater: bookmark.readLater ? "yes" : "no"
     }
-    if (bookmark.tags !== undefined) {
+    if (bookmark.tags !== undefined && bookmark.tags.length > 0) {
         queryParams.tags = bookmark.tags
     }
-    if (bookmark.desc !== undefined) {
+    if (bookmark.desc !== undefined && bookmark.desc.length > 0) {
         queryParams.desc = bookmark.desc
     }
 
