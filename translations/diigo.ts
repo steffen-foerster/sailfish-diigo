@@ -46,6 +46,29 @@
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Public</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save the bookmark as public</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read Later</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CoverPage</name>
+    <message>
+        <source>Add or search a bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>URL in clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HttpClient</name>
@@ -82,13 +105,6 @@
     </message>
     <message>
         <source>Pull down to add</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>SecondPage</name>
-    <message>
-        <source>Nested Page</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

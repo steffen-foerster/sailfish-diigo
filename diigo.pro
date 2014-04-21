@@ -19,7 +19,6 @@ SOURCES += src/diigo.cpp \
 
 OTHER_FILES += qml/diigo.qml \
     qml/cover/CoverPage.qml \
-    qml/pages/SecondPage.qml \
     rpm/diigo.changes.in \
     rpm/diigo.spec \
     rpm/diigo.yaml \
@@ -33,7 +32,9 @@ OTHER_FILES += qml/diigo.qml \
     qml/components/BookmarkItem.qml \
     qml/pages/LocalStore.js \
     qml/components/MessageBookmarkList.qml \
-    qml/pages/AddBookmarkPage.qml
+    qml/pages/AddBookmarkPage.qml \
+    qml/pages/AppState.js \
+    qml/pages/Utils.js
 
 # to disable building translations every time, comment out the
 # following CONFIG line

@@ -25,6 +25,7 @@ THE SOFTWARE.
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "Settings.js" as Settings
+import "AppState.js" as AppState
 
 /**
  * Page to save user settings.
@@ -32,21 +33,23 @@ import "Settings.js" as Settings
 Dialog {
     id: page
 
+    onStatusChanged: {
+        if (status === PageStatus.Active) {
+            getAppContext().state = AppState.S_ADD;
+        }
+    }
+
     onAccepted: {
         Settings.set(Settings.keys.COUNT_RECENT_BOOKMARKS, recentBookmarks.value);
         Settings.setBoolean(Settings.keys.SAVE_PASSWORD, savePassword.checked);
         Settings.setPassword(password.text, savePassword.checked, getAppContext());
         Settings.set(Settings.keys.USER, user.text);
 
-        // refresh the StartPage
-        var previous = pageStack.previousPage(page);
-        previous.refresh = true;
+        getAppContext().state = AppState.T_SETTINGS_ACCEPTED;
     }
 
     onRejected: {
-        // dont't refresh the StartPage
-        var previous = pageStack.previousPage(page);
-        previous.refresh = false;
+        getAppContext().state = AppState.T_SETTINGS_REJECTED;
     }
 
     SilicaFlickable {

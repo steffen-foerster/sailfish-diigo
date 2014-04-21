@@ -24,24 +24,104 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import "../pages/AppState.js" as AppState
+import "../pages/Utils.js" as Utils
+import "../pages"
 
 CoverBackground {
-    Label {
-        id: label
+
+    id: cover
+
+    CoverPlaceholder {
         anchors.centerIn: parent
-        text: "My Cover"
+        text: qsTr("Add or search a bookmark")
+    }
+
+    Label {
+        id: urlHint
+        visible: hasUrlInClipboard()
+        text: qsTr("URL in clipboard")
+        color: Theme.highlightColor
+        font.pixelSize: Theme.fontSizeSmall
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            margins: Theme.paddingLarge
+        }
+    }
+    Label {
+        visible: urlHint.visible
+        anchors {
+            top: urlHint.bottom
+            horizontalCenter: urlHint.horizontalCenter
+        }
+        text: startOfUrl()
+        color: Theme.highlightColor
+        font.pixelSize: Theme.fontSizeSmall
     }
 
     CoverActionList {
         id: coverAction
 
         CoverAction {
-            iconSource: "image://theme/icon-cover-next"
+            iconSource: "image://theme/icon-cover-new"
+            onTriggered: addBookmark()
         }
 
         CoverAction {
-            iconSource: "image://theme/icon-cover-pause"
+            iconSource: "image://theme/icon-cover-search"
+            onTriggered: search()
         }
+    }
+
+    function startOfUrl() {
+        if (hasUrlInClipboard()) {
+            var text = Clipboard.text;
+            if (text.indexOf("https") === 0) {
+                text = text.substring(8, text.length);
+            }
+            else {
+                text = text.substring(7, text.length);
+            }
+            return Utils.crop(text, 18);
+        }
+        return "";
+    }
+
+    function hasUrlInClipboard() {
+        if (Clipboard.hasText) {
+            var urls = Clipboard.text.match(/^http[s]*:\/\/.{3,242}$/);
+            if (urls.length > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function addBookmark () {
+        var state = getAppContext().state;
+        console.log("state: " + state);
+
+        var performAdd = true;
+        if (state === AppState.S_START) {
+            performAdd = true;
+        }
+        else if (state === AppState.S_SETTINGS ||
+                 state === AppState.S_ADD) {
+            pageStack.currentPage.reject();
+            performAdd = true;
+        }
+
+        if (performAdd) {
+            pageStack.completeAnimation();
+
+            getAppContext().state = AppState.T_START_ADD;
+            pageStack.push(Qt.resolvedUrl("../pages/AddBookmarkPage.qml"));
+            mainWindow.activate()
+        }
+    }
+
+    function search () {
+
     }
 }
 

@@ -22,35 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import QtQuick 2.0
-import Sailfish.Silica 1.0
+.pragma library
 
-
-Page {
-    id: page
-    SilicaListView {
-        id: listView
-        model: 20
-        anchors.fill: parent
-        header: PageHeader {
-            title: qsTr("Nested Page")
-        }
-        delegate: BackgroundItem {
-            id: delegate
-
-            Label {
-                x: Theme.paddingLarge
-                text: "Item " + index
-                anchors.verticalCenter: parent.verticalCenter
-                color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
-            }
-            onClicked: console.log("Clicked " + index)
-        }
-        VerticalScrollDecorator {}
+function crop(value, maxLength) {
+    if (value !== undefined && value.length > maxLength) {
+        return value.substr(0, maxLength);
+    }
+    else {
+        return value;
     }
 }
-
-
-
-
-

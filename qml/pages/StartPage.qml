@@ -27,6 +27,7 @@ import Sailfish.Silica 1.0
 import "../components"
 import "DiigoService.js" as DiigoService
 import "Settings.js" as Settings
+import "AppState.js" as AppState
 
 /**
  * Startpage shows the recentenly created bookmarks.
@@ -37,13 +38,13 @@ Page {
     // Result of the last check
     property bool signedIn: false
 
-    property bool settingsInitialized: false
-
-    // Flag controls if the page content should be updated on activation
-    property bool refresh: true;
-
     onStatusChanged: {
         if (status === PageStatus.Active) {
+            // TODO: Find better place to initialize the database.
+            if (getAppContext().state === AppState.T_MAIN_START) {
+                Settings.initialize();
+            }
+
             preparePage();
         }
     }
@@ -65,11 +66,17 @@ Page {
         PullDownMenu {
             MenuItem {
                 text: (page.signedIn ? qsTr("Settings") : qsTr("Sign in / Settings"))
-                onClicked: pageStack.push(Qt.resolvedUrl("SettingPage.qml"));
+                onClicked: {
+                    getAppContext().state = AppState.T_START_SETTINGS;
+                    pageStack.push(Qt.resolvedUrl("SettingPage.qml"));
+                }
             }
             MenuItem {
                 text: qsTr("Add bookmark")
-                onClicked: pageStack.push(Qt.resolvedUrl("AddBookmarkPage.qml"))
+                onClicked: {
+                    getAppContext().state = AppState.T_START_ADD;
+                    pageStack.push(Qt.resolvedUrl("AddBookmarkPage.qml"))
+                }
                 visible: page.signedIn
             }
         }
@@ -130,20 +137,24 @@ Page {
     }
 
     function preparePage() {
-        // User has rejected a dialog or the page is waiting for a service result
-        if (!refresh) {
+        var state = getAppContext().state;
+        console.log("preparePage, state: " + state);
+
+        // a dialog as rejected -> page isn't refreshed
+        if (state === AppState.T_ADD_REJECTED
+                || state === AppState.T_SETTINGS_REJECTED) {
+            getAppContext().state = AppState.S_START;
+            return;
+        }
+        // we are waiting for the service result
+        if (state === AppState.S_ADD_WAIT_SERVICE) {
+            return;
+        }
+        // page was refreshed -> service has finished before page transition
+        if (state === AppState.S_START) {
             return;
         }
 
-        /**
-         * TODO: Find better place to initialize the database.
-         */
-        if (!page.settingsInitialized) {
-            Settings.initialize();
-            page.settingsInitialized = true;
-        }
-
-        busyIndicator.running = false;
         message.visible = false;
 
         page.signedIn = isSignedIn();
@@ -152,39 +163,32 @@ Page {
             console.log("signed in");
             var count = Settings.get(Settings.keys.COUNT_RECENT_BOOKMARKS);
             DiigoService.getRecentBookmarks(
-                        count, showBookmarksCallback, showErrorCallback, getAppContext());
+                        count, fetchBookmarksSuccessCallback, serviceErrorCallback, getAppContext());
         }
         else {
             console.log("not signed in");
             bookmarkModel.clear();
             message.visible = true;
         }
+        getAppContext().state = AppState.S_START;
     }
 
     function waitForServiceResult () {
         bookmarkModel.clear();
         message.visible = false;
         busyIndicator.running = true;
-        refresh = false;
+        getAppContext().state = AppState.S_ADD_WAIT_SERVICE;
     }
 
     function formatTimestamp(timestamp) {
         return timestamp.substr(0, 10);
     }
 
-    // "title":"Diigo API Help",
-    // "url":"http://www.diigo.com/help/api.html",
-    // "user":"foo",
-    // "desc":"",
-    // "tags":"test,diigo,help",
-    // "shared":"yes",
-    // "created_at":"2008/04/30 06:28:54 +0800",
-    // "updated_at":"2008/04/30 06:28:54 +0800",
-    // "comments":[],
-    // "annotations":[]
+    // ---------------------------------------------------------
+    // callbacks
+    // ---------------------------------------------------------
 
-
-    function showBookmarksCallback(bookmarks) {
+    function fetchBookmarksSuccessCallback(bookmarks) {
         message.serviceError = false;
         bookmarkModel.clear();
 
@@ -195,18 +199,20 @@ Page {
         message.visible = bookmarkModel.count === 0;
     }
 
-    function showBookmarksAfterAddCallback() {
+    function addBookmarkSuccessCallback() {
         busyIndicator.running = false;
-        refresh = true;
+        getAppContext().state = AppState.T_ADD_SERVICE_RESULT_RECIEVED;
         preparePage();
     }
 
-    function showErrorCallback(error) {
+    function serviceErrorCallback(error) {
         console.error(error.detailMessage);
         bookmarkModel.clear();
         busyIndicator.running = false;
         message.serviceError = true;
         message.serviceResult = error;
         message.visible = true;
+        getAppContext().state = AppState.S_START;
     }
+
 }

@@ -37,17 +37,14 @@ Item {
     anchors.fill: parent
 
     onSignedInChanged: {
-        console.log("changed signedIn: " + signedIn);
         computeText()
     }
 
     onServiceErrorChanged: {
-        console.log("changed serviceError: " + serviceError);
         computeText()
     }
 
     onVisibleChanged: {
-        console.log("changed visible: " + visible);
         computeText()
     }
 

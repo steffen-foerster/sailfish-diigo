@@ -25,37 +25,46 @@ THE SOFTWARE.
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "DiigoService.js" as DiigoService
+import "AppState.js" as AppState
+import "Utils.js" as Utils
 
 /**
- * Page to a bookmark.
+ * Page to add a bookmark.
  */
 Dialog {
     id: page
 
-    canAccept: (url.text.length > 0 && title.text.length > 0)
+    onStatusChanged: {
+        if (status === PageStatus.Active) {
+            getAppContext().state = AppState.S_ADD;
+            autofillUrl();
+        }
+    }
 
-    onAccepted: {
-        var bookmark = createBookmarkObj();
+    canAccept: (!url.errorHighlight && !title.errorHighlight)
+
+    onAccepted: {     
         var previous = pageStack.previousPage(page);
         previous.waitForServiceResult();
 
+        var bookmark = createBookmarkObj();
         DiigoService.addBookmark(bookmark,
-                                 previous.showBookmarksAfterAddCallback,
-                                 previous.showErrorCallback,
+                                 previous.addBookmarkSuccessCallback,
+                                 previous.serviceErrorCallback,
                                  getAppContext())
     }
 
     onRejected: {
-        // dont't refresh the StartPage
-        var previous = pageStack.previousPage(page);
-        previous.refresh = false;
+        getAppContext().state = AppState.T_ADD_REJECTED;
     }
 
     SilicaFlickable {
         anchors.fill: parent
 
         PullDownMenu {
+            visible: menuClear.visible
             MenuItem {
+                id: menuClear
                 text: qsTr("Clear")
                 onClicked: clearFields()
                 visible: anyFieldChanged()
@@ -81,6 +90,7 @@ Dialog {
                 placeholderText: qsTr("Enter or paste URL")
                 label: qsTr("URL")
                 width: column.width
+                focus: true;
                 validator: RegExpValidator { regExp: /^http[s]*:\/\/.{3,242}$/ }
                 EnterKey.enabled: text.length > 0
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
@@ -116,15 +126,25 @@ Dialog {
             }
             TextSwitch {
                 id: shared
-                text: "Public"
-                description: "Save the bookmark as public"
+                text: qsTr("Public")
+                description: qsTr("Save the bookmark as public")
                 checked: true
             }
             TextSwitch {
                 id: readLater
-                text: "Read Later"
+                text: qsTr("Read Later")
                 description: qsTr("The bookmark is \"unread\"");
                 checked: false
+            }
+        }
+    }
+
+    function autofillUrl() {
+        if (Clipboard.hasText) {
+            var urls = Clipboard.text.match(/^http[s]*:\/\/.{3,242}$/);
+            if (urls.length > 0) {
+                url.text = urls[0];
+                title.focus = true;
             }
         }
     }
@@ -149,31 +169,14 @@ Dialog {
 
     function createBookmarkObj() {
         var bookmark = {
-            url: crop(url.text, 250),
-            title: crop(title.text, 250),
-            tags: crop(tags.text, 250),
-            desc: crop(description.text, 250),
+            url: Utils.crop(url.text, 250),
+            title: Utils.crop(title.text, 250),
+            tags: Utils.crop(tags.text, 250),
+            desc: Utils.crop(description.text, 250),
             shared: shared.checked,
             readLater: readLater.checked
         }
         return bookmark;
-    }
-
-    function crop(value, maxLength) {
-        if (value !== undefined && value.length > maxLength) {
-            return value.substr(0, maxLength);
-        }
-        else {
-            return value;
-        }
-    }
-
-    function showBookmarksCallback() {
-        console.log("saved");
-    }
-
-    function showErrorCallback(error) {
-        console.error(error.message);
     }
 }
 
