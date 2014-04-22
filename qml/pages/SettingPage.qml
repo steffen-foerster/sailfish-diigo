@@ -31,7 +31,7 @@ import "AppState.js" as AppState
  * Page to save user settings.
  */
 Dialog {
-    id: page
+    id: settingPage
 
     onStatusChanged: {
         if (status === PageStatus.Active) {
@@ -101,7 +101,7 @@ Dialog {
                 echoMode: TextInput.Password
                 EnterKey.enabled: text.length > 0
                 EnterKey.iconSource: "image://theme/icon-m-enter-accept"
-                EnterKey.onClicked: page.accept()
+                EnterKey.onClicked: settingPage.accept()
                 text: Settings.getPassword(getAppContext())
             }
 

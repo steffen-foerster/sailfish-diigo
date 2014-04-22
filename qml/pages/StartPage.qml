@@ -33,7 +33,7 @@ import "AppState.js" as AppState
  * Startpage shows the recentenly created bookmarks.
  */
 Page {
-    id: page
+    id: startPage
 
     // Result of the last check
     property bool signedIn: false
@@ -65,7 +65,7 @@ Page {
 
         PullDownMenu {
             MenuItem {
-                text: (page.signedIn ? qsTr("Settings") : qsTr("Sign in / Settings"))
+                text: (startPage.signedIn ? qsTr("Settings") : qsTr("Sign in / Settings"))
                 onClicked: {
                     getAppContext().state = AppState.T_START_SETTINGS;
                     pageStack.push(Qt.resolvedUrl("SettingPage.qml"));
@@ -77,7 +77,7 @@ Page {
                     getAppContext().state = AppState.T_START_SEARCH;
                     pageStack.push(Qt.resolvedUrl("SearchPage.qml"))
                 }
-                visible: page.signedIn
+                visible: startPage.signedIn
             }
             MenuItem {
                 text: qsTr("Add bookmark")
@@ -85,7 +85,7 @@ Page {
                     getAppContext().state = AppState.T_START_ADD;
                     pageStack.push(Qt.resolvedUrl("AddBookmarkPage.qml"))
                 }
-                visible: page.signedIn
+                visible: startPage.signedIn
             }
         }
 
@@ -99,7 +99,7 @@ Page {
             mode: "START_PAGE"
         }
 
-        width: page.width
+        width: parent.width
         spacing: Theme.paddingLarge
 
         model: ListModel {
@@ -167,9 +167,9 @@ Page {
 
         message.visible = false;
 
-        page.signedIn = isSignedIn();
-        message.signedIn = page.signedIn;
-        if (page.signedIn) {
+        startPage.signedIn = isSignedIn();
+        message.signedIn = startPage.signedIn;
+        if (startPage.signedIn) {
             console.log("signed in");
             var count = Settings.get(Settings.keys.COUNT_RECENT_BOOKMARKS);
             DiigoService.getRecentBookmarks(

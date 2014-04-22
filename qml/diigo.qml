@@ -54,4 +54,8 @@ ApplicationWindow
     function isSignedIn() {
         return Settings.isSignedIn(appContext)
     }
+
+    function isStartPage(page) {
+        return page.id == "startPage"
+    }
 }

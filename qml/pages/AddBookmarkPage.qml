@@ -32,7 +32,7 @@ import "Utils.js" as Utils
  * Page to add a bookmark.
  */
 Dialog {
-    id: page
+    id: addPage
 
     onStatusChanged: {
         if (status === PageStatus.Active) {
@@ -44,7 +44,7 @@ Dialog {
     canAccept: (!url.errorHighlight && !title.errorHighlight)
 
     onAccepted: {     
-        var previous = pageStack.previousPage(page);
+        var previous = pageStack.previousPage(addPage);
         previous.waitForServiceResult();
 
         var bookmark = createBookmarkObj();

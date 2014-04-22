@@ -33,7 +33,7 @@ import "AppState.js" as AppState
  * Startpage shows the searched bookmarks.
  */
 Page {
-    id: page
+    id: searchResultPage
 
     property variant criteria
 
@@ -74,7 +74,7 @@ Page {
             mode: "RESULT_PAGE"
         }
 
-        width: page.width
+        width: parent.width
         spacing: Theme.paddingLarge
 
         model: ListModel {

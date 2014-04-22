@@ -54,7 +54,7 @@ CoverBackground {
             top: urlHint.bottom
             horizontalCenter: urlHint.horizontalCenter
         }
-        text: startOfUrl()
+        text: getFirstLettersOfUrl()
         color: Theme.highlightColor
         font.pixelSize: Theme.fontSizeSmall
     }
@@ -64,16 +64,40 @@ CoverBackground {
 
         CoverAction {
             iconSource: "image://theme/icon-cover-new"
-            onTriggered: addBookmark()
+            onTriggered: addBookmarkAction()
         }
 
         CoverAction {
             iconSource: "image://theme/icon-cover-search"
-            onTriggered: search()
+            onTriggered: searchAction()
         }
     }
 
-    function startOfUrl() {
+    function addBookmarkAction () {
+        var navigationSuccess = navigateToStartPage();
+
+        if (navigationSuccess) {
+            pageStack.completeAnimation();
+
+            getAppContext().state = AppState.T_START_ADD;
+            pageStack.push(Qt.resolvedUrl("../pages/AddBookmarkPage.qml"));
+            mainWindow.activate()
+        }
+    }
+
+    function searchAction () {
+        var navigationSuccess = navigateToStartPage();
+
+        if (navigationSuccess) {
+            pageStack.completeAnimation();
+
+            getAppContext().state = AppState.T_START_SEARCH;
+            pageStack.push(Qt.resolvedUrl("../pages/SearchPage.qml"));
+            mainWindow.activate()
+        }
+    }
+
+    function getFirstLettersOfUrl() {
         if (hasUrlInClipboard()) {
             var text = Clipboard.text;
             if (text.indexOf("https") === 0) {
@@ -97,31 +121,29 @@ CoverBackground {
         return false;
     }
 
-    function addBookmark () {
+    function navigateToStartPage() {
+        var success = false;
         var state = getAppContext().state;
         console.log("state: " + state);
 
-        var performAdd = true;
         if (state === AppState.S_START) {
-            performAdd = true;
+            success = true;
         }
         else if (state === AppState.S_SETTINGS ||
-                 state === AppState.S_ADD) {
+                 state === AppState.S_ADD ||
+                 state === AppState.S_SEARCH) {
             pageStack.currentPage.reject();
-            performAdd = true;
+            success = true;
+        }
+        else if (state === AppState.S_SEARCH_RESULT) {
+            //var startPage = pageStack.find(isStartPage);
+            pageStack.pop(undefined, PageStackAction.Immediate);
+            pageStack.currentPage.reject();
+            success = true;
         }
 
-        if (performAdd) {
-            pageStack.completeAnimation();
-
-            getAppContext().state = AppState.T_START_ADD;
-            pageStack.push(Qt.resolvedUrl("../pages/AddBookmarkPage.qml"));
-            mainWindow.activate()
-        }
-    }
-
-    function search () {
-
+        console.log("navigation was successful: " + success);
+        return success;
     }
 }
 

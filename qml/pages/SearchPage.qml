@@ -32,7 +32,7 @@ import "Utils.js" as Utils
  * Page to search bookmarks.
  */
 Dialog {
-    id: page
+    id: searchPage
 
     acceptDestination: Qt.resolvedUrl("SearchResultPage.qml")
 
