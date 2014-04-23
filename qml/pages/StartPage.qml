@@ -38,6 +38,8 @@ Page {
     // Result of the last check
     property bool signedIn: false
 
+    property string pageHeader: qsTr("Your recent bookmarks")
+
     onStatusChanged: {
         if (status === PageStatus.Active) {
             // TODO: Find better place to initialize the database.
@@ -89,14 +91,13 @@ Page {
             }
         }
 
-        header: PageHeader {
-            title: qsTr("Your recent bookmarks")
+        header : PageHeader {
+            title: pageHeader
         }
 
         MessageBookmarkList {
             id: message
             count: bookmarkModel.count
-            mode: "START_PAGE"
         }
 
         width: parent.width
@@ -157,37 +158,79 @@ Page {
             return;
         }
         // we are waiting for the service result
-        if (state === AppState.S_ADD_WAIT_SERVICE) {
+        if (state === AppState.S_ADD_WAIT_SERVICE
+                || state === AppState.S_SEARCH_WAIT_SERVICE) {
             return;
         }
         // page was refreshed -> service has finished before page transition
         if (state === AppState.S_START) {
             return;
         }
+        if (state === AppState.T_ADD_ACCEPTED) {
+            addBookmark();
+            return;
+        }
+        if (state === AppState.T_SEARCH_ACCEPTED) {
+            searchBookmarks();
+            return;
+        }
 
+        searchBookmarksBySavedCriteria();
+    }
+
+    function searchBookmarksBySavedCriteria() {
+        console.log("searchBookmarksBySavedCriteria");
+
+        pageHeader = qsTr("Your recent bookmarks")
+        bookmarkModel.clear();
         message.visible = false;
 
         startPage.signedIn = isSignedIn();
         message.signedIn = startPage.signedIn;
         if (startPage.signedIn) {
             console.log("signed in");
+            busyIndicator.running = true;
+
+            // TODO Load saved search criteria and title
             var count = Settings.get(Settings.keys.COUNT_RECENT_BOOKMARKS);
             DiigoService.getRecentBookmarks(
                         count, fetchBookmarksSuccessCallback, serviceErrorCallback, getAppContext());
         }
         else {
             console.log("not signed in");
-            bookmarkModel.clear();
             message.visible = true;
         }
         getAppContext().state = AppState.S_START;
     }
 
-    function waitForServiceResult () {
+    function addBookmark() {
+        console.log("addBookmark");
+
+        pageHeader = qsTr("Your recent bookmarks")
         bookmarkModel.clear();
         message.visible = false;
         busyIndicator.running = true;
         getAppContext().state = AppState.S_ADD_WAIT_SERVICE;
+
+        DiigoService.addBookmark(getAppContext().dialogProperties,
+                                 addBookmarkSuccessCallback,
+                                 serviceErrorCallback,
+                                 getAppContext())
+    }
+
+    function searchBookmarks() {
+        console.log("searchBookmarks");
+
+        bookmarkModel.clear();
+        message.visible = false;
+        busyIndicator.running = true;
+        pageHeader = qsTr("Search result");
+        getAppContext().state = AppState.S_SEARCH_WAIT_SERVICE;
+
+        DiigoService.fetchBookmarks(getAppContext().dialogProperties,
+                                    fetchBookmarksSuccessCallback,
+                                    serviceErrorCallback,
+                                    getAppContext())
     }
 
     function formatTimestamp(timestamp) {
@@ -199,7 +242,10 @@ Page {
     // ---------------------------------------------------------
 
     function fetchBookmarksSuccessCallback(bookmarks) {
+        console.log("fetchBookmarksSuccessCallback");
+
         message.serviceError = false;
+        busyIndicator.running = false;
         bookmarkModel.clear();
 
         for (var i = 0; i < bookmarks.length; i++) {
@@ -207,15 +253,21 @@ Page {
         }
 
         message.visible = bookmarkModel.count === 0;
+        getAppContext().state = AppState.S_START;
     }
 
     function addBookmarkSuccessCallback() {
+        console.log("addBookmarkSuccessCallback");
+
+        message.serviceError = false;
         busyIndicator.running = false;
         getAppContext().state = AppState.T_ADD_SERVICE_RESULT_RECIEVED;
         preparePage();
     }
 
     function serviceErrorCallback(error) {
+        console.log("serviceErrorCallback");
+
         console.error(error.detailMessage);
         bookmarkModel.clear();
         busyIndicator.running = false;
@@ -224,5 +276,4 @@ Page {
         message.visible = true;
         getAppContext().state = AppState.S_START;
     }
-
 }

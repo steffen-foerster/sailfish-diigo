@@ -24,7 +24,6 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "DiigoService.js" as DiigoService
 import "AppState.js" as AppState
 import "Utils.js" as Utils
 
@@ -34,8 +33,6 @@ import "Utils.js" as Utils
 Dialog {
     id: searchPage
 
-    acceptDestination: Qt.resolvedUrl("SearchResultPage.qml")
-
     onStatusChanged: {
         if (status === PageStatus.Active) {
             getAppContext().state = AppState.S_SEARCH;
@@ -43,8 +40,10 @@ Dialog {
     }
 
     onAccepted: {     
+        var startPage = pageStack.previousPage();
         var criteria = createCriteria();
-        acceptDestinationInstance.criteria = criteria
+        getAppContext().dialogProperties = criteria;
+        getAppContext().state = AppState.T_SEARCH_ACCEPTED;
     }
 
     onRejected: {

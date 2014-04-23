@@ -135,12 +135,6 @@ CoverBackground {
             pageStack.currentPage.reject();
             success = true;
         }
-        else if (state === AppState.S_SEARCH_RESULT) {
-            //var startPage = pageStack.find(isStartPage);
-            pageStack.pop(undefined, PageStackAction.Immediate);
-            pageStack.currentPage.reject();
-            success = true;
-        }
 
         console.log("navigation was successful: " + success);
         return success;

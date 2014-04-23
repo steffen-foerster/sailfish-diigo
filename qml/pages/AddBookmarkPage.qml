@@ -24,7 +24,6 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "DiigoService.js" as DiigoService
 import "AppState.js" as AppState
 import "Utils.js" as Utils
 
@@ -43,15 +42,11 @@ Dialog {
 
     canAccept: (!url.errorHighlight && !title.errorHighlight)
 
-    onAccepted: {     
-        var previous = pageStack.previousPage(addPage);
-        previous.waitForServiceResult();
-
+    onAccepted: {
+        var startPage = pageStack.previousPage();
         var bookmark = createBookmarkObj();
-        DiigoService.addBookmark(bookmark,
-                                 previous.addBookmarkSuccessCallback,
-                                 previous.serviceErrorCallback,
-                                 getAppContext())
+        getAppContext().dialogProperties = bookmark;
+        getAppContext().state = AppState.T_ADD_ACCEPTED;
     }
 
     onRejected: {

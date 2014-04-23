@@ -108,10 +108,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pull down to add</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source></source>
         <translation></translation>
     </message>
@@ -213,6 +209,10 @@
     </message>
     <message>
         <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search result</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

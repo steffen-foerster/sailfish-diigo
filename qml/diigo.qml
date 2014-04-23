@@ -45,6 +45,7 @@ ApplicationWindow
         property string password: ""
         property string apiKey: SailUtil.apiKey
         property string state: AppState.T_MAIN_START
+        property variant dialogProperties
     }
 
     function getAppContext() {
