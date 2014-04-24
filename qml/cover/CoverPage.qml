@@ -135,6 +135,10 @@ CoverBackground {
             pageStack.currentPage.reject();
             success = true;
         }
+        else if (state === AppState.S_VIEW_BOOKMARK) {
+            pageStack.navigateBack(PageStackAction.Immediate);
+            success = true;
+        }
 
         console.log("navigation was successful: " + success);
         return success;

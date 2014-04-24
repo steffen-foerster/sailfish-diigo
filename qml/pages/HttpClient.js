@@ -102,6 +102,7 @@ var private = {
         if (request.status === 400) {
             console.log("status ", request.status,
                         " - Some request parameters are invalid or the API rate limit is exceeded");
+            result = {detailMessage : qsTr("Search parameters are invalid")};
         }
         else if (request.status === 401) {
             console.log("status ", request.status,

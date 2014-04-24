@@ -21,25 +21,44 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-Item {
+Column {
+    property alias label: label.text
+    property alias text: text.text
+    property alias separator: separator.visible
 
-    id: parent
+    spacing: Theme.paddingMedium
 
-    height: label.height
-
-    property string title: ""
-
-    property string url: ""
+    anchors {
+        right: parent.right
+        left: parent.left
+    }
 
     Label {
         id: label
-        color: Theme.primaryColor
-        wrapMode: Text.Wrap
-        text: title
+        anchors {
+            left: parent.left
+        }
         width: parent.width
+        color: Theme.highlightColor
+        font.pixelSize: Theme.fontSizeExtraSmall
+        //horizontalAlignment: Text.AlignRight
+    }
+    Label {
+        id: text
+        anchors {
+            left: parent.left
+        }
+        color: Theme.primaryColor
+        font.pixelSize: Theme.fontSizeSmall
+        wrapMode: Text.Wrap
+        width: parent.width - (2 * Theme.paddingLarge)
+    }
+    Separator {
+        id: separator
+        width:parent.width;
+        color: Theme.highlightColor
     }
 }

@@ -85,7 +85,8 @@ Dialog {
                 placeholderText: qsTr("Enter or paste URL")
                 label: qsTr("URL")
                 width: column.width
-                focus: true;
+                focus: true
+                inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase
                 validator: RegExpValidator { regExp: /^http[s]*:\/\/.{3,242}$/ }
                 EnterKey.enabled: text.length > 0
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
@@ -96,6 +97,7 @@ Dialog {
                 placeholderText: qsTr("Title")
                 label: qsTr("Title")
                 width: column.width
+                inputMethodHints: Qt.ImhNoAutoUppercase
                 validator: RegExpValidator { regExp: /^.{3,250}$/ }
                 EnterKey.enabled: text.length > 0
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"

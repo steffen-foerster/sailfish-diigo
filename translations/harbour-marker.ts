@@ -92,6 +92,10 @@
         <source>Authentication failed</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Search parameters are invalid</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MessageBookmarkList</name>
@@ -156,13 +160,6 @@
     </message>
 </context>
 <context>
-    <name>SearchResultPage</name>
-    <message>
-        <source>Search result</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>SettingPage</name>
     <message>
         <source>Settings</source>
@@ -213,6 +210,45 @@
     </message>
     <message>
         <source>Search result</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ViewBookmarkPage</name>
+    <message>
+        <source>Open in browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Public</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Created at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Updated at</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

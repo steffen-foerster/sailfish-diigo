@@ -1,18 +1,22 @@
-Name: diigo
-Summary: Diigo
-Version: 0.1
+Name: harbour-marker
+Summary: Native client for the Diigo bookmark service.
+Version: 0.1.0
 Release: 1
 # The contents of the Group field must be one of the groups listed here:
 # http://gitorious.org/meego-developer-tools/spectacle/blobs/master/data/GROUPS
 Group: Qt/Qt
-URL: http://example.org/
-License: LICENSE
+URL: https://github.com/steffen-foerster/sailfish-diigo
+License: The MIT License (MIT)
 # This must be generated before uploading a package to a remote build service.
 # Usually this line does not need to be modified.
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
-  Short description of my SailfishOS Application
+  This application uses the API of Diigo to add bookmarks to your collection.
+  You can search for your bookmarks, too.
+
+  You need an Diigo account to use this application. See https://www.diigo.com
+
 Configure: none
 # The qtc5 builder inserts macros to allow QtCreator to have fine
 # control over qmake/make execution

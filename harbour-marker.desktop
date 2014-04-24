@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 X-Nemo-Application-Type=silica-qt5
-Name=diigo
-Icon=diigo
-Exec=diigo
+Name=Bookmark
+Icon=harbour-marker
+Exec=harbour-marker
 

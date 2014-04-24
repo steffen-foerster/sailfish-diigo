@@ -32,3 +32,7 @@ function crop(value, maxLength) {
         return value;
     }
 }
+
+function formatTimestamp(timestamp) {
+    return timestamp.substr(0, 10);
+}

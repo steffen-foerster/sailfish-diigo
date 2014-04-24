@@ -52,6 +52,7 @@ Dialog {
 
     SilicaFlickable {
         anchors.fill: parent
+        contentHeight: column.height
 
         PullDownMenu {
             visible: menuClear.visible
@@ -61,8 +62,6 @@ Dialog {
                 onClicked: clearFields()
             }
         }
-
-        contentHeight: column.height
 
         Column {
             id: column

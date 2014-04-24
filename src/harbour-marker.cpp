@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     QScopedPointer<SailUtil> sailUtil(new SailUtil(app.data()));
 
     view->rootContext()->setContextProperty("SailUtil", sailUtil.data());
-    view->setSource(SailfishApp::pathTo("qml/diigo.qml"));
+    view->setSource(SailfishApp::pathTo("qml/harbour-marker.qml"));
     view->showFullScreen();
 
     return app->exec();

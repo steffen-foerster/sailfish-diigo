@@ -1,4 +1,4 @@
-# Rename this file as diigo.changes to include changelog
+# Rename this file as marker.changes to include changelog
 # entries in your RPM file.
 #
 # Add new changelog entries following the format below.
@@ -8,7 +8,7 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
-* Sun Apr 13 2014 Jack Tar <jack.tar@example.com> 0.0.1-1
+* Sun Apr 25 2014 Steffen Förster <@example.com> 0.0.1-1
 - Scrubbed the deck
 - Hoisted the sails
 

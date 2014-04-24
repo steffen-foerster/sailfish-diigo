@@ -28,6 +28,7 @@ import "../components"
 import "DiigoService.js" as DiigoService
 import "Settings.js" as Settings
 import "AppState.js" as AppState
+import "Utils.js" as Utils
 
 /**
  * Startpage shows the recentenly created bookmarks.
@@ -64,6 +65,8 @@ Page {
     SilicaListView {
         id: bookmarkList
         anchors.fill: parent
+        width: parent.width
+        spacing: Theme.paddingLarge
 
         PullDownMenu {
             MenuItem {
@@ -100,19 +103,36 @@ Page {
             count: bookmarkModel.count
         }
 
-        width: parent.width
-        spacing: Theme.paddingLarge
-
         model: ListModel {
             id: bookmarkModel
         }
+
+        property Item contextMenu
+
         delegate: ListItem {
             id: wrapper
-            contentHeight: itemColumn.height
+            property bool menuOpen: {
+                bookmarkList.contextMenu != null
+                        && bookmarkList.contextMenu.parent === wrapper
+            }
+
+            contentHeight: {
+                menuOpen ? bookmarkList.contextMenu.height + itemColumn.height
+                         : itemColumn.height
+            }
 
             onClicked: {
-                console.log("opening URL: " + url)
-                Qt.openUrlExternally(url)
+                pageStack.push(Qt.resolvedUrl("ViewBookmarkPage.qml"),
+                               {bookmark: bookmarkModel.get(index)});
+            }
+
+            onPressAndHold: {
+                if (!bookmarkList.contextMenu) {
+                    bookmarkList.contextMenu =
+                            contextMenuComponent.createObject(bookmarkList)
+                }
+                bookmarkList.contextMenu.bookmark = bookmarkModel.get(index);
+                bookmarkList.contextMenu.show(wrapper);
             }
 
             Column {
@@ -138,11 +158,26 @@ Page {
                     }
                     color: Theme.secondaryColor
                     font.pixelSize: Theme.fontSizeExtraSmall
-                    text: formatTimestamp(created_at)
+                    text: Utils.formatTimestamp(created_at)
                 }
             }
-
         }
+
+        Component {
+            id: contextMenuComponent
+            ContextMenu {
+                property variant bookmark
+
+                MenuItem {
+                    text: "Open in browser"
+                    onClicked: {
+                        console.log("opening URL: " + bookmark.url)
+                        Qt.openUrlExternally(bookmark.url)
+                    }
+                }
+            }
+        }
+
         VerticalScrollDecorator {}
     }
 
@@ -154,6 +189,11 @@ Page {
         if (state === AppState.T_ADD_REJECTED
                 || state === AppState.T_SETTINGS_REJECTED
                 || state === AppState.T_SEARCH_REJECTED) {
+            getAppContext().state = AppState.S_START;
+            return;
+        }
+        // back from bookmark view
+        if (state === AppState.T_VIEW_BOOKMARK_START) {
             getAppContext().state = AppState.S_START;
             return;
         }
@@ -233,10 +273,6 @@ Page {
                                     getAppContext())
     }
 
-    function formatTimestamp(timestamp) {
-        return timestamp.substr(0, 10);
-    }
-
     // ---------------------------------------------------------
     // callbacks
     // ---------------------------------------------------------
@@ -271,8 +307,8 @@ Page {
         console.error(error.detailMessage);
         bookmarkModel.clear();
         busyIndicator.running = false;
-        message.serviceError = true;
         message.serviceResult = error;
+        message.serviceError = true;
         message.visible = true;
         getAppContext().state = AppState.S_START;
     }

@@ -10,38 +10,39 @@
 #   - translation filenames have to be changed
 
 # The name of your application
-TARGET = diigo
+TARGET = harbour-marker
 
 CONFIG += sailfishapp
 
-SOURCES += src/diigo.cpp \
-    src/sail_util.cpp
+SOURCES += src/harbour-marker.cpp \
+    src/sail_util.cpp \
 
-OTHER_FILES += qml/diigo.qml \
+OTHER_FILES += qml/harbour-marker.qml \
     qml/cover/CoverPage.qml \
-    rpm/diigo.changes.in \
-    rpm/diigo.spec \
-    rpm/diigo.yaml \
     translations/*.ts \
-    diigo.desktop \
     qml/pages/SettingPage.qml \
     qml/pages/StartPage.qml \
     qml/pages/HttpClient.js \
     qml/pages/DiigoService.js \
     qml/pages/Settings.js \
-    qml/components/BookmarkItem.qml \
     qml/pages/LocalStore.js \
     qml/components/MessageBookmarkList.qml \
     qml/pages/AddBookmarkPage.qml \
     qml/pages/AppState.js \
     qml/pages/Utils.js \
     qml/pages/SearchPage.qml \
-    qml/pages/SearchResultPage.qml
+    rpm/harbour-marker.yaml \
+    rpm/harbour-marker.spec \
+    rpm/harbour-marker.changes.in \
+    qml/harbour-marker.qml \
+    harbour-marker.desktop \
+    qml/pages/ViewBookmarkPage.qml \
+    qml/components/LabelText.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line
 CONFIG += sailfishapp_i18n
-TRANSLATIONS += translations/diigo-de.ts
+#TRANSLATIONS += translations/harbour-marker-de.ts
 
 HEADERS += \
     src/config.h \

@@ -54,6 +54,7 @@ Dialog {
 
     SilicaFlickable {
         anchors.fill: parent
+        contentHeight: column.height
 
         PullDownMenu {
             MenuItem {
@@ -66,8 +67,6 @@ Dialog {
                 }
             }
         }
-
-        contentHeight: column.height
 
         Column {
             id: column
