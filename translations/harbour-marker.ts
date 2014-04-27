@@ -160,6 +160,25 @@
     </message>
 </context>
 <context>
+    <name>ServicePage</name>
+    <message>
+        <source>Diigo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pinboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pull down to select your service</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SettingPage</name>
     <message>
         <source>Settings</source>

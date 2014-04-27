@@ -37,7 +37,16 @@ OTHER_FILES += qml/harbour-marker.qml \
     qml/harbour-marker.qml \
     harbour-marker.desktop \
     qml/pages/ViewBookmarkPage.qml \
-    qml/components/LabelText.qml
+    qml/components/LabelText.qml \
+    qml/pages/diigo/Settings.js \
+    qml/pages/diigo/ViewBookmarkPage.qml \
+    qml/pages/diigo/StartPage.qml \
+    qml/pages/diigo/SettingPage.qml \
+    qml/pages/diigo/SearchPage.qml \
+    qml/pages/diigo/AddBookmarkPage.qml \
+    qml/pages/diigo/DiigoService.js \
+    qml/pages/ServicePage.qml \
+    qml/pages/diigo/PinboardService.js
 
 # to disable building translations every time, comment out the
 # following CONFIG line

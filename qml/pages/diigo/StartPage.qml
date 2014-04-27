@@ -24,11 +24,11 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "../components"
+import "../../components"
 import "DiigoService.js" as DiigoService
-import "Settings.js" as Settings
-import "AppState.js" as AppState
-import "Utils.js" as Utils
+import "../Settings.js" as Settings
+import "../AppState.js" as AppState
+import "../Utils.js" as Utils
 
 /**
  * Startpage shows the recentenly created bookmarks.
@@ -43,11 +43,6 @@ Page {
 
     onStatusChanged: {
         if (status === PageStatus.Active) {
-            // TODO: Find better place to initialize the database.
-            if (getAppContext().state === AppState.T_MAIN_START) {
-                Settings.initialize();
-            }
-
             preparePage();
         }
     }
@@ -232,7 +227,7 @@ Page {
             busyIndicator.running = true;
 
             // TODO Load saved search criteria and title
-            var count = Settings.get(Settings.keys.COUNT_RECENT_BOOKMARKS);
+            var count = Settings.get(getAppContext().service, Settings.keys.COUNT_RECENT_BOOKMARKS);
             DiigoService.getRecentBookmarks(
                         count, fetchBookmarksSuccessCallback, serviceErrorCallback, getAppContext());
         }

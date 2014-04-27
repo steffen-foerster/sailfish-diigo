@@ -24,8 +24,8 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "Settings.js" as Settings
-import "AppState.js" as AppState
+import "../Settings.js" as Settings
+import "../AppState.js" as AppState
 
 /**
  * Page to save user settings.
@@ -40,10 +40,10 @@ Dialog {
     }
 
     onAccepted: {
-        Settings.set(Settings.keys.COUNT_RECENT_BOOKMARKS, recentBookmarks.value);
-        Settings.setBoolean(Settings.keys.SAVE_PASSWORD, savePassword.checked);
+        Settings.set(getAppContext().service, Settings.keys.COUNT_RECENT_BOOKMARKS, recentBookmarks.value);
+        Settings.setBoolean(getAppContext().service, Settings.keys.SAVE_PASSWORD, savePassword.checked);
         Settings.setPassword(password.text, savePassword.checked, getAppContext());
-        Settings.set(Settings.keys.USER, user.text);
+        Settings.set(getAppContext().service, Settings.keys.USER, user.text);
 
         getAppContext().state = AppState.T_SETTINGS_ACCEPTED;
     }
@@ -89,7 +89,7 @@ Dialog {
                 EnterKey.enabled: text.length > 0
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
                 EnterKey.onClicked: password.focus = true
-                text: Settings.get(Settings.keys.USER)
+                text: Settings.get(getAppContext().service, Settings.keys.USER)
             }
 
             TextField {
@@ -120,7 +120,7 @@ Dialog {
                 id: savePassword
                 text: "Save password"
                 description: "Save password on your phone"
-                checked: Settings.getBoolean(Settings.keys.SAVE_PASSWORD)
+                checked: Settings.getBoolean(getAppContext().service, Settings.keys.SAVE_PASSWORD)
             }
 
             Slider {
@@ -131,7 +131,7 @@ Dialog {
                 maximumValue: 50
                 stepSize: 5
                 valueText: value
-                value: Settings.get(Settings.keys.COUNT_RECENT_BOOKMARKS)
+                value: Settings.get(getAppContext().service, Settings.keys.COUNT_RECENT_BOOKMARKS)
             }
         }
     }

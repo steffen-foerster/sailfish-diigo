@@ -23,29 +23,9 @@ THE SOFTWARE.
 */
 
 .pragma library
+.import "../HttpClient.js" as HttpClient
+.import "../Settings.js" as Settings
 
-// States
-var S_START = "s_start";
-var S_SETTINGS = "s_settings";
-var S_ADD = "s_add";
-var S_SEARCH = "s_search";
-var S_ADD_WAIT_SERVICE = "s_add_wait_service";
-var S_SEARCH_WAIT_SERVICE = "s_search_wait_service";
-var S_VIEW_BOOKMARK = "s_view_bookmark";
-
-// Transitions
-var T_MAIN_START = "t_main_start";
-var T_DIIGO_START = "t_diigo_start";
-var T_PINBOARD_START = "t_pinboard_start";
-var T_START_SETTINGS = "t_start_settings";
-var T_START_ADD = "t_start_add";
-var T_START_SEARCH = "t_start_search";
-var T_SETTINGS_ACCEPTED = "t_settings_accepted";
-var T_SETTINGS_REJECTED = "t_settings_rejected";
-var T_ADD_REJECTED = "t_add_rejected";
-var T_ADD_ACCEPTED = "t_add_accepted";
-var T_ADD_SERVICE_RESULT_RECIEVED = "t_add_service_result_recieved";
-var T_SEARCH_SERVICE_RESULT_RECIEVED = "t_search_service_result_recieved";
-var T_SEARCH_REJECTED = "t_search_rejected";
-var T_SEARCH_ACCEPTED = "t_search_accepted";
-var T_VIEW_BOOKMARK_START = "t_view_bookmark_start";
+/**
+ * Documentation of the Pinboard API: https://pinboard.in/api/
+ */

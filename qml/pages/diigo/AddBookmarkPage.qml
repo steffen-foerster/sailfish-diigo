@@ -24,8 +24,8 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "AppState.js" as AppState
-import "Utils.js" as Utils
+import "../AppState.js" as AppState
+import "../Utils.js" as Utils
 
 /**
  * Page to add a bookmark.

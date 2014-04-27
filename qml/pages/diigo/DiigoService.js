@@ -23,8 +23,8 @@ THE SOFTWARE.
 */
 
 .pragma library
-.import "HttpClient.js" as HttpClient
-.import "Settings.js" as Settings
+.import "../HttpClient.js" as HttpClient
+.import "../Settings.js" as Settings
 
 /**
  * Documentation of the Diigo API: https://www.diigo.com/api_dev
@@ -52,7 +52,7 @@ var searchParam = {
 function getRecentBookmarks(count, onSuccess, onFailure, appContext) {
     var queryParams = {
         key: appContext.apiKey,
-        user: Settings.get(Settings.keys.USER),
+        user: Settings.get(Settings.services.DIIGO, Settings.keys.USER),
         start: 0,
         count: count,
         sort: searchParam.SORT_CREATED_AT,
@@ -64,7 +64,7 @@ function getRecentBookmarks(count, onSuccess, onFailure, appContext) {
                 queryParams,
                 onSuccess,
                 onFailure,
-                Settings.get(Settings.keys.USER),
+                Settings.get(Settings.services.DIIGO, Settings.keys.USER),
                 Settings.getPassword(appContext));
 }
 
@@ -74,7 +74,7 @@ function getRecentBookmarks(count, onSuccess, onFailure, appContext) {
 function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
     var queryParams = {
         key: appContext.apiKey,
-        user: Settings.get(Settings.keys.USER),
+        user: Settings.get(Settings.services.DIIGO, Settings.keys.USER),
         start: 0,
         count: searchCriteria.count,
         sort: searchCriteria.sort,
@@ -92,7 +92,7 @@ function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
                 queryParams,
                 onSuccess,
                 onFailure,
-                Settings.get(Settings.keys.USER),
+                Settings.get(Settings.services.DIIGO, Settings.keys.USER),
                 Settings.getPassword(appContext));
 }
 
@@ -109,7 +109,7 @@ function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
 function addBookmark(bookmark, onSuccess, onFailure, appContext) {
     var queryParams = {
         key: appContext.apiKey,
-        user: Settings.get(Settings.keys.USER),
+        user: Settings.get(Settings.services.DIIGO, Settings.keys.USER),
         title: bookmark.title,
         url: bookmark.url,
         shared: bookmark.shared ? "yes" : "no",
@@ -127,7 +127,7 @@ function addBookmark(bookmark, onSuccess, onFailure, appContext) {
                 queryParams,
                 onSuccess,
                 onFailure,
-                Settings.get(Settings.keys.USER),
+                Settings.get(Settings.services.DIIGO, Settings.keys.USER),
                 Settings.getPassword(appContext));
 }
 

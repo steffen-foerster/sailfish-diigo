@@ -24,10 +24,10 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "../components"
-import "Settings.js" as Settings
-import "AppState.js" as AppState
-import "Utils.js" as Utils
+import "../../components"
+import "../Settings.js" as Settings
+import "../AppState.js" as AppState
+import "../Utils.js" as Utils
 
 /**
  * Shows the details of a bookmark.

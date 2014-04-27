@@ -31,21 +31,40 @@ import "pages/AppState.js" as AppState
 ApplicationWindow
 {
     id: mainWindow
-    initialPage: Component { StartPage { } }
+    initialPage: Component { ServicePage { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
     Component.onCompleted: {
+        console.log("ApplicationWindow onCompleted");
+
+        if (getAppContext().state === AppState.T_MAIN_START) {
+            Settings.initialize()
+        }
+
+        var activeService = Settings.get(Settings.services.ALL, Settings.keys.SERVICE);
+        console.log("saved service: ", activeService);
+        if (activeService == Settings.services.DIIGO) {
+            //startDiigo()
+        }
     }
 
     Component.onDestruction: {
     }
 
+    function startDiigo() {
+        console.log("startDiigo");
+        getAppContext().service = Settings.services.DIIGO;
+        getAppContext().state = AppState.T_DIIGO_START;
+        pageStack.replace(Qt.resolvedUrl("pages/diigo/StartPage.qml"));
+    }
+
     QtObject {
         id: appContext
         property string password: ""
-        property string apiKey: SailUtil.apiKey
+        property string apiKey: SailUtil.apiKey // API-Key for Diigo
         property string state: AppState.T_MAIN_START
         property variant dialogProperties
+        property int service
     }
 
     function getAppContext() {
@@ -54,9 +73,5 @@ ApplicationWindow
 
     function isSignedIn() {
         return Settings.isSignedIn(appContext)
-    }
-
-    function isStartPage(page) {
-        return page.id == "startPage"
     }
 }
