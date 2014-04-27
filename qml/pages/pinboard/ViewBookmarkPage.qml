@@ -30,7 +30,7 @@ import "../AppState.js" as AppState
 import "../Utils.js" as Utils
 
 /**
- * Service: Diigo
+ * Service: Pinboard
  * Shows the details of a bookmark.
  */
 Page {
@@ -57,7 +57,7 @@ Page {
                 text: qsTr("Open in browser")
                 onClicked: {
                     console.log("opening URL: " + bookmark.url)
-                    Qt.openUrlExternally(bookmark.url)
+                    Qt.openUrlExternally(bookmark.href)
                 }
             }
         }
@@ -76,16 +76,16 @@ Page {
 
             LabelText {
                 label: qsTr("Title")
-                text: bookmark.title
+                text: bookmark.description
                 separator: false
             }
             LabelText {
                 label: qsTr("URL")
-                text: bookmark.url
+                text: bookmark.href
             }
             LabelText {
                 label: qsTr("Description")
-                text: bookmark.desc
+                text: bookmark.extended
             }
             LabelText {
                 label: qsTr("Tags")
@@ -96,13 +96,12 @@ Page {
                 text: bookmark.shared
             }
             LabelText {
-                label: qsTr("Created at")
-                text: Utils.formatTimestamp(bookmark.created_at)
-                separator: false
+                label: qsTr("Read later")
+                text: bookmark.toread
             }
             LabelText {
-                label: qsTr("Updated at")
-                text: Utils.formatTimestamp(bookmark.updated_at)
+                label: qsTr("Created at")
+                text: Utils.formatTimestamp(bookmark.time)
                 separator: false
             }
         }

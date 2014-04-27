@@ -17,36 +17,33 @@ CONFIG += sailfishapp
 SOURCES += src/harbour-marker.cpp \
     src/sail_util.cpp \
 
-OTHER_FILES += qml/harbour-marker.qml \
-    qml/cover/CoverPage.qml \
+OTHER_FILES += harbour-marker.desktop \
     translations/*.ts \
-    qml/pages/SettingPage.qml \
-    qml/pages/StartPage.qml \
-    qml/pages/HttpClient.js \
-    qml/pages/DiigoService.js \
-    qml/pages/Settings.js \
-    qml/pages/LocalStore.js \
-    qml/components/MessageBookmarkList.qml \
-    qml/pages/AddBookmarkPage.qml \
-    qml/pages/AppState.js \
-    qml/pages/Utils.js \
-    qml/pages/SearchPage.qml \
     rpm/harbour-marker.yaml \
     rpm/harbour-marker.spec \
     rpm/harbour-marker.changes.in \
+    qml/cover/CoverPage.qml \
     qml/harbour-marker.qml \
-    harbour-marker.desktop \
-    qml/pages/ViewBookmarkPage.qml \
+    qml/components/MessageBookmarkList.qml \
     qml/components/LabelText.qml \
-    qml/pages/diigo/Settings.js \
+    qml/pages/HttpClient.js \
+    qml/pages/Settings.js \
+    qml/pages/LocalStore.js \
+    qml/pages/AppState.js \
+    qml/pages/Utils.js \
+    qml/pages/ServicePage.qml \
     qml/pages/diigo/ViewBookmarkPage.qml \
     qml/pages/diigo/StartPage.qml \
     qml/pages/diigo/SettingPage.qml \
     qml/pages/diigo/SearchPage.qml \
     qml/pages/diigo/AddBookmarkPage.qml \
     qml/pages/diigo/DiigoService.js \
-    qml/pages/ServicePage.qml \
-    qml/pages/diigo/PinboardService.js
+    qml/pages/pinboard/PinboardService.js \
+    qml/pages/pinboard/SettingPage.qml \
+    qml/pages/pinboard/StartPage.qml \
+    qml/pages/pinboard/SearchPage.qml \
+    qml/pages/pinboard/ViewBookmarkPage.qml \
+    qml/pages/pinboard/AddBookmarkPage.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

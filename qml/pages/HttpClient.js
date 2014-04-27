@@ -39,12 +39,23 @@ function performGetRequest(url, queryParams, onSuccess, onFailure, user, passwor
     }
 
     url += ("?");
+    var addAnd = false;
     for (var paramKey in queryParams) {
-        url += ("&" + paramKey + "=" + queryParams[paramKey])
+        if (addAnd) {
+            url += ("&");
+        }
+        url += (paramKey + "=" + queryParams[paramKey]);
+        addAnd = true;
     }
     console.log("URL: ", url);
 
-    request.open("GET", url, true, user, password);
+    if (user) {
+        request.open("GET", url, true, user, password);
+    }
+    else {
+        request.open("GET", url, true);
+    }
+
     request.send();
 }
 
@@ -58,7 +69,14 @@ function performPostRequest (url, queryParams, onSuccess, onFailure, user, passw
     }
 
     var content = private.createPostBody(queryParams);
-    request.open("POST", url, true, user, password);
+
+    if (user) {
+        request.open("POST", url, true, user, password);
+    }
+    else {
+        request.open("POST", url, true);
+    }
+
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     request.setRequestHeader('Content-Length', content.length);
     request.send(content);
@@ -85,9 +103,7 @@ var private = {
                 onSuccess(response);
             } else {
                 var errorResponse = this.handleError(request);
-                errorResponse.errorMessage = (method === "GET"
-                        ? qsTr("Cannot fetch bookmarks")
-                        : qsTr("Cannot save bookmark"));
+                errorResponse.errorMessage = qsTr("Cannot execute action");
                 onFailure(errorResponse);
             }
         }
@@ -118,6 +134,10 @@ var private = {
             console.log("status ", request.status,
                         " - Either you're requesting an invalid URI or the resource in question doesn't exist (e.g. no such user)");
         }
+        else if (request.status === 429) {
+            console.log("status ", request.status, " - Too many requests");
+            result = {detailMessage : qsTr("Too many requests")};
+        }
         else if (request.status === 500) {
             console.log("status ", request.status,
                         " - Something is broken");
@@ -128,7 +148,7 @@ var private = {
         }
         else if (request.status === 503) {
             console.log("status ", request.status,
-                        " - The Diigo servers are too busy to server your request.");
+                        " - The servers are too busy to server your request.");
         }
         return result;
     }

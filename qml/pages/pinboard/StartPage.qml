@@ -25,13 +25,13 @@ THE SOFTWARE.
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "../../components"
-import "DiigoService.js" as DiigoService
+import "PinboardService.js" as PinboardService
 import "../Settings.js" as Settings
 import "../AppState.js" as AppState
 import "../Utils.js" as Utils
 
 /**
- * Service: Diigo
+ * Service: Pinboard
  * Startpage shows the recentenly created bookmarks or a search result.
  */
 Page {
@@ -150,7 +150,7 @@ Page {
                     color: Theme.primaryColor
                     font.pixelSize: Theme.fontSizeSmall
                     wrapMode: Text.Wrap
-                    text: title
+                    text: description
                     width: wrapper.ListView.view.width - (2 * Theme.paddingLarge)
                 }
                 Label {
@@ -161,7 +161,7 @@ Page {
                     }
                     color: Theme.secondaryColor
                     font.pixelSize: Theme.fontSizeExtraSmall
-                    text: Utils.formatTimestamp(created_at)
+                    text: Utils.formatTimestamp(time)
                 }
             }
         }
@@ -174,8 +174,8 @@ Page {
                 MenuItem {
                     text: "Open in browser"
                     onClicked: {
-                        console.log("opening URL: " + bookmark.url)
-                        Qt.openUrlExternally(bookmark.url)
+                        console.log("opening URL: " + bookmark.href)
+                        Qt.openUrlExternally(bookmark.href)
                     }
                 }
             }
@@ -217,8 +217,32 @@ Page {
             searchBookmarks();
             return;
         }
+        if (state === AppState.T_PINBOARD_START) {
+            refreshCache();
+            return;
+        }
 
         searchBookmarksBySavedCriteria();
+    }
+
+    function refreshCache() {
+        console.log("refreshCache");
+
+        bookmarkModel.clear();
+        message.visible = false;
+
+        startPage.signedIn = isSignedIn();
+        message.signedIn = startPage.signedIn;
+        if (startPage.signedIn) {
+            console.log("signed in");
+            busyIndicator.running = true;
+
+            PinboardService.refreshCache(searchBookmarksBySavedCriteria, serviceErrorCallback);
+        }
+        else {
+            console.log("not signed in");
+            message.visible = true;
+        }
     }
 
     function searchBookmarksBySavedCriteria() {
@@ -236,7 +260,7 @@ Page {
 
             // TODO Load saved search criteria and title
             var count = Settings.get(getAppContext().service, Settings.keys.COUNT_RECENT_BOOKMARKS);
-            DiigoService.getRecentBookmarks(
+            PinboardService.fetchRecentBookmarks(
                         count, fetchBookmarksSuccessCallback, serviceErrorCallback, getAppContext());
         }
         else {
@@ -255,10 +279,9 @@ Page {
         busyIndicator.running = true;
         getAppContext().state = AppState.S_ADD_WAIT_SERVICE;
 
-        DiigoService.addBookmark(getAppContext().dialogProperties,
-                                 addBookmarkSuccessCallback,
-                                 serviceErrorCallback,
-                                 getAppContext())
+        PinboardService.addBookmark(getAppContext().dialogProperties,
+                                    addBookmarkSuccessCallback,
+                                    serviceErrorCallback)
     }
 
     function searchBookmarks() {
@@ -270,10 +293,9 @@ Page {
         pageHeader = qsTr("Search result");
         getAppContext().state = AppState.S_SEARCH_WAIT_SERVICE;
 
-        DiigoService.fetchBookmarks(getAppContext().dialogProperties,
-                                    fetchBookmarksSuccessCallback,
-                                    serviceErrorCallback,
-                                    getAppContext())
+        PinboardService.fetchBookmarks(getAppContext().dialogProperties,
+                                       fetchBookmarksSuccessCallback,
+                                       serviceErrorCallback)
     }
 
     // ---------------------------------------------------------

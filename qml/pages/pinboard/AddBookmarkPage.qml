@@ -28,7 +28,7 @@ import "../AppState.js" as AppState
 import "../Utils.js" as Utils
 
 /**
- * Service: Diigo
+ * Service: Pinboard
  * Page to add a bookmark.
  */
 Dialog {
@@ -41,7 +41,7 @@ Dialog {
         }
     }
 
-    canAccept: (!url.errorHighlight && !title.errorHighlight)
+    canAccept: (!url.errorHighlight && !description.errorHighlight)
 
     onAccepted: {
         var startPage = pageStack.previousPage();
@@ -91,10 +91,10 @@ Dialog {
                 validator: RegExpValidator { regExp: /^http[s]*:\/\/.{3,242}$/ }
                 EnterKey.enabled: text.length > 0
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                EnterKey.onClicked: title.focus = true
+                EnterKey.onClicked: description.focus = true
             }
             TextField {
-                id: title
+                id: description
                 placeholderText: qsTr("Title")
                 label: qsTr("Title")
                 width: column.width
@@ -106,15 +106,15 @@ Dialog {
             }
             TextField {
                 id: tags
-                placeholderText: qsTr("Tags, comma separated")
-                label: qsTr("Tags, comma separated")
+                placeholderText: qsTr("Tags, separated with space")
+                label: qsTr("Tags, separated with space")
                 width: column.width
                 EnterKey.enabled: true
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                EnterKey.onClicked: description.focus = true
+                EnterKey.onClicked: extended.focus = true
             }
             TextField {
-                id: description
+                id: extended
                 placeholderText: qsTr("Description")
                 label: qsTr("Description")
                 width: column.width
@@ -129,7 +129,7 @@ Dialog {
                 checked: true
             }
             TextSwitch {
-                id: readLater
+                id: toread
                 text: qsTr("Read Later")
                 description: qsTr("The bookmark is \"unread\"");
                 checked: false
@@ -142,37 +142,37 @@ Dialog {
             var urls = Clipboard.text.match(/^http[s]*:\/\/.{3,242}$/);
             if (urls.length > 0) {
                 url.text = urls[0];
-                title.focus = true;
+                description.focus = true;
             }
         }
     }
 
     function anyFieldChanged() {
         return url.text.length > 0
-                || title.text.length > 0
-                || tags.text.length > 0
                 || description.text.length > 0
+                || tags.text.length > 0
+                || extended.text.length > 0
                 || !shared.checked
-                || readLater.checked;
+                || toread.checked;
     }
 
     function clearFields() {
         url.text = "";
-        title.text = "";
-        tags.text = "";
         description.text = "";
+        tags.text = "";
+        extended.text = "";
         shared.checked = true;
-        readLater.checked = false;
+        toread.checked = false;
     }
 
     function createBookmarkObj() {
         var bookmark = {
             url: Utils.crop(url.text, 250),
-            title: Utils.crop(title.text, 250),
-            tags: Utils.crop(tags.text, 250),
-            desc: Utils.crop(description.text, 250),
+            description: Utils.crop(description.text, 250),
+            tags: Utils.crop(tags.text, 250 * 100),
+            extended: Utils.crop(extended.text, 65536),
             shared: shared.checked,
-            readLater: readLater.checked
+            toread: toread.checked
         }
         return bookmark;
     }

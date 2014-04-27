@@ -31,7 +31,8 @@ var keys = {
     SAVE_PASSWORD: "save_password",
     COUNT_RECENT_BOOKMARKS: "count_recent_bookmarks",
     API_KEY: "api_key",
-    SERVICE: "service"
+    SERVICE: "service",
+    LAST_SYNC: "last_sync"
 }
 
 var dBValues = {

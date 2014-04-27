@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 var private = {
     getDatabase : function() {
-        return Sql.LocalStorage.openDatabaseSync("Bookmark", "1.0", "Database of application Bookmark", 100000);
+        return Sql.LocalStorage.openDatabaseSync("Bookmark", "1.0", "Database of application Bookmark", 1000000);
     }
 }
 
@@ -46,6 +46,7 @@ function initializeDatabase(defaultSettings) {
         initializeSettings(defaultSettings, tx);
         //initializeSearchStore(tx);
         initializeVersion(tx);
+        initializePinboardStore(tx);
     });
 }
 
@@ -79,6 +80,20 @@ function initializeVersion(tx) {
     console.debug("Table MIGRATION initialized");
 }
 
+function initializePinboardStore(tx) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS pinboard_post(' +
+                  '  href TEXT UNIQUE,' +
+                  '  tags TEXT,' +
+                  '  description TEXT,' +
+                  '  extended TEXT,' +
+                  '  shared TEXT,' +
+                  '  toread TEXT,' +
+                  '  time TEXT,' +
+                  '  meta TEXT,' +
+                  '  hash TEXT)');
+    console.debug("Table PINBOARD_POST initialized");
+}
+
 // ------------------------------------------------------------
 // Settings
 // ------------------------------------------------------------
@@ -104,6 +119,131 @@ function get(service, key) {
         }
     });
     return retval;
+}
+
+// ------------------------------------------------------------
+// PINBOARD_POST
+// ------------------------------------------------------------
+
+/*
+  Sample: [{
+    "href":"http:\/\/softwaredevelopmenttoday.blogspot.fi\/",
+    "description":"Software Development",
+    "extended":"",
+    "meta":"4e1bdda6e44ad1656add4fb566566572",
+    "hash":"f193639805ecc2fc03bb64244ebf11ed",
+    "time":"2014-04-25T13:32:00Z",
+    "shared":"yes",
+    "toread":"no",
+    "tags":"Dev"},...]
+*/
+
+function savePinboardPosts(posts) {
+    var db = private.getDatabase();
+    db.transaction(function (tx) {
+        var res = tx.executeSql('DELETE FROM pinboard_post;');
+        console.log("Deleted posts: ", res.rowsAffected);
+        if (posts) {
+            for (var i = 0; i < posts.length; i++) {
+                var p = posts[i];
+                tx.executeSql('INSERT OR REPLACE INTO pinboard_post' +
+                              '  (href, description, extended, meta, hash, time, shared, toread, tags) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);',
+                              [p.href, p.description, p.extended, p.meta, p.hash, p.time, p.shared, p.toread, p.tags]);
+            }
+            console.log("Inserted posts: " + posts.length);
+        }
+        else {
+            console.log("posts is: ", posts);
+        }
+    });
+}
+
+/**
+ * A post with the same URL will be replaced.
+ */
+function addPinboardPost(post) {
+    var db = private.getDatabase();
+    db.transaction(function (tx) {
+        tx.executeSql('INSERT OR REPLACE INTO pinboard_post' +
+                      '  (href, description, extended, shared, toread, tags, time) VALUES(?, ?, ?, ?, ?, ?, ?);',
+                      [post.href, post.description, post.extended, post.shared, post.toread, post.tags, new Date().toISOString()]);
+
+    });
+}
+
+function deletePinboardPost(post) {
+    var db = private.getDatabase();
+    db.transaction(function (tx) {
+        var res = tx.executeSql('DELETE FROM pinboard_post WHERE href = ?;', [post.href]);
+        console.log("Deleted posts: ", res.rowsAffected);
+    });
+}
+
+function getRecentPinboardPosts(count) {
+    var db = private.getDatabase();
+    var retval = [];
+    db.transaction(function (tx) {
+        var res = tx.executeSql('SELECT * FROM pinboard_post ORDER BY time DESC LIMIT ?;', [count]);
+        retval = createPosts(res);
+    });
+    return retval;
+}
+
+function searchPinboardPosts(criteria) {
+    var db = private.getDatabase();
+    var retval = [];
+    db.transaction(function (tx) {
+        var res = tx.executeSql(createPinboardSearchQuery(criteria));
+        retval = createPosts(res);
+    });
+    return retval;
+}
+
+function createPosts(resultSet) {
+    var retval = [];
+    for (var i = 0; i < resultSet.rows.length; i++) {
+        retval.push({
+            href: resultSet.rows.item(i).href,
+            description: resultSet.rows.item(i).description,
+            extended: resultSet.rows.item(i).extended,
+            time: resultSet.rows.item(i).time,
+            shared: resultSet.rows.item(i).shared,
+            toread: resultSet.rows.item(i).toread,
+            tags: resultSet.rows.item(i).tags
+        });
+    }
+    return retval;
+}
+
+function createPinboardSearchQuery(criteria) {
+    var query = "SELECT * FROM pinboard_post";
+    var where = "";
+
+    console.log("description: ", criteria.description, " where: ", where);
+    if (criteria.description && criteria.description.trim().length > 0) {
+        where += " description LIKE '%" + criteria.description + "%'";
+    }
+
+    console.log("extended: ", criteria.extended, "where: ", where);
+    if (criteria.extended && criteria.extended.trim().length > 0) {
+        where += " extended LIKE '%" + criteria.extended + "%'";
+    }
+
+    console.log("tags: ", criteria.tags, " where: ", where);
+    if (criteria.tags && criteria.tags.trim().length > 0) {
+        var tags = criteria.tags.split(" ");
+        for (var i = 0; i < tags.length; i++) {
+            where += " tags LIKE '%" + tags[i].trim() + "%'";
+        }
+    }
+    if (where.length > 0) {
+        query += " WHERE " + where;
+    }
+    query += " ORDER BY time";
+    query += " LIMIT " + criteria.count;
+
+    console.log("query: " + query);
+    return query;
 }
 
 // ------------------------------------------------------------

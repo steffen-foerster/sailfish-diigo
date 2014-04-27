@@ -28,7 +28,7 @@ import "../AppState.js" as AppState
 import "../Utils.js" as Utils
 
 /**
- * Service: Diigo
+ * Service: Pinboard
  * Page to search bookmarks.
  */
 Dialog {
@@ -77,45 +77,31 @@ Dialog {
 
             TextField {
                 id: tags
-                placeholderText: qsTr("Tags, comma separated")
-                label: qsTr("Tags, comma separated")
+                placeholderText: qsTr("Tags, separated by space")
+                label: qsTr("Tags, separated by space")
                 width: parent.width
                 focus: true;
                 EnterKey.enabled: true
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                EnterKey.onClicked: list.focus = true
+                EnterKey.onClicked: description.focus = true
             }
             TextField {
-                id: list
-                placeholderText: qsTr("List name")
-                label: qsTr("List name")
+                id: description
+                placeholderText: qsTr("Title")
+                label: qsTr("Title")
                 width: parent.width
                 EnterKey.enabled: true
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                EnterKey.onClicked: filter.focus = true
+                EnterKey.onClicked: extended.focus = true
             }
-            TextSwitch {
-                id: filter
-                text: qsTr("Public and private")
-                description: qsTr("Show public and private bookmarks")
-                checked: true
-            }
-            ComboBox {
-                id: sort
+            TextField {
+                id: extended
+                placeholderText: qsTr("Description")
+                label: qsTr("Description")
                 width: parent.width
-                label: qsTr("Sort by")
-
-                menu: ContextMenu {
-                    MenuItem {
-                        text: qsTr("Created at")
-                    }
-                    MenuItem {
-                        text: qsTr("Updated at")
-                    }
-                    MenuItem {
-                        text: qsTr("Popularity")
-                    }
-                }
+                EnterKey.enabled: true
+                EnterKey.iconSource: "image://theme/icon-m-enter-next"
+                EnterKey.onClicked: count.focus = true
             }
             Slider {
                 id: count
@@ -132,19 +118,16 @@ Dialog {
 
     function clearFields() {
         tags.text = "";
-        liste.text = "";
-        filter.checked = true;
-        sort.value = "0";
-        sort.currentIndex = 0;
+        description.text = "";
+        extended.text = "";
         count.value = 5;
     }
 
     function createCriteria() {
         var criteria = {
-            tags: Utils.crop(tags.text, 250),
-            list: Utils.crop(list.text, 250),
-            filter: filter.checked,
-            sort: sort.currentIndex,
+            tags: tags.text,
+            description: description.text,
+            extended: extended.text,
             count: count.value
         }
         return criteria;

@@ -62,6 +62,10 @@
         <source>Read Later</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Tags, separated with space</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CoverPage</name>
@@ -77,15 +81,11 @@
 <context>
     <name>HttpClient</name>
     <message>
-        <source>Cannot fetch bookmarks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot save bookmark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Service request failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search parameters are invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -93,7 +93,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Search parameters are invalid</source>
+        <source>Too many requests</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot execute action</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -114,6 +118,17 @@
     <message>
         <source></source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>PinboardService</name>
+    <message>
+        <source>Cannot execute action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Service request failed</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -158,6 +173,18 @@
         <source>Popularity</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags, separated by space</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ServicePage</name>
@@ -170,11 +197,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Start</source>
+        <source>Pull down to select your service</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pull down to select your service</source>
+        <source>Service selection</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -204,6 +231,14 @@
         <source>Note: It&apos;s comfortable but not secure</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>API Token</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Pinboard to get your API Token</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StartPage</name>
@@ -229,6 +264,10 @@
     </message>
     <message>
         <source>Search result</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change service</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -268,6 +307,10 @@
     </message>
     <message>
         <source>Updated at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read later</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -99,12 +99,14 @@ function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
 /**
  * Saves the given bookmark.
  *
- * bookmark.title:      required, string, 1-250
- * bookmark.url:        required, string, 1-250
- * bookmark.shared:     optional, string (yes/no)
- * bookmarks.tags:      optional, string, 1-250, comma separated
- * bookmarks.desc:      optional, string, 1-250
- * bookmarks.readLater: optional, string (yes/no)
+ * API Fields:
+ *
+ * title:     required, string, 1-250
+ * url:       required, string, 1-250
+ * shared:    optional, string (yes/no)
+ * tags:      optional, string, 1-250, comma separated
+ * desc:      optional, string, 1-250
+ * readLater: optional, string (yes/no)
  */
 function addBookmark(bookmark, onSuccess, onFailure, appContext) {
     var queryParams = {

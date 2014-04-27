@@ -51,15 +51,16 @@ Page {
             MenuItem {
                 text: qsTr("Pinboard")
                 onClicked: {
+                    Settings.set(Settings.services.ALL, Settings.keys.SERVICE, Settings.services.PINBOARD);
                     getAppContext().service = Settings.services.PINBOARD;
                     getAppContext().state = AppState.T_PINBOARD_START;
-                    //pageStack.push(Qt.resolvedUrl("AddBookmarkPage.qml"))
+                    pageStack.replace(Qt.resolvedUrl("pinboard/StartPage.qml"))
                 }
             }
         }
 
         PageHeader {
-            title: qsTr("Start")
+            title: qsTr("Service selection")
         }
 
         ViewPlaceholder {

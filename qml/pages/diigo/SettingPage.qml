@@ -28,6 +28,7 @@ import "../Settings.js" as Settings
 import "../AppState.js" as AppState
 
 /**
+ * Service: Diigo
  * Page to save user settings.
  */
 Dialog {
@@ -63,7 +64,7 @@ Dialog {
                     user.text = ""
                     password.text = ""
                     savePassword.checked = false
-                    recentBookmarks.value = 5
+                    recentBookmarks.value = 10
                 }
             }
         }

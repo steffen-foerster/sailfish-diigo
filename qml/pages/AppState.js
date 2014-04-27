@@ -35,6 +35,7 @@ var S_VIEW_BOOKMARK = "s_view_bookmark";
 
 // Transitions
 var T_MAIN_START = "t_main_start";
+var T_CHANGE_SERVICE = "t_change_service";
 var T_DIIGO_START = "t_diigo_start";
 var T_PINBOARD_START = "t_pinboard_start";
 var T_START_SETTINGS = "t_start_settings";

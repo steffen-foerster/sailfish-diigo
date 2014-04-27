@@ -44,7 +44,10 @@ ApplicationWindow
         var activeService = Settings.get(Settings.services.ALL, Settings.keys.SERVICE);
         console.log("saved service: ", activeService);
         if (activeService == Settings.services.DIIGO) {
-            //startDiigo()
+            startDiigo();
+        }
+        else if (activeService == Settings.services.PINBOARD) {
+            startPinboard();
         }
     }
 
@@ -56,6 +59,13 @@ ApplicationWindow
         getAppContext().service = Settings.services.DIIGO;
         getAppContext().state = AppState.T_DIIGO_START;
         pageStack.replace(Qt.resolvedUrl("pages/diigo/StartPage.qml"));
+    }
+
+    function startPinboard() {
+        console.log("startPinboard");
+        getAppContext().service = Settings.services.PINBOARD;
+        getAppContext().state = AppState.T_PINBOARD_START;
+        pageStack.replace(Qt.resolvedUrl("pages/pinboard/StartPage.qml"))
     }
 
     QtObject {
