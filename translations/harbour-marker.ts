@@ -68,13 +68,20 @@
     </message>
 </context>
 <context>
-    <name>CoverPage</name>
+    <name>CoverPageActive</name>
     <message>
-        <source>Add or search a bookmark</source>
+        <source>URL in clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>URL in clipboard</source>
+        <source>Add or search a bookmark with </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CoverPageInactive</name>
+    <message>
+        <source>Sign in</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -236,7 +243,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Open Pinboard to get your API Token</source>
+        <source>Get your API Token</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change service</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -267,7 +278,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change service</source>
+        <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

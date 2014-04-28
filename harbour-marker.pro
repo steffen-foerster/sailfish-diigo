@@ -21,8 +21,6 @@ OTHER_FILES += harbour-marker.desktop \
     translations/*.ts \
     rpm/harbour-marker.yaml \
     rpm/harbour-marker.spec \
-    rpm/harbour-marker.changes.in \
-    qml/cover/CoverPage.qml \
     qml/harbour-marker.qml \
     qml/components/MessageBookmarkList.qml \
     qml/components/LabelText.qml \
@@ -43,7 +41,10 @@ OTHER_FILES += harbour-marker.desktop \
     qml/pages/pinboard/StartPage.qml \
     qml/pages/pinboard/SearchPage.qml \
     qml/pages/pinboard/ViewBookmarkPage.qml \
-    qml/pages/pinboard/AddBookmarkPage.qml
+    qml/pages/pinboard/AddBookmarkPage.qml \
+    qml/cover/CoverPageInactive.qml \
+    qml/cover/CoverPageActive.qml \
+    rpm/harbour-marker.changes
 
 # to disable building translations every time, comment out the
 # following CONFIG line

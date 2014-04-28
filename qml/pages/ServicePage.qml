@@ -34,6 +34,10 @@ import "AppState.js" as AppState
 Page {
     id: providerPage
 
+    Component.onCompleted: {
+        setInactiveCover();
+    }
+
     SilicaFlickable {
         anchors.fill: parent
         width: parent.width
@@ -44,7 +48,7 @@ Page {
                 onClicked: {
                     Settings.set(Settings.services.ALL, Settings.keys.SERVICE, Settings.services.DIIGO);
                     getAppContext().service = Settings.services.DIIGO;
-                    getAppContext().state = AppState.T_DIIGO_START;
+                    getAppContext().state = AppState.T_SERVICE_START;
                     pageStack.replace(Qt.resolvedUrl("diigo/StartPage.qml"));
                 }
             }
@@ -53,7 +57,7 @@ Page {
                 onClicked: {
                     Settings.set(Settings.services.ALL, Settings.keys.SERVICE, Settings.services.PINBOARD);
                     getAppContext().service = Settings.services.PINBOARD;
-                    getAppContext().state = AppState.T_PINBOARD_START;
+                    getAppContext().state = AppState.T_SERVICE_START;
                     pageStack.replace(Qt.resolvedUrl("pinboard/StartPage.qml"))
                 }
             }

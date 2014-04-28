@@ -144,8 +144,18 @@ function fetchAllSuccessCallback(posts, onSuccess) {
 function addSuccessCallback(result, bookmark, onSuccess, onFailure) {
     console.log("addSuccessCallback, result code: " + result.code);
     if (result.result_code === "done") {
+        // transform to post interface
+        var post = {
+            href: bookmark.url,
+            description: bookmark.description,
+            shared: bookmark.shared ? "yes" : "no",
+            toread: bookmark.toread ? "yes" : "no",
+            tags: (bookmark.tags !== undefined && bookmark.tags.length > 0) ? bookmark.tags : "",
+            extended: (bookmark.extended !== undefined && bookmark.extended.length > 0) ? bookmark.extended : ""
+        }
+
         console.log("Add bookmark to cache");
-        LocalStore.addPinboardPost(bookmark);
+        LocalStore.addPinboardPost(post);
         onSuccess();
     }
     else {

@@ -81,6 +81,7 @@ Dialog {
                 label: qsTr("Tags, comma separated")
                 width: parent.width
                 focus: true;
+                inputMethodHints: Qt.ImhNoAutoUppercase
                 EnterKey.enabled: true
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
                 EnterKey.onClicked: list.focus = true

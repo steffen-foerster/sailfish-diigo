@@ -67,6 +67,14 @@ Dialog {
                     recentBookmarks.value = 10
                 }
             }
+            MenuItem {
+                text: qsTr("Change service")
+                onClicked: {
+                    getAppContext().state = AppState.T_CHANGE_SERVICE;
+                    pageStack.clear();
+                    pageStack.push(Qt.resolvedUrl("../ServicePage.qml"));
+                }
+            }
         }
 
         Column {

@@ -44,6 +44,15 @@ Page {
 
     onStatusChanged: {
         if (status === PageStatus.Active) {
+            startPage.signedIn = isSignedIn();
+            if (startPage.signedIn) {
+                console.log("signed in");
+                setActiveCover();
+            }
+            else {
+                console.log("not signed in");
+                setInactiveCover();
+            }
             preparePage();
         }
     }
@@ -66,18 +75,18 @@ Page {
 
         PullDownMenu {
             MenuItem {
-                text: qsTr("Change service")
-                onClicked: {
-                    getAppContext().state = AppState.T_CHANGE_SERVICE;
-                    pageStack.replace(Qt.resolvedUrl("../ServicePage.qml"));
-                }
-            }
-            MenuItem {
                 text: (startPage.signedIn ? qsTr("Settings") : qsTr("Sign in / Settings"))
                 onClicked: {
                     getAppContext().state = AppState.T_START_SETTINGS;
                     pageStack.push(Qt.resolvedUrl("SettingPage.qml"));
                 }
+            }
+            MenuItem {
+                text: qsTr("Refresh")
+                onClicked: {
+                   searchBookmarksBySavedCriteria();
+                }
+                visible: startPage.signedIn
             }
             MenuItem {
                 text: qsTr("Search")
@@ -161,7 +170,8 @@ Page {
                     }
                     color: Theme.secondaryColor
                     font.pixelSize: Theme.fontSizeExtraSmall
-                    text: Utils.formatTimestamp(created_at)
+                    text: Utils.formatTimestamp(created_at) + " | " +
+                          (shared === "yes" ? "public" : "private")
                 }
             }
         }
@@ -176,6 +186,12 @@ Page {
                     onClicked: {
                         console.log("opening URL: " + bookmark.url)
                         Qt.openUrlExternally(bookmark.url)
+                    }
+                }
+                MenuItem {
+                    text: "Copy URL to clipboard"
+                    onClicked: {
+                        Clipboard.text = bookmark.url
                     }
                 }
             }
@@ -228,10 +244,8 @@ Page {
         bookmarkModel.clear();
         message.visible = false;
 
-        startPage.signedIn = isSignedIn();
         message.signedIn = startPage.signedIn;
         if (startPage.signedIn) {
-            console.log("signed in");
             busyIndicator.running = true;
 
             // TODO Load saved search criteria and title
@@ -240,7 +254,6 @@ Page {
                         count, fetchBookmarksSuccessCallback, serviceErrorCallback, getAppContext());
         }
         else {
-            console.log("not signed in");
             message.visible = true;
         }
         getAppContext().state = AppState.S_START;

@@ -63,6 +63,14 @@ Dialog {
                     recentBookmarks.value = 10
                 }
             }
+            MenuItem {
+                text: qsTr("Change service")
+                onClicked: {
+                    getAppContext().state = AppState.T_CHANGE_SERVICE;
+                    pageStack.clear();
+                    pageStack.push(Qt.resolvedUrl("../ServicePage.qml"));
+                }
+            }
         }
 
         Column {
@@ -75,22 +83,13 @@ Dialog {
                 title: qsTr("Settings")
             }
 
-            BackgroundItem {
-                width: parent.width
-
+            Button {
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                }
+                text: qsTr("Get your API Token")
                 onClicked: {
                     Qt.openUrlExternally("https://pinboard.in/settings/password");
-                }
-
-                Label {
-                    anchors {
-                        horizontalCenter: parent.horizontalCenter
-                    }
-                    text: qsTr("Open Pinboard to get your API Token")
-                    width: parent.width
-                    color: Theme.primaryColor
-                    font.pixelSize: Theme.fontSizeSmall
-                    horizontalAlignment: Text.AlignHCenter
                 }
             }
 

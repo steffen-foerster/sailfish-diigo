@@ -81,6 +81,7 @@ Dialog {
                 label: qsTr("Tags, separated by space")
                 width: parent.width
                 focus: true;
+                inputMethodHints: Qt.ImhNoAutoUppercase
                 EnterKey.enabled: true
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
                 EnterKey.onClicked: description.focus = true

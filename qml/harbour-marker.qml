@@ -32,7 +32,7 @@ ApplicationWindow
 {
     id: mainWindow
     initialPage: Component { ServicePage { } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
+    cover: Qt.resolvedUrl("cover/CoverPageInactive.qml")
 
     Component.onCompleted: {
         console.log("ApplicationWindow onCompleted");
@@ -44,28 +44,29 @@ ApplicationWindow
         var activeService = Settings.get(Settings.services.ALL, Settings.keys.SERVICE);
         console.log("saved service: ", activeService);
         if (activeService == Settings.services.DIIGO) {
-            startDiigo();
+            startService(Settings.services.DIIGO);
         }
         else if (activeService == Settings.services.PINBOARD) {
-            startPinboard();
+            startService(Settings.services.PINBOARD);
         }
     }
 
     Component.onDestruction: {
     }
 
-    function startDiigo() {
-        console.log("startDiigo");
-        getAppContext().service = Settings.services.DIIGO;
-        getAppContext().state = AppState.T_DIIGO_START;
-        pageStack.replace(Qt.resolvedUrl("pages/diigo/StartPage.qml"));
+    function setActiveCover() {
+        mainWindow.cover = Qt.resolvedUrl("cover/CoverPageActive.qml")
     }
 
-    function startPinboard() {
-        console.log("startPinboard");
-        getAppContext().service = Settings.services.PINBOARD;
-        getAppContext().state = AppState.T_PINBOARD_START;
-        pageStack.replace(Qt.resolvedUrl("pages/pinboard/StartPage.qml"))
+    function setInactiveCover() {
+        mainWindow.cover = Qt.resolvedUrl("cover/CoverPageInactive.qml")
+    }
+
+    function startService(service) {
+        console.log("start service: " + service);
+        getAppContext().service = service;
+        getAppContext().state = AppState.T_SERVICE_START;
+        pageStack.replace(Qt.resolvedUrl(getFolderByService() + "StartPage.qml"));
     }
 
     QtObject {
@@ -83,5 +84,23 @@ ApplicationWindow
 
     function isSignedIn() {
         return Settings.isSignedIn(appContext)
+    }
+
+    function getFolderByService() {
+        if (getAppContext().service === Settings.services.DIIGO) {
+            return "pages/diigo/";
+        }
+        else if (getAppContext().service === Settings.services.PINBOARD) {
+            return "pages/pinboard/";
+        }
+    }
+
+    function getServiceName() {
+        if (getAppContext().service === Settings.services.DIIGO) {
+            return "DIIGO";
+        }
+        else if (getAppContext().service === Settings.services.PINBOARD) {
+            return "PINBOARD";
+        }
     }
 }

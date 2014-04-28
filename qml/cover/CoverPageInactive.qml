@@ -22,30 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-.pragma library
+import QtQuick 2.0
+import Sailfish.Silica 1.0
+import "../pages/AppState.js" as AppState
+import "../pages/Utils.js" as Utils
+import "../pages"
 
-// States
-var S_START = "s_start";
-var S_SETTINGS = "s_settings";
-var S_ADD = "s_add";
-var S_SEARCH = "s_search";
-var S_ADD_WAIT_SERVICE = "s_add_wait_service";
-var S_SEARCH_WAIT_SERVICE = "s_search_wait_service";
-var S_VIEW_BOOKMARK = "s_view_bookmark";
+CoverBackground {
 
-// Transitions
-var T_MAIN_START = "t_main_start";
-var T_CHANGE_SERVICE = "t_change_service";
-var T_SERVICE_START = "t_service_start";
-var T_START_SETTINGS = "t_start_settings";
-var T_START_ADD = "t_start_add";
-var T_START_SEARCH = "t_start_search";
-var T_SETTINGS_ACCEPTED = "t_settings_accepted";
-var T_SETTINGS_REJECTED = "t_settings_rejected";
-var T_ADD_REJECTED = "t_add_rejected";
-var T_ADD_ACCEPTED = "t_add_accepted";
-var T_ADD_SERVICE_RESULT_RECIEVED = "t_add_service_result_recieved";
-var T_SEARCH_SERVICE_RESULT_RECIEVED = "t_search_service_result_recieved";
-var T_SEARCH_REJECTED = "t_search_rejected";
-var T_SEARCH_ACCEPTED = "t_search_accepted";
-var T_VIEW_BOOKMARK_START = "t_view_bookmark_start";
+    id: cover
+
+    CoverPlaceholder {
+        anchors.centerIn: parent
+        text: qsTr("Sign in")
+    }
+
+}
+
+

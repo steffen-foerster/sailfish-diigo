@@ -34,7 +34,7 @@ CoverBackground {
 
     CoverPlaceholder {
         anchors.centerIn: parent
-        text: qsTr("Add or search a bookmark")
+        text: qsTr("Add or search a bookmark with ") + getServiceName()
     }
 
     Label {
@@ -80,7 +80,7 @@ CoverBackground {
             pageStack.completeAnimation();
 
             getAppContext().state = AppState.T_START_ADD;
-            pageStack.push(Qt.resolvedUrl("../pages/AddBookmarkPage.qml"));
+            pageStack.push(Qt.resolvedUrl("../" + getFolderByService() + "AddBookmarkPage.qml"));
             mainWindow.activate()
         }
     }
@@ -92,9 +92,25 @@ CoverBackground {
             pageStack.completeAnimation();
 
             getAppContext().state = AppState.T_START_SEARCH;
-            pageStack.push(Qt.resolvedUrl("../pages/SearchPage.qml"));
+            pageStack.push(Qt.resolvedUrl("../" + getFolderByService() + "SearchPage.qml"));
             mainWindow.activate()
         }
+    }
+
+    function navigateToStartPage() {
+        var success = false;
+        if (getAppContext().state === AppState.S_START) {
+            // we are ready
+            success = true;
+        }
+        else {
+            pageStack.clear();
+            getAppContext().state = AppState.T_SERVICE_START; // init start page
+            pageStack.push(Qt.resolvedUrl("../" + getFolderByService() + "StartPage.qml"));
+            success = true;
+        }
+
+        return success;
     }
 
     function getFirstLettersOfUrl() {
@@ -106,7 +122,7 @@ CoverBackground {
             else {
                 text = text.substring(7, text.length);
             }
-            return Utils.crop(text, 18);
+            return Utils.crop(text, 15) + "..";
         }
         return "";
     }
@@ -121,28 +137,6 @@ CoverBackground {
         return false;
     }
 
-    function navigateToStartPage() {
-        var success = false;
-        var state = getAppContext().state;
-        console.log("state: " + state);
-
-        if (state === AppState.S_START) {
-            success = true;
-        }
-        else if (state === AppState.S_SETTINGS ||
-                 state === AppState.S_ADD ||
-                 state === AppState.S_SEARCH) {
-            pageStack.currentPage.reject();
-            success = true;
-        }
-        else if (state === AppState.S_VIEW_BOOKMARK) {
-            pageStack.navigateBack(PageStackAction.Immediate);
-            success = true;
-        }
-
-        console.log("navigation was successful: " + success);
-        return success;
-    }
 }
 
 

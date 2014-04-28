@@ -109,6 +109,7 @@ Dialog {
                 placeholderText: qsTr("Tags, separated with space")
                 label: qsTr("Tags, separated with space")
                 width: column.width
+                inputMethodHints: Qt.ImhNoAutoUppercase
                 EnterKey.enabled: true
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
                 EnterKey.onClicked: extended.focus = true
