@@ -34,7 +34,7 @@ CoverBackground {
 
     CoverPlaceholder {
         anchors.centerIn: parent
-        text: qsTr("Add or search a bookmark with ") + getServiceName()
+        text: qsTr("Search or add with ") + getServiceName()
     }
 
     Label {
@@ -130,7 +130,7 @@ CoverBackground {
     function hasUrlInClipboard() {
         if (Clipboard.hasText) {
             var urls = Clipboard.text.match(/^http[s]*:\/\/.{3,242}$/);
-            if (urls.length > 0) {
+            if (urls && urls.length > 0) {
                 return true;
             }
         }

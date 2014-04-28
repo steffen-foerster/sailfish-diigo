@@ -44,7 +44,7 @@ function performGetRequest(url, queryParams, onSuccess, onFailure, user, passwor
         if (addAnd) {
             url += ("&");
         }
-        url += (paramKey + "=" + queryParams[paramKey]);
+        url += (paramKey + "=" + encodeURIComponent(queryParams[paramKey]));
         addAnd = true;
     }
     console.log("URL: ", url);
@@ -90,7 +90,7 @@ var private = {
             if (content.length > 0) {
                 content += "&";
             }
-            content += (paramKey + "=" + escape(queryParams[paramKey]))
+            content += (paramKey + "=" + encodeURIComponent(queryParams[paramKey]));
         }
         return content;
     },

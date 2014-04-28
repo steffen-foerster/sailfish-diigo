@@ -74,7 +74,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add or search a bookmark with </source>
+        <source>Search or add with </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
