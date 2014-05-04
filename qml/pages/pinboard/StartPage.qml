@@ -143,7 +143,7 @@ Page {
                     bookmarkList.contextMenu =
                             contextMenuComponent.createObject(bookmarkList)
                 }
-                bookmarkList.contextMenu.bookmark = bookmarkModel.get(index);
+                bookmarkList.contextMenu.index = index
                 bookmarkList.contextMenu.show(wrapper);
             }
 
@@ -157,9 +157,12 @@ Page {
                     }
                     id: lbTitle
                     color: Theme.primaryColor
-                    font.pixelSize: Theme.fontSizeSmall
+                    font {
+                        pixelSize: Theme.fontSizeSmall
+                        bold: model.toread === 'yes'
+                    }
                     wrapMode: Text.Wrap
-                    text: description
+                    text: model.description
                     width: wrapper.ListView.view.width - (2 * Theme.paddingLarge)
                 }
                 Label {
@@ -170,9 +173,18 @@ Page {
                     }
                     color: Theme.secondaryColor
                     font.pixelSize: Theme.fontSizeExtraSmall
-                    text: Utils.formatTimestamp(time) + " | " +
-                          (shared === "yes" ? "public" : "private") +
-                          (toread === "yes" ? " | to read" : "")
+                    text: Utils.formatTimestamp(model.time)
+                    Image {
+                        anchors {
+                            verticalCenter: lbCreated.verticalCenter
+                            left: lbCreated.right
+                            leftMargin: Theme.paddingMedium
+                        }
+                        height: Theme.iconSizeSmall
+                        fillMode: Image.PreserveAspectFit
+                        source: "image://theme/icon-m-device-lock"
+                        visible: model.shared === 'no'
+                    }
                 }
             }
         }
@@ -180,23 +192,39 @@ Page {
         Component {
             id: contextMenuComponent
             ContextMenu {
-                property variant bookmark
+                property variant index
 
                 MenuItem {
                     text: "Open in browser"
                     onClicked: {
-                        console.log("opening URL: " + bookmark.href)
-                        Qt.openUrlExternally(bookmark.href)
+                        console.log("opening URL: " + bookmarkModel.get(index).href)
+                        Qt.openUrlExternally(bookmarkModel.get(index).href)
+                    }
+                }
+                MenuItem {
+                    text: "Remove"
+                    onClicked: {
+                        remorse.execute(bookmarkList.contextMenu.parent,
+                                        "Deleting",
+                                        function() {
+                                            PinboardService.deleteBookmark(bookmarkModel.get(index),
+                                                        function() { bookmarkModel.remove(index) },
+                                                        // TODO add failure handler
+                                                        function() {})
+                                        },
+                                        3000)
                     }
                 }
                 MenuItem {
                     text: "Copy URL to clipboard"
                     onClicked: {
-                        Clipboard.text = bookmark.href
+                        Clipboard.text = bookmarkModel.get(index).href
                     }
                 }
             }
         }
+
+        RemorseItem { id: remorse }
 
         VerticalScrollDecorator {}
     }

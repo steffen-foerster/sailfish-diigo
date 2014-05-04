@@ -68,7 +68,7 @@ Dialog {
                 onClicked: {
                     getAppContext().state = AppState.T_CHANGE_SERVICE;
                     pageStack.clear();
-                    pageStack.push(Qt.resolvedUrl("../ServicePage.qml"));
+                    pageStack.push(Qt.resolvedUrl("../ServicePage.qml"), {placeholderVisible: true});
                 }
             }
         }

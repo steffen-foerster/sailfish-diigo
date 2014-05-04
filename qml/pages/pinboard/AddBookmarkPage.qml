@@ -41,7 +41,7 @@ Dialog {
         }
     }
 
-    canAccept: (!url.errorHighlight && !description.errorHighlight)
+    canAccept: (!href.errorHighlight && !description.errorHighlight)
 
     onAccepted: {
         var startPage = pageStack.previousPage();
@@ -82,7 +82,7 @@ Dialog {
             }
 
             TextField {
-                id: url
+                id: href
                 placeholderText: qsTr("Enter or paste URL")
                 label: qsTr("URL")
                 width: column.width
@@ -142,14 +142,14 @@ Dialog {
         if (Clipboard.hasText) {
             var urls = Clipboard.text.match(/^http[s]*:\/\/.{3,242}$/);
             if (urls.length > 0) {
-                url.text = urls[0];
+                href.text = urls[0];
                 description.focus = true;
             }
         }
     }
 
     function anyFieldChanged() {
-        return url.text.length > 0
+        return href.text.length > 0
                 || description.text.length > 0
                 || tags.text.length > 0
                 || extended.text.length > 0
@@ -158,7 +158,7 @@ Dialog {
     }
 
     function clearFields() {
-        url.text = "";
+        href.text = "";
         description.text = "";
         tags.text = "";
         extended.text = "";
@@ -168,7 +168,7 @@ Dialog {
 
     function createBookmarkObj() {
         var bookmark = {
-            url: Utils.crop(url.text, 250),
+            href: Utils.crop(href.text, 250),
             description: Utils.crop(description.text, 250),
             tags: Utils.crop(tags.text, 250 * 100),
             extended: Utils.crop(extended.text, 65536),

@@ -27,6 +27,7 @@ import Sailfish.Silica 1.0
 Column {
     property alias label: label.text
     property alias text: text.text
+    property alias font: text.font
     property alias separator: separator.visible
 
     spacing: Theme.paddingMedium

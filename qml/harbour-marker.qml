@@ -31,7 +31,7 @@ import "pages/AppState.js" as AppState
 ApplicationWindow
 {
     id: mainWindow
-    initialPage: Component { ServicePage { } }
+    initialPage: servicePage
     cover: Qt.resolvedUrl("cover/CoverPageInactive.qml")
 
     Component.onCompleted: {
@@ -49,9 +49,26 @@ ApplicationWindow
         else if (activeService == Settings.services.PINBOARD) {
             startService(Settings.services.PINBOARD);
         }
+        else {
+            servicePage.placeholderVisible = true
+        }
     }
 
     Component.onDestruction: {
+    }
+
+    QtObject {
+        id: appContext
+        property string password: ""
+        property string apiKey: SailUtil.apiKey // API-Key for Diigo
+        property string state: AppState.T_MAIN_START
+        property variant dialogProperties
+        property int service
+    }
+
+    Component {
+        id: servicePage
+        ServicePage { }
     }
 
     function setActiveCover() {
@@ -67,15 +84,6 @@ ApplicationWindow
         getAppContext().service = service;
         getAppContext().state = AppState.T_SERVICE_START;
         pageStack.replace(Qt.resolvedUrl(getFolderByService() + "StartPage.qml"));
-    }
-
-    QtObject {
-        id: appContext
-        property string password: ""
-        property string apiKey: SailUtil.apiKey // API-Key for Diigo
-        property string state: AppState.T_MAIN_START
-        property variant dialogProperties
-        property int service
     }
 
     function getAppContext() {

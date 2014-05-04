@@ -30,22 +30,6 @@ THE SOFTWARE.
  * Documentation of the Diigo API: https://www.diigo.com/api_dev
  */
 
-var URL_BOOKMARK = "https://secure.diigo.com/api/v2/bookmarks";
-
-var searchParam = {
-    SORT_CREATED_AT : 0,
-
-    SORT_UPDATED_AT : 1,
-
-    SORT_POPULARITY : 2,
-
-    SORT_HOT : 3,
-
-    FILTER_ALL : "all",
-
-    FILTER_PUBLIC : "public"
-}
-
 /**
  * Returns the recent created bookmarks.
  */
@@ -55,12 +39,12 @@ function getRecentBookmarks(count, onSuccess, onFailure, appContext) {
         user: Settings.get(Settings.services.DIIGO, Settings.keys.USER),
         start: 0,
         count: count,
-        sort: searchParam.SORT_CREATED_AT,
-        filter: searchParam.FILTER_ALL
+        sort: internal.SEARCH_PARAMS.SORT_CREATED_AT,
+        filter: internal.SEARCH_PARAMS.FILTER_ALL
     }
 
     HttpClient.performGetRequest(
-                URL_BOOKMARK,
+                internal.URL_BOOKMARK,
                 queryParams,
                 onSuccess,
                 onFailure,
@@ -78,7 +62,7 @@ function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
         start: 0,
         count: searchCriteria.count,
         sort: searchCriteria.sort,
-        filter: searchCriteria.filter ? searchParam.FILTER_ALL : searchParam.FILTER_PUBLIC,
+        filter: searchCriteria.filter ? internal.SEARCH_PARAMS.FILTER_ALL : internal.SEARCH_PARAMS.FILTER_PUBLIC,
     }
     if (searchCriteria.tags !== undefined && searchCriteria.tags.length > 0) {
         queryParams.tags = searchCriteria.tags
@@ -88,7 +72,7 @@ function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
     }
 
     HttpClient.performGetRequest(
-                URL_BOOKMARK,
+                internal.URL_BOOKMARK,
                 queryParams,
                 onSuccess,
                 onFailure,
@@ -125,7 +109,7 @@ function addBookmark(bookmark, onSuccess, onFailure, appContext) {
     }
 
     HttpClient.performPostRequest(
-                URL_BOOKMARK,
+                internal.URL_BOOKMARK,
                 queryParams,
                 onSuccess,
                 onFailure,
@@ -133,4 +117,27 @@ function addBookmark(bookmark, onSuccess, onFailure, appContext) {
                 Settings.getPassword(appContext));
 }
 
+// -------------------------------------------------------
+// private section
+// -------------------------------------------------------
+
+var internal = {
+
+    URL_BOOKMARK: "https://secure.diigo.com/api/v2/bookmarks",
+
+    SEARCH_PARAMS: {
+        SORT_CREATED_AT : 0,
+
+        SORT_UPDATED_AT : 1,
+
+        SORT_POPULARITY : 2,
+
+        SORT_HOT : 3,
+
+        FILTER_ALL : "all",
+
+        FILTER_PUBLIC : "public"
+    }
+
+}
 

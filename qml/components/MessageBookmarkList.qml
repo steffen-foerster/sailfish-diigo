@@ -36,6 +36,8 @@ Item {
 
     anchors.fill: parent
 
+    visible: false
+
     onSignedInChanged: {
         computeText()
     }

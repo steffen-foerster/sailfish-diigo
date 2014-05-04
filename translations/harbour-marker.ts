@@ -130,11 +130,19 @@
 <context>
     <name>PinboardService</name>
     <message>
-        <source>Cannot execute action</source>
+        <source>Service request failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Service request failed</source>
+        <source>Cannot add bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot update bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot remove bookmark</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -309,10 +317,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Public</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Created at</source>
         <translation type="unfinished"></translation>
     </message>
@@ -321,7 +325,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Read later</source>
+        <source>Mark as read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mark as to read</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

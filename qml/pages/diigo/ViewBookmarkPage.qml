@@ -62,17 +62,28 @@ Page {
             }
         }
 
-        PageHeader {
-            id: header
-            title: qsTr("Bookmark")
-        }
-
         Column {
             id: itemColumn
             x: Theme.paddingLarge
             width: parent.width - 2 * Theme.paddingLarge
+            height: childrenRect.height + 2 * Theme.paddingLarge
             spacing: Theme.paddingMedium
-            anchors.top: header.bottom
+
+            PageHeader {
+                id: header
+                title: qsTr("Bookmark")
+
+                Image {
+                    anchors {
+                        top: header.bottom
+                        right: header.right
+                    }
+                    height: Theme.iconSizeMedium * 0.8
+                    fillMode: Image.PreserveAspectFit
+                    source: "image://theme/icon-m-device-lock"
+                    visible: bookmark.shared === 'no'
+                }
+            }
 
             LabelText {
                 label: qsTr("Title")
@@ -89,11 +100,7 @@ Page {
             }
             LabelText {
                 label: qsTr("Tags")
-                text: bookmark.tags
-            }
-            LabelText {
-                label: qsTr("Public")
-                text: bookmark.shared
+                text: formatTags(bookmark.tags)
             }
             LabelText {
                 label: qsTr("Created at")
@@ -107,6 +114,14 @@ Page {
             }
         }
         VerticalScrollDecorator {}
+    }
+
+    function formatTags(tags) {
+        var retval = tags;
+        if (tags) {
+            retval = tags.replace(",", " ")
+        }
+        return retval;
     }
 
 }

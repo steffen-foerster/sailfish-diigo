@@ -32,6 +32,9 @@ import "AppState.js" as AppState
  * Page to select the provider.
  */
 Page {
+
+    property alias placeholderVisible: placeHolder.enabled
+
     id: providerPage
 
     Component.onCompleted: {
@@ -68,7 +71,8 @@ Page {
         }
 
         ViewPlaceholder {
-            enabled: true
+            id: placeHolder
+            enabled: false
             text: qsTr("Pull down to select your service")
         }
     }

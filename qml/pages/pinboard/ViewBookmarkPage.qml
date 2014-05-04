@@ -27,6 +27,7 @@ import Sailfish.Silica 1.0
 import "../../components"
 import "../Settings.js" as Settings
 import "../AppState.js" as AppState
+import "PinboardService.js" as PinboardService
 import "../Utils.js" as Utils
 
 /**
@@ -34,9 +35,10 @@ import "../Utils.js" as Utils
  * Shows the details of a bookmark.
  */
 Page {
-    id: viewBookmarkPage
 
     property variant bookmark
+
+    id: viewBookmarkPage
 
     onStatusChanged: {
         if (status === Component.Loading) {
@@ -54,29 +56,49 @@ Page {
 
         PullDownMenu {
             MenuItem {
+                text: (bookmark.toread === 'yes' ? qsTr("Mark as read") : qsTr("Mark as to read"))
+                onClicked: {
+                    bookmark.toread = (bookmark.toread === 'yes' ? 'no' : 'yes')
+                    // TODO add failure handler
+                    PinboardService.updateStatus(bookmark, function(){}, function(){})
+                }
+            }
+            MenuItem {
                 text: qsTr("Open in browser")
                 onClicked: {
-                    console.log("opening URL: " + bookmark.url)
+                    console.log("opening URL: " + bookmark.href)
                     Qt.openUrlExternally(bookmark.href)
                 }
             }
-        }
-
-        PageHeader {
-            id: header
-            title: qsTr("Bookmark")
         }
 
         Column {
             id: itemColumn
             x: Theme.paddingLarge
             width: parent.width - 2 * Theme.paddingLarge
+            height: childrenRect.height + 2 * Theme.paddingLarge
             spacing: Theme.paddingMedium
-            anchors.top: header.bottom
+
+            PageHeader {
+                id: header
+                title: qsTr("Bookmark")
+
+                Image {
+                    anchors {
+                        top: header.bottom
+                        right: header.right
+                    }
+                    height: Theme.iconSizeMedium * 0.8
+                    fillMode: Image.PreserveAspectFit
+                    source: "image://theme/icon-m-device-lock"
+                    visible: bookmark.shared === 'no'
+                }
+            }
 
             LabelText {
                 label: qsTr("Title")
                 text: bookmark.description
+                font.bold: bookmark.toread === 'yes'
                 separator: false
             }
             LabelText {
@@ -92,14 +114,6 @@ Page {
                 text: bookmark.tags
             }
             LabelText {
-                label: qsTr("Public")
-                text: bookmark.shared
-            }
-            LabelText {
-                label: qsTr("Read later")
-                text: bookmark.toread
-            }
-            LabelText {
                 label: qsTr("Created at")
                 text: Utils.formatTimestamp(bookmark.time)
                 separator: false
@@ -107,5 +121,4 @@ Page {
         }
         VerticalScrollDecorator {}
     }
-
 }

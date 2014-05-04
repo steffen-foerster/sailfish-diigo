@@ -31,15 +31,6 @@ THE SOFTWARE.
  * Documentation of the Pinboard API: https://pinboard.in/api/
  */
 
-var URL_BOOKMARK = "https://api.pinboard.in/v1/posts/";
-
-var methods = {
-    ADD: "add",
-    ALL: "all",
-    DELETE: "delete",
-    RECENT: "recent"
-}
-
 /**
  * Returns the recent created bookmarks from the cache.
  */
@@ -51,16 +42,16 @@ function fetchRecentBookmarks(count, onSuccess, onFailure, appContext) {
 function refreshCache(onSuccess, onFailure) {
     var lastSync = Settings.get(Settings.services.PINBOARD, Settings.keys.LAST_SYNC);
     console.log("lastSync: " + lastSync);
-    if (!lastSync || canFetchAll(lastSync)) {
+    if (!lastSync || internal.canFetchAll(lastSync)) {
         var queryParams = {
             auth_token: Settings.get(Settings.services.PINBOARD, Settings.keys.API_KEY),
             format: "json"
         }
 
         HttpClient.performGetRequest(
-                    URL_BOOKMARK + methods.ALL,
+                    internal.URL_BOOKMARK + internal.METHODS.ALL,
                     queryParams,
-                    function(posts) {fetchAllSuccessCallback(posts, onSuccess)},
+                    function(posts) {internal.fetchAllSuccessCallback(posts, onSuccess)},
                     onFailure);
     }
     else {
@@ -74,7 +65,7 @@ function fetchBookmarks(criteria, onSuccess, onFailure) {
 }
 
 /**
- * Saves the given bookmark.
+ * Adds the given bookmark to Pinboard and to the local cache.
  *
  * API Fields:
  *
@@ -91,7 +82,7 @@ function addBookmark(bookmark, onSuccess, onFailure) {
     var queryParams = {
         auth_token: Settings.get(Settings.services.PINBOARD, Settings.keys.API_KEY),
         description: bookmark.description,
-        url: bookmark.url,
+        url: bookmark.href,
         shared: bookmark.shared ? "yes" : "no",
         toread: bookmark.toread ? "yes" : "no",
         format: "json"
@@ -104,9 +95,53 @@ function addBookmark(bookmark, onSuccess, onFailure) {
     }
 
     HttpClient.performGetRequest(
-                URL_BOOKMARK + methods.ADD,
+                internal.URL_BOOKMARK + internal.METHODS.ADD,
                 queryParams,
-                function(result) {addSuccessCallback(result, bookmark, onSuccess, onFailure)},
+                function(result) {internal.addSuccessCallback(result, bookmark, onSuccess, onFailure)},
+                onFailure);
+}
+
+/**
+ * Updates the bookmark in the Pinboard library and the local cache.
+ */
+function updateBookmark(bookmark, onSuccess, onFailure) {
+    var queryParams = {
+        auth_token: Settings.get(Settings.services.PINBOARD, Settings.keys.API_KEY),
+        description: bookmark.description,
+        url: bookmark.href,
+        shared: bookmark.shared,
+        toread: bookmark.toread,
+        dt: bookmark.time,
+        format: "json"
+    }
+    if (bookmark.tags !== undefined && bookmark.tags.length > 0) {
+        queryParams.tags = bookmark.tags
+    }
+    if (bookmark.extended !== undefined && bookmark.extended.length > 0) {
+        queryParams.extended = bookmark.extended
+    }
+
+    HttpClient.performGetRequest(
+                internal.URL_BOOKMARK + internal.METHODS.ADD,
+                queryParams,
+                function(result) {internal.updateSuccessCallback(result, bookmark, onSuccess, onFailure)},
+                onFailure);
+}
+
+/**
+ * Deletes the bookmark from the Pinboard library and the local cache.
+ */
+function deleteBookmark(bookmark, onSuccess, onFailure) {
+    var queryParams = {
+        auth_token: Settings.get(Settings.services.PINBOARD, Settings.keys.API_KEY),
+        url: bookmark.href,
+        format: "json"
+    }
+
+    HttpClient.performGetRequest(
+                internal.URL_BOOKMARK + internal.METHODS.DELETE,
+                queryParams,
+                function(result) {internal.deleteSuccessCallback(result, bookmark, onSuccess, onFailure)},
                 onFailure);
 }
 
@@ -114,55 +149,95 @@ function addBookmark(bookmark, onSuccess, onFailure) {
 // private functions
 // -------------------------------------------------------
 
-/**
- * We can only fetch all posts every 5 minutes.
- */
-function canFetchAll(lastSync) {
-    var dateLastSync = Date.parse(lastSync);
-    var now = Date.now();
-    var diffSeconds = (now - dateLastSync) / (1000);
-    var delay = (5 * 60) + 10; // 10 extra seconds
-    console.log("diffSeconds: ", diffSeconds);
+var internal = {
 
-    return diffSeconds > delay;
-}
+    URL_BOOKMARK: "https://api.pinboard.in/v1/posts/",
 
-// -------------------------------------------------------
-// callback functions
-// -------------------------------------------------------
+    METHODS: {
+        ADD: "add",
+        ALL: "all",
+        DELETE: "delete",
+        RECENT: "recent"
+    },
 
-function fetchAllSuccessCallback(posts, onSuccess) {
-    var nowStr = new Date().toISOString();
-    console.log("Save last sync: " + nowStr);
-    Settings.set(Settings.services.PINBOARD, Settings.keys.LAST_SYNC, nowStr);
-    console.log("Save posts ...");
-    LocalStore.savePinboardPosts(posts);
-    console.log("back to page");
-    onSuccess();
-}
+    /**
+     * We can only fetch all posts every 5 minutes.
+     */
+    canFetchAll: function(lastSync) {
+        var dateLastSync = Date.parse(lastSync);
+        var now = Date.now();
+        var diffSeconds = (now - dateLastSync) / (1000);
+        var delay = (5 * 60) + 10; // 10 extra seconds
+        console.log("diffSeconds: ", diffSeconds);
 
-function addSuccessCallback(result, bookmark, onSuccess, onFailure) {
-    console.log("addSuccessCallback, result code: " + result.code);
-    if (result.result_code === "done") {
-        // transform to post interface
-        var post = {
-            href: bookmark.url,
-            description: bookmark.description,
-            shared: bookmark.shared ? "yes" : "no",
-            toread: bookmark.toread ? "yes" : "no",
-            tags: (bookmark.tags !== undefined && bookmark.tags.length > 0) ? bookmark.tags : "",
-            extended: (bookmark.extended !== undefined && bookmark.extended.length > 0) ? bookmark.extended : ""
-        }
+        return diffSeconds > delay;
+    },
 
-        console.log("Add bookmark to cache");
-        LocalStore.addPinboardPost(post);
+    fetchAllSuccessCallback: function(posts, onSuccess) {
+        var nowStr = new Date().toISOString();
+        console.log("Save last sync: " + nowStr);
+        Settings.set(Settings.services.PINBOARD, Settings.keys.LAST_SYNC, nowStr);
+        console.log("Save posts ...");
+        LocalStore.savePinboardPosts(posts);
+        console.log("back to page");
         onSuccess();
-    }
-    else {
-        var errorResponse = {
-            errorMessage: qsTr("Cannot execute action"),
-            detailMessage : qsTr("Service request failed")
-        };
-        onFailure(errorResponse);
+    },
+
+    addSuccessCallback: function(result, bookmark, onSuccess, onFailure) {
+        console.log("addSuccessCallback, result code: " + result.result_code);
+        if (result.result_code === "done") {
+            // transform to post interface
+            var post = {
+                href: bookmark.href,
+                description: bookmark.description,
+                shared: bookmark.shared ? "yes" : "no",
+                toread: bookmark.toread ? "yes" : "no",
+                tags: (bookmark.tags !== undefined && bookmark.tags.length > 0) ? bookmark.tags : "",
+                extended: (bookmark.extended !== undefined && bookmark.extended.length > 0) ? bookmark.extended : ""
+            }
+
+            console.log("Add bookmark to cache");
+            LocalStore.addOrUpdatePinboardPost(post);
+            onSuccess();
+        }
+        else {
+            var errorResponse = {
+                errorMessage: qsTr("Cannot add bookmark"),
+                detailMessage : qsTr("Service request failed")
+            };
+            onFailure(errorResponse);
+        }
+    },
+
+    updateSuccessCallback: function(result, bookmark, onSuccess, onFailure) {
+        console.log("updateSuccessCallback, result code: " + result.result_code);
+        if (result.result_code === "done") {
+            console.log("Update bookmark in cache");
+            LocalStore.addOrUpdatePinboardPost(bookmark);
+            onSuccess();
+        }
+        else {
+            var errorResponse = {
+                errorMessage: qsTr("Cannot update bookmark"),
+                detailMessage : qsTr("Service request failed")
+            };
+            onFailure(errorResponse);
+        }
+    },
+
+    deleteSuccessCallback: function(result, bookmark, onSuccess, onFailure) {
+        console.log("deleteSuccessCallback, result code: " + result.result_code);
+        if (result.result_code === "done") {
+            console.log("Remove bookmark from cache");
+            LocalStore.deletePinboardPost(bookmark);
+            onSuccess();
+        }
+        else {
+            var errorResponse = {
+                errorMessage: qsTr("Cannot remove bookmark"),
+                detailMessage : qsTr("Service request failed")
+            };
+            onFailure(errorResponse);
+        }
     }
 }

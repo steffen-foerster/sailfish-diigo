@@ -143,7 +143,7 @@ Page {
                     bookmarkList.contextMenu =
                             contextMenuComponent.createObject(bookmarkList)
                 }
-                bookmarkList.contextMenu.bookmark = bookmarkModel.get(index);
+                bookmarkList.contextMenu.index = index
                 bookmarkList.contextMenu.show(wrapper);
             }
 
@@ -159,7 +159,7 @@ Page {
                     color: Theme.primaryColor
                     font.pixelSize: Theme.fontSizeSmall
                     wrapMode: Text.Wrap
-                    text: title
+                    text: model.title
                     width: wrapper.ListView.view.width - (2 * Theme.paddingLarge)
                 }
                 Label {
@@ -170,8 +170,18 @@ Page {
                     }
                     color: Theme.secondaryColor
                     font.pixelSize: Theme.fontSizeExtraSmall
-                    text: Utils.formatTimestamp(created_at) + " | " +
-                          (shared === "yes" ? "public" : "private")
+                    text: Utils.formatTimestamp(model.created_at)
+                    Image {
+                        anchors {
+                            verticalCenter: lbCreated.verticalCenter
+                            left: lbCreated.right
+                            leftMargin: Theme.paddingMedium
+                        }
+                        height: Theme.iconSizeSmall
+                        fillMode: Image.PreserveAspectFit
+                        source: "image://theme/icon-m-device-lock"
+                        visible: model.shared === 'no'
+                    }
                 }
             }
         }
@@ -179,19 +189,19 @@ Page {
         Component {
             id: contextMenuComponent
             ContextMenu {
-                property variant bookmark
+                property variant index
 
                 MenuItem {
                     text: "Open in browser"
                     onClicked: {
-                        console.log("opening URL: " + bookmark.url)
-                        Qt.openUrlExternally(bookmark.url)
+                        console.log("opening URL: " + bookmarkModel.get(index).url)
+                        Qt.openUrlExternally(bookmarkModel.get(index).url)
                     }
                 }
                 MenuItem {
                     text: "Copy URL to clipboard"
                     onClicked: {
-                        Clipboard.text = bookmark.url
+                        Clipboard.text = bookmarkModel.get(index).url
                     }
                 }
             }

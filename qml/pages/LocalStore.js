@@ -159,14 +159,15 @@ function savePinboardPosts(posts) {
 }
 
 /**
- * A post with the same URL will be replaced.
+ * A bookmark with the same URL will be replaced.
  */
-function addPinboardPost(post) {
+function addOrUpdatePinboardPost(post) {
     var db = private.getDatabase();
     db.transaction(function (tx) {
+        var time = post.time ? post.time : new Date().toISOString()
         tx.executeSql('INSERT OR REPLACE INTO pinboard_post' +
                       '  (href, description, extended, shared, toread, tags, time) VALUES(?, ?, ?, ?, ?, ?, ?);',
-                      [post.href, post.description, post.extended, post.shared, post.toread, post.tags, new Date().toISOString()]);
+                      [post.href, post.description, post.extended, post.shared, post.toread, post.tags, time]);
 
     });
 }

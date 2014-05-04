@@ -35,7 +35,7 @@ THE SOFTWARE.
 function performGetRequest(url, queryParams, onSuccess, onFailure, user, password) {
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
-        private.onReady(request, onSuccess, onFailure, "GET");
+        internal.onReady(request, onSuccess, onFailure, "GET");
     }
 
     url += ("?");
@@ -65,10 +65,10 @@ function performGetRequest(url, queryParams, onSuccess, onFailure, user, passwor
 function performPostRequest (url, queryParams, onSuccess, onFailure, user, password) {
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
-        private.onReady(request, onSuccess, onFailure, "POST");
+        internal.onReady(request, onSuccess, onFailure, "POST");
     }
 
-    var content = private.createPostBody(queryParams);
+    var content = internal.createPostBody(queryParams);
 
     if (user) {
         request.open("POST", url, true, user, password);
@@ -82,7 +82,11 @@ function performPostRequest (url, queryParams, onSuccess, onFailure, user, passw
     request.send(content);
 };
 
-var private = {
+// -------------------------------------------------------
+// private functions
+// -------------------------------------------------------
+
+var internal = {
 
     createPostBody : function(queryParams) {
         var content = "";
