@@ -56,18 +56,30 @@ Page {
 
         PullDownMenu {
             MenuItem {
-                text: (bookmark.toread === 'yes' ? qsTr("Mark as read") : qsTr("Mark as to read"))
-                onClicked: {
-                    bookmark.toread = (bookmark.toread === 'yes' ? 'no' : 'yes')
-                    // TODO add failure handler
-                    PinboardService.updateStatus(bookmark, function(){}, function(){})
-                }
-            }
-            MenuItem {
                 text: qsTr("Open in browser")
                 onClicked: {
                     console.log("opening URL: " + bookmark.href)
                     Qt.openUrlExternally(bookmark.href)
+                }
+            }
+            MenuItem {
+                text: qsTr("Edit")
+                onClicked: {
+                    getAppContext().state = AppState.T_VIEW_BOOKMARK_EDIT;
+                    pageStack.push(Qt.resolvedUrl("EditBookmarkPage.qml"), {bookmark: bookmark, viewPage: viewBookmarkPage})
+                }
+            }
+            MenuItem {
+                text: (bookmark.toread === 'yes' ? qsTr("Mark as read") : qsTr("Mark as to read"))
+                onClicked: {
+                    bookmark.toread = (bookmark.toread === 'yes' ? 'no' : 'yes')
+                    // TODO add failure handler
+                    PinboardService.updateBookmark(bookmark, function(){},
+                        function() {
+                            // failure -> reverse flag
+                            bookmark.toread = (bookmark.toread === 'yes' ? 'no' : 'yes')
+                        }
+                    )
                 }
             }
         }
@@ -120,5 +132,21 @@ Page {
             }
         }
         VerticalScrollDecorator {}
+    }
+
+    function editSuccessCallback() {
+        getAppContext().state = AppState.S_VIEW_BOOKMARK;
+    }
+
+    function editFailureCallback(errorResult, oldBookmark) {
+        getAppContext().state = AppState.S_VIEW_BOOKMARK;
+        // restore bookmark values
+        bookmark.href = oldBookmark.href;
+        bookmark.description = oldBookmark.description;
+        bookmark.tags = oldBookmark.tags;
+        bookmark.extended = oldBookmark.extended;
+        bookmark.shared = oldBookmark.shared;
+        bookmark.toread = oldBookmark.toread;
+        // TODO show error message
     }
 }

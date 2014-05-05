@@ -25,6 +25,8 @@ THE SOFTWARE.
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "pages"
+import "pages/diigo" as DiigoModule
+import "pages/pinboard" as PinboardModule
 import "pages/Settings.js" as Settings
 import "pages/AppState.js" as AppState
 
@@ -71,6 +73,16 @@ ApplicationWindow
         ServicePage { }
     }
 
+    Component {
+        id: startPageDiigo
+        DiigoModule.StartPage { }
+    }
+
+    Component {
+        id: startPagePinboard
+        PinboardModule.StartPage { }
+    }
+
     function setActiveCover() {
         mainWindow.cover = Qt.resolvedUrl("cover/CoverPageActive.qml")
     }
@@ -83,7 +95,7 @@ ApplicationWindow
         console.log("start service: " + service);
         getAppContext().service = service;
         getAppContext().state = AppState.T_SERVICE_START;
-        pageStack.replace(Qt.resolvedUrl(getFolderByService() + "StartPage.qml"));
+        pageStack.replace(getStartPage());
     }
 
     function getAppContext() {
@@ -100,6 +112,15 @@ ApplicationWindow
         }
         else if (getAppContext().service === Settings.services.PINBOARD) {
             return "pages/pinboard/";
+        }
+    }
+
+    function getStartPage() {
+        if (getAppContext().service === Settings.services.DIIGO) {
+            return startPageDiigo;
+        }
+        else if (getAppContext().service === Settings.services.PINBOARD) {
+            return startPagePinboard;
         }
     }
 

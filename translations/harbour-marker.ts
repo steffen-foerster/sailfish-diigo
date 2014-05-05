@@ -27,10 +27,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enter or paste URL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>URL</source>
         <translation type="unfinished"></translation>
     </message>
@@ -40,10 +36,6 @@
     </message>
     <message>
         <source>The bookmark is &quot;unread&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tags, comma separated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -63,7 +55,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tags, separated with space</source>
+        <source>Enter URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags, comma-separated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags, separated by space</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -82,6 +82,57 @@
     <name>CoverPageInactive</name>
     <message>
         <source>Sign in</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>EditBookmarkPage</name>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Modified URL creates new bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags, separated by space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Public</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save the bookmark as public</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read Later</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The bookmark is &quot;unread&quot;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -157,10 +208,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tags, comma separated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>List name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -198,6 +245,10 @@
     </message>
     <message>
         <source>Tags, separated by space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags, comma-separated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -330,6 +381,10 @@
     </message>
     <message>
         <source>Mark as to read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

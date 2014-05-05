@@ -207,10 +207,14 @@ Page {
                         remorse.execute(bookmarkList.contextMenu.parent,
                                         "Deleting",
                                         function() {
-                                            PinboardService.deleteBookmark(bookmarkModel.get(index),
-                                                        function() { bookmarkModel.remove(index) },
-                                                        // TODO add failure handler
-                                                        function() {})
+                                            var itemToDelete = bookmarkModel.get(index);
+                                            bookmarkModel.remove(index)
+                                            PinboardService.deleteBookmark(itemToDelete, function() {},
+                                                function() {
+                                                    // error -> insert removed item
+                                                    bookmarkModel.insert(index, itemToDelete)
+                                                }
+                                            )
                                         },
                                         3000)
                     }

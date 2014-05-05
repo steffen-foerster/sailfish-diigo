@@ -44,7 +44,8 @@ OTHER_FILES += harbour-marker.desktop \
     qml/pages/pinboard/AddBookmarkPage.qml \
     qml/cover/CoverPageInactive.qml \
     qml/cover/CoverPageActive.qml \
-    rpm/harbour-marker.changes
+    rpm/harbour-marker.changes \
+    qml/pages/pinboard/EditBookmarkPage.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

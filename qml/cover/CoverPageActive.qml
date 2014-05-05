@@ -106,7 +106,7 @@ CoverBackground {
         else {
             pageStack.clear();
             getAppContext().state = AppState.T_SERVICE_START; // init start page
-            pageStack.push(Qt.resolvedUrl("../" + getFolderByService() + "StartPage.qml"));
+            pageStack.push(getStartPage());
             success = true;
         }
 

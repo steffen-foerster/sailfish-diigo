@@ -222,19 +222,19 @@ function createPinboardSearchQuery(criteria) {
 
     console.log("description: ", criteria.description, " where: ", where);
     if (criteria.description && criteria.description.trim().length > 0) {
-        where += " description LIKE '%" + criteria.description + "%'";
+        where = addCondition(where, "description LIKE '%" + criteria.description + "%'", "AND");
     }
 
     console.log("extended: ", criteria.extended, "where: ", where);
     if (criteria.extended && criteria.extended.trim().length > 0) {
-        where += " extended LIKE '%" + criteria.extended + "%'";
+        where = addCondition(where, "extended LIKE '%" + criteria.extended + "%'", "AND");
     }
 
     console.log("tags: ", criteria.tags, " where: ", where);
     if (criteria.tags && criteria.tags.trim().length > 0) {
         var tags = criteria.tags.split(" ");
         for (var i = 0; i < tags.length; i++) {
-            where += " tags LIKE '%" + tags[i].trim() + "%'";
+            where = addCondition(where, " tags LIKE '%" + tags[i].trim() + "%'", "AND");
         }
     }
     if (where.length > 0) {
@@ -245,6 +245,13 @@ function createPinboardSearchQuery(criteria) {
 
     console.log("query: " + query);
     return query;
+}
+
+function addCondition(where, condition, operator) {
+    if (where.length > 0) {
+        where += " " + operator + " ";
+    }
+    return where + condition;
 }
 
 // ------------------------------------------------------------

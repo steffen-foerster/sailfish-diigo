@@ -26,18 +26,24 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "../AppState.js" as AppState
 import "../Utils.js" as Utils
+import "PinboardService.js" as PinboardService
 
 /**
  * Service: Pinboard
- * Page to add a bookmark.
+ * Page to edit a bookmark.
  */
 Dialog {
-    id: addPage
+
+    property variant bookmark
+
+    property variant viewPage
+
+    id: editPage
 
     onStatusChanged: {
         if (status === PageStatus.Active) {
-            getAppContext().state = AppState.S_ADD;
-            autofillUrl();
+            getAppContext().state = AppState.S_EDIT;
+            setValues();
         }
     }
 
@@ -45,13 +51,18 @@ Dialog {
 
     onAccepted: {
         var startPage = pageStack.previousPage();
-        var bookmark = createBookmarkObj();
-        getAppContext().dialogProperties = bookmark;
-        getAppContext().state = AppState.T_ADD_ACCEPTED;
+        var bookmarkOld = copyBookmark();
+        updateBookmarkObj();
+        getAppContext().state = AppState.T_EDIT_ACCEPTED;
+        PinboardService.updateBookmark(bookmark, viewPage.editSuccessCallback,
+               function(errorResult) {
+                   viewPage.editFailureCallback(errorResult, bookmarkOld)
+               }
+        );
     }
 
     onRejected: {
-        getAppContext().state = AppState.T_ADD_REJECTED;
+        getAppContext().state = AppState.T_EDIT_REJECTED;
     }
 
     SilicaFlickable {
@@ -75,15 +86,14 @@ Dialog {
 
             DialogHeader {
                 acceptText: qsTr("Save")
-                title: qsTr("Add bookmark")
+                title: qsTr("Edit bookmark")
             }
 
             TextField {
                 id: href
                 placeholderText: qsTr("Enter URL")
-                label: qsTr("URL")
+                label: qsTr("Modified URL creates new bookmark")
                 width: column.width
-                focus: true
                 inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase
                 validator: RegExpValidator { regExp: /^http[s]*:\/\/.{3,242}$/ }
                 EnterKey.enabled: text.length > 0
@@ -94,6 +104,7 @@ Dialog {
                 id: description
                 placeholderText: qsTr("Title")
                 label: qsTr("Title")
+                focus: true
                 width: column.width
                 inputMethodHints: Qt.ImhNoAutoUppercase
                 validator: RegExpValidator { regExp: /^.{3,250}$/ }
@@ -135,16 +146,6 @@ Dialog {
         }
     }
 
-    function autofillUrl() {
-        if (Clipboard.hasText) {
-            var urls = Clipboard.text.match(/^http[s]*:\/\/.{3,242}$/);
-            if (urls.length > 0) {
-                href.text = urls[0];
-                description.focus = true;
-            }
-        }
-    }
-
     function clearFields() {
         href.text = "";
         description.text = "";
@@ -154,16 +155,34 @@ Dialog {
         toread.checked = false;
     }
 
-    function createBookmarkObj() {
-        var bookmark = {
-            href: Utils.crop(href.text, 250),
-            description: Utils.crop(description.text, 250),
-            tags: Utils.crop(tags.text, 250 * 100),
-            extended: Utils.crop(extended.text, 65536),
-            shared: shared.checked,
-            toread: toread.checked
+    function setValues() {
+        href.text = bookmark.href;
+        description.text = bookmark.description;
+        tags.text = bookmark.tags;
+        extended.text = bookmark.extended;
+        shared.checked = bookmark.shared === "yes";
+        toread.checked = bookmark.toread === "yes";
+    }
+
+    function updateBookmarkObj() {
+        bookmark.href = Utils.crop(href.text, 250);
+        bookmark.description = Utils.crop(description.text, 250);
+        bookmark.tags = Utils.crop(tags.text, 250 * 100);
+        bookmark.extended = Utils.crop(extended.text, 65536);
+        bookmark.shared = shared.checked ? "yes" : "no";
+        bookmark.toread = toread.checked ? "yes" : "no"
+    }
+
+    function copyBookmark() {
+        var copy = {
+            href: bookmark.href,
+            description: bookmark.description,
+            tags: bookmark.tags,
+            extended: bookmark.extended,
+            shared: bookmark.shared,
+            toread: bookmark.toread
         }
-        return bookmark;
+        return copy;
     }
 }
 

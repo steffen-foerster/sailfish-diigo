@@ -77,8 +77,8 @@ Dialog {
 
             TextField {
                 id: tags
-                placeholderText: qsTr("Tags, comma separated")
-                label: qsTr("Tags, comma separated")
+                placeholderText: qsTr("Tags, comma-separated")
+                label: qsTr("Tags, comma-separated")
                 width: parent.width
                 focus: true;
                 inputMethodHints: Qt.ImhNoAutoUppercase

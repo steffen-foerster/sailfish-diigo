@@ -56,18 +56,15 @@ Dialog {
 
     SilicaFlickable {
         anchors.fill: parent
+        contentHeight: column.height
 
         PullDownMenu {
-            visible: menuClear.visible
             MenuItem {
                 id: menuClear
                 text: qsTr("Clear")
                 onClicked: clearFields()
-                visible: anyFieldChanged()
             }
         }
-
-        contentHeight: column.height
 
         Column {
             id: column
@@ -83,7 +80,7 @@ Dialog {
 
             TextField {
                 id: url
-                placeholderText: qsTr("Enter or paste URL")
+                placeholderText: qsTr("Enter URL")
                 label: qsTr("URL")
                 width: column.width
                 focus: true
@@ -106,8 +103,8 @@ Dialog {
             }
             TextField {
                 id: tags
-                placeholderText: qsTr("Tags, comma separated")
-                label: qsTr("Tags, comma separated")
+                placeholderText: qsTr("Tags, comma-separated")
+                label: qsTr("Tags, comma-separated")
                 width: column.width
                 inputMethodHints: Qt.ImhNoAutoUppercase
                 EnterKey.enabled: true
@@ -146,15 +143,6 @@ Dialog {
                 title.focus = true;
             }
         }
-    }
-
-    function anyFieldChanged() {
-        return url.text.length > 0
-                || title.text.length > 0
-                || tags.text.length > 0
-                || description.text.length > 0
-                || !shared.checked
-                || readLater.checked;
     }
 
     function clearFields() {
