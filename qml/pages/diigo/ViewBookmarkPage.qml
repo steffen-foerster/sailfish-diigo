@@ -119,7 +119,7 @@ Page {
     function formatTags(tags) {
         var retval = tags;
         if (tags) {
-            retval = tags.replace(",", " ")
+            retval = tags.replace(/,/g, " ")
         }
         return retval;
     }
