@@ -202,20 +202,11 @@ Page {
                     }
                 }
                 MenuItem {
-                    text: "Remove"
+                    text: "Delete"
                     onClicked: {
                         remorse.execute(bookmarkList.contextMenu.parent,
                                         "Deleting",
-                                        function() {
-                                            var itemToDelete = bookmarkModel.get(index);
-                                            bookmarkModel.remove(index)
-                                            PinboardService.deleteBookmark(itemToDelete, function() {},
-                                                function() {
-                                                    // error -> insert removed item
-                                                    bookmarkModel.insert(index, itemToDelete)
-                                                }
-                                            )
-                                        },
+                                        getDeleteFunction(bookmarkModel, index),
                                         3000)
                     }
                 }
@@ -224,6 +215,21 @@ Page {
                     onClicked: {
                         Clipboard.text = bookmarkModel.get(index).href
                     }
+                }
+
+                function getDeleteFunction(model, index) {
+                    // Removing from list destroys the ListElement so we need a copy
+                    var itemToDelete = PinboardService.copyBookmark(model.get(index));
+                    var f = function() {
+                        model.remove(index);
+                        PinboardService.deleteBookmark(itemToDelete, function() {},
+                            function() {
+                                // error -> insert removed item
+                                bookmarkModel.insert(index, itemToDelete)
+                            }
+                        )
+                    }
+                    return f;
                 }
             }
         }

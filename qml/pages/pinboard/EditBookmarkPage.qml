@@ -51,7 +51,7 @@ Dialog {
 
     onAccepted: {
         var startPage = pageStack.previousPage();
-        var bookmarkOld = copyBookmark();
+        var bookmarkOld = PinboardService.copyBookmark(bookmark);
         updateBookmarkObj();
         getAppContext().state = AppState.T_EDIT_ACCEPTED;
         PinboardService.updateBookmark(bookmark, viewPage.editSuccessCallback,
@@ -171,18 +171,6 @@ Dialog {
         bookmark.extended = Utils.crop(extended.text, 65536);
         bookmark.shared = shared.checked ? "yes" : "no";
         bookmark.toread = toread.checked ? "yes" : "no"
-    }
-
-    function copyBookmark() {
-        var copy = {
-            href: bookmark.href,
-            description: bookmark.description,
-            tags: bookmark.tags,
-            extended: bookmark.extended,
-            shared: bookmark.shared,
-            toread: bookmark.toread
-        }
-        return copy;
     }
 }
 

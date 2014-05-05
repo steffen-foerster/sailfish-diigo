@@ -27,6 +27,7 @@ THE SOFTWARE.
 // States
 var S_START = "s_start";
 var S_SETTINGS = "s_settings";
+var S_ADD = "s_add";
 var S_EDIT = "s_edit";
 var S_SEARCH = "s_search";
 var S_ADD_WAIT_SERVICE = "s_add_wait_service";

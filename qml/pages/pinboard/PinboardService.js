@@ -145,6 +145,19 @@ function deleteBookmark(bookmark, onSuccess, onFailure) {
                 onFailure);
 }
 
+function copyBookmark(bookmark) {
+    var copy = {
+        href: bookmark.href,
+        description: bookmark.description,
+        tags: bookmark.tags,
+        extended: bookmark.extended,
+        shared: bookmark.shared,
+        toread: bookmark.toread,
+        time: bookmark.time
+    }
+    return copy;
+}
+
 // -------------------------------------------------------
 // private functions
 // -------------------------------------------------------
