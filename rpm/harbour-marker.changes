@@ -8,7 +8,10 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
-* Mon Apr 28 2014 Steffen Förster 0.2.0-1
-- Added support for pinboard
+* Tue May 06 2014 Steffen Förster 0.3.0-1
+- New features for Pinboard: edit, delete, mark
+- Bug fixes
 
+* Mon Apr 28 2014 Steffen Förster 0.2.1-1
+- Added support for Pinboard
 

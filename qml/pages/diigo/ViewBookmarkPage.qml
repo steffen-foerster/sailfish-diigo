@@ -53,6 +53,14 @@ Page {
         contentHeight: itemColumn.height
 
         PullDownMenu {
+            /*
+            MenuItem {
+                text: qsTr("Share")
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("../SharePage.qml"), {url: bookmark.url, title: bookmark.title})
+                }
+            }
+            */
             MenuItem {
                 text: qsTr("Open in browser")
                 onClicked: {

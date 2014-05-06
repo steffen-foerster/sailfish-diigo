@@ -28,8 +28,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-This application uses the API of Diigo and Pinboard to add bookmarks to your collection.
-You can search for your bookmarks, too.
+This application uses the API of Diigo and Pinboard to manage your bookmarks.
 
 
 %prep

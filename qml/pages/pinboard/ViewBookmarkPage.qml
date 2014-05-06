@@ -55,6 +55,14 @@ Page {
         contentHeight: itemColumn.height
 
         PullDownMenu {
+            /*
+            MenuItem {
+                text: qsTr("Share")
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("../SharePage.qml"), {url: bookmark.href, title: bookmark.description})
+                }
+            }
+            */
             MenuItem {
                 text: qsTr("Open in browser")
                 onClicked: {
@@ -65,7 +73,6 @@ Page {
             MenuItem {
                 text: qsTr("Edit")
                 onClicked: {
-                    getAppContext().state = AppState.T_VIEW_BOOKMARK_EDIT;
                     pageStack.push(Qt.resolvedUrl("EditBookmarkPage.qml"), {bookmark: bookmark, viewPage: viewBookmarkPage})
                 }
             }

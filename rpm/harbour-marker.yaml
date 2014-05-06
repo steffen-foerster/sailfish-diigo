@@ -12,8 +12,7 @@ License: The MIT License (MIT)
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
-  This application uses the API of Diigo and Pinboard to add bookmarks to your collection.
-  You can search for your bookmarks, too.
+  This application uses the API of Diigo and Pinboard to manage your bookmarks.
 
 Configure: none
 # The qtc5 builder inserts macros to allow QtCreator to have fine
