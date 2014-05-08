@@ -240,7 +240,7 @@ function createPinboardSearchQuery(criteria) {
     if (where.length > 0) {
         query += " WHERE " + where;
     }
-    query += " ORDER BY time";
+    query += " ORDER BY time DESC";
     query += " LIMIT " + criteria.count;
 
     console.log("query: " + query);

@@ -40,6 +40,8 @@ public:
 
     Q_INVOKABLE bool openBrowser(QString url);
 
+    Q_INVOKABLE QString getBrowserBookmarks();
+
     QString getApiKey() const;
 
 };

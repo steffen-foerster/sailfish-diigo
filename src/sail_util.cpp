@@ -24,6 +24,8 @@ THE SOFTWARE.
 
 #include "sail_util.h"
 #include "config.h"
+#include <QFile>
+#include <QTextStream>
 
 SailUtil::SailUtil(QObject *parent) :
     QObject(parent)
@@ -40,4 +42,14 @@ QString SailUtil::getApiKey() const {
 
 bool SailUtil::openBrowser(QString url) {
     return QDesktopServices::openUrl(QUrl(url));
+}
+
+QString SailUtil::getBrowserBookmarks() {
+    QFile file("/home/nemo/.local/share/org.sailfishos/sailfish-browser/bookmarks.json");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return "[]";
+    }
+
+    QTextStream in(&file);
+    return in.readAll();
 }
