@@ -1,0 +1,116 @@
+/*
+The MIT License (MIT)
+
+Copyright (c) 2014 Steffen Förster
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
+import QtQuick 2.0
+import Sailfish.Silica 1.0
+
+import "../js/Settings.js" as Settings
+import "PinboardService.js" as PinboardService
+import "DiigoService.js" as DiigoService
+
+QtObject {
+    id: root
+
+    function startService(service) {
+        Settings.set(Settings.services.ALL, Settings.keys.SERVICE, service);
+        getAppContext().service = service;
+
+        if (isSignedIn()) {
+            var page = pageStack.replace(getMainPage());
+            page.initialize();
+        }
+        else {
+            pageStack.replace(getSignInPage());
+        }
+    }
+
+    function getSettingsDialog() {
+        if (getAppContext().service === Settings.services.DIIGO) {
+            return Qt.createComponent("../pages/diigo/SettingDialog.qml");
+        }
+        else if (getAppContext().service === Settings.services.PINBOARD) {
+            return Qt.createComponent("../pages/pinboard/SettingDialog.qml");
+        }
+    }
+
+    function getServiceName() {
+        if (getAppContext().service === Settings.services.DIIGO) {
+            return "DIIGO";
+        }
+        else if (getAppContext().service === Settings.services.PINBOARD) {
+            return "PINBOARD";
+        }
+    }
+
+    /**
+     * Refresh cache if it exists.
+     */
+    function refresh(onSuccess, onFailure) {
+        if (getAppContext().service === Settings.services.PINBOARD) {
+            PinboardService.refreshCache(onSuccess, onFailure);
+        }
+        else {
+            onSuccess();
+        }
+    }
+
+    function deleteBookmark(bookmark, onSuccess, onFailure) {
+        if (getAppContext().service === Settings.services.PINBOARD) {
+            PinboardService.deleteBookmark(bookmark, onSuccess, onFailure);
+        }
+    }
+
+    function fetchRecentBookmarks(onSuccess, onFailure) {
+        if (getAppContext().service === Settings.services.PINBOARD) {
+            PinboardService.fetchRecentBookmarks(onSuccess, onFailure);
+        }
+        else if (getAppContext().service === Settings.services.DIIGO) {
+            DiigoService.fetchRecentBookmarks(onSuccess, onFailure, getAppContext());
+        }
+    }
+
+    function fetchBookmarks(criteria, onSuccess, onFailure) {
+        if (getAppContext().service === Settings.services.PINBOARD) {
+            PinboardService.fetchBookmarks(criteria, onSuccess, onFailure);
+        }
+        else if (getAppContext().service === Settings.services.DIIGO) {
+            DiigoService.fetchBookmarks(criteria, onSuccess, onFailure, getAppContext());
+        }
+    }
+
+    function addBookmark(bookmark, onSuccess, onFailure) {
+        if (getAppContext().service === Settings.services.PINBOARD) {
+            PinboardService.addBookmark(bookmark, onSuccess, onFailure);
+        }
+        else if (getAppContext().service === Settings.services.DIIGO) {
+            DiigoService.addBookmark(bookmark, onSuccess, onFailure, getAppContext());
+        }
+    }
+
+    function updateBookmark(bookmark, onSuccess, onFailure) {
+        if (getAppContext().service === Settings.services.PINBOARD) {
+            PinboardService.updateBookmark(bookmark, onSuccess, onFailure);
+        }
+    }
+}

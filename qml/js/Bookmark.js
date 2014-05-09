@@ -22,51 +22,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import QtQuick 2.0
-import Sailfish.Silica 1.0
-
-import "../js/Settings.js" as Settings
+.pragma library
 
 /**
- * Page to select the service provider.
+ * Creates a bookmark object which is used in the GUI.
  */
-Page {
-    id: servicePage
-
-    onStatusChanged: {
-        if (status === PageStatus.Active) {
-            setInactiveCover();
-        }
-    }
-
-    SilicaFlickable {
-        anchors.fill: parent
-        width: parent.width
-
-        PullDownMenu {
-            MenuItem {
-                text: qsTr("Diigo")
-                onClicked: {
-                    getServiceManager().startService(Settings.services.DIIGO);
-                }
-            }
-            MenuItem {
-                text: qsTr("Pinboard")
-                onClicked: {
-                    getServiceManager().startService(Settings.services.PINBOARD);
-                }
-            }
-        }
-
-        PageHeader {
-            title: qsTr("Service selection")
-        }
-
-        ViewPlaceholder {
-            id: placeHolder
-            enabled: true
-            text: qsTr("Pull down to select your service")
-        }
-    }
+function create(href, title, desc, tags, shared, toread, time) {
+    return {
+        href: href,
+        title: title,
+        desc: desc,
+        tags: tags,
+        shared: shared,
+        toread: toread,
+        time: time
+    };
 }
 
+function copy(bookmark) {
+    return create(
+        bookmark.href,
+        bookmark.title,
+        bookmark.desc,
+        bookmark.tags,
+        bookmark.shared,
+        bookmark.toread,
+        bookmark.time
+    );
+}

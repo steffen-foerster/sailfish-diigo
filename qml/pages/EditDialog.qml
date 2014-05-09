@@ -24,21 +24,43 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "../AppState.js" as AppState
-import "../Utils.js" as Utils
-import "PinboardService.js" as PinboardService
+
+import "../js/Utils.js" as Utils
 
 /**
- * Service: Pinboard
  * Page to edit a bookmark.
  */
 Dialog {
+    id: editPage
 
     property variant bookmark
 
-    property variant viewPage
+    function clearFields() {
+        href.text = "";
+        description.text = "";
+        tags.text = "";
+        extended.text = "";
+        shared.checked = true;
+        toread.checked = false;
+    }
 
-    id: editPage
+    function setValues() {
+        href.text = bookmark.href;
+        description.text = bookmark.description;
+        tags.text = bookmark.tags;
+        extended.text = bookmark.extended;
+        shared.checked = bookmark.shared === "yes";
+        toread.checked = bookmark.toread === "yes";
+    }
+
+    function updateBookmarkObj() {
+        bookmark.href = Utils.crop(href.text, 250);
+        bookmark.description = Utils.crop(description.text, 250);
+        bookmark.tags = Utils.crop(tags.text, 250 * 100);
+        bookmark.extended = Utils.crop(extended.text, 65536);
+        bookmark.shared = shared.checked ? "yes" : "no";
+        bookmark.toread = toread.checked ? "yes" : "no"
+    }
 
     onStatusChanged: {
         if (status === PageStatus.Active) {
@@ -145,33 +167,4 @@ Dialog {
             }
         }
     }
-
-    function clearFields() {
-        href.text = "";
-        description.text = "";
-        tags.text = "";
-        extended.text = "";
-        shared.checked = true;
-        toread.checked = false;
-    }
-
-    function setValues() {
-        href.text = bookmark.href;
-        description.text = bookmark.description;
-        tags.text = bookmark.tags;
-        extended.text = bookmark.extended;
-        shared.checked = bookmark.shared === "yes";
-        toread.checked = bookmark.toread === "yes";
-    }
-
-    function updateBookmarkObj() {
-        bookmark.href = Utils.crop(href.text, 250);
-        bookmark.description = Utils.crop(description.text, 250);
-        bookmark.tags = Utils.crop(tags.text, 250 * 100);
-        bookmark.extended = Utils.crop(extended.text, 65536);
-        bookmark.shared = shared.checked ? "yes" : "no";
-        bookmark.toread = toread.checked ? "yes" : "no"
-    }
 }
-
-

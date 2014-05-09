@@ -172,10 +172,10 @@ function addOrUpdatePinboardPost(post) {
     });
 }
 
-function deletePinboardPost(post) {
+function deletePinboardPost(href) {
     var db = private.getDatabase();
     db.transaction(function (tx) {
-        var res = tx.executeSql('DELETE FROM pinboard_post WHERE href = ?;', [post.href]);
+        var res = tx.executeSql('DELETE FROM pinboard_post WHERE href = ?;', [href]);
         console.log("Deleted posts: ", res.rowsAffected);
     });
 }

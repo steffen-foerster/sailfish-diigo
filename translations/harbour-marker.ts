@@ -68,6 +68,88 @@
     </message>
 </context>
 <context>
+    <name>AddDialog</name>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags, separated by space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Public</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save the bookmark as public</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read Later</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The bookmark is &quot;unread&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BookmarkView</name>
+    <message>
+        <source>Your recent bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search result</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No bookmarks found</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CoverPageActive</name>
     <message>
         <source>URL in clipboard</source>
@@ -82,6 +164,49 @@
     <name>CoverPageInactive</name>
     <message>
         <source>Sign in</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DetailsPage</name>
+    <message>
+        <source>Open in browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mark as read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Created at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mark as unread</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -198,6 +323,29 @@
     </message>
 </context>
 <context>
+    <name>SearchDialog</name>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags, separated by space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SearchPage</name>
     <message>
         <source>Clear</source>
@@ -272,21 +420,13 @@
     </message>
 </context>
 <context>
-    <name>SettingPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation type="unfinished"></translation>
-    </message>
+    <name>SettingDialog</name>
     <message>
         <source>Reset to defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change service</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -294,11 +434,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Note: It&apos;s comfortable but not secure</source>
+        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>API Token</source>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note: It&apos;s comfortable but not secure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -306,7 +454,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change service</source>
+        <source>API Token</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SignInPage</name>
+    <message>
+        <source>Sign in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pull down to sign in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sign in / Settings</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

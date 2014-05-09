@@ -25,48 +25,42 @@ THE SOFTWARE.
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-import "../js/Settings.js" as Settings
+import "../components"
 
-/**
- * Page to select the service provider.
- */
 Page {
-    id: servicePage
+    id: mainPage
 
-    onStatusChanged: {
-        if (status === PageStatus.Active) {
-            setInactiveCover();
+    function initialize() {
+        bookmarks.refresh();
+    }
+
+    SlideshowView {
+        id: mainView
+
+        itemWidth: width
+        itemHeight: height
+        height: window.height - viewIndicator.height
+        clip:true
+
+        anchors { top: parent.top; left: parent.left; right: parent.right }
+        model: VisualItemModel {
+            BookmarkView {id: bookmarks}
+            TagsView { id: tags }
         }
     }
 
-    SilicaFlickable {
-        anchors.fill: parent
-        width: parent.width
+    Rectangle {
+        id: viewIndicator
+        anchors.top: mainView.bottom
+        color: Theme.highlightColor
+        height: Theme.paddingMedium
+        width: mainView.width / 2
+        x: mainView.currentIndex * width
 
-        PullDownMenu {
-            MenuItem {
-                text: qsTr("Diigo")
-                onClicked: {
-                    getServiceManager().startService(Settings.services.DIIGO);
-                }
+        Behavior on x {
+            NumberAnimation {
+                duration: 200
             }
-            MenuItem {
-                text: qsTr("Pinboard")
-                onClicked: {
-                    getServiceManager().startService(Settings.services.PINBOARD);
-                }
-            }
-        }
-
-        PageHeader {
-            title: qsTr("Service selection")
-        }
-
-        ViewPlaceholder {
-            id: placeHolder
-            enabled: true
-            text: qsTr("Pull down to select your service")
         }
     }
 }
-

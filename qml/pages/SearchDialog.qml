@@ -24,31 +24,37 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "../AppState.js" as AppState
-import "../Utils.js" as Utils
+
+import "../js/Utils.js" as Utils
 
 /**
- * Service: Pinboard
- * Page to search bookmarks.
+ * Page to search for bookmarks.
  */
 Dialog {
     id: searchPage
 
-    onStatusChanged: {
-        if (status === PageStatus.Active) {
-            getAppContext().state = AppState.S_SEARCH;
+    property variant criteria: null
+
+    function clearFields() {
+        tags.text = "";
+        title.text = "";
+        desc.text = "";
+        count.value = 5;
+    }
+
+    function createCriteria() {
+        var criteria = {
+            tags: tags.text,
+            title: title.text,
+            desc: desc.text,
+            count: count.value
         }
+        return criteria;
     }
 
     onAccepted: {     
-        var startPage = pageStack.previousPage();
-        var criteria = createCriteria();
-        getAppContext().dialogProperties = criteria;
-        getAppContext().state = AppState.T_SEARCH_ACCEPTED;
-    }
-
-    onRejected: {
-        getAppContext().state = AppState.T_SEARCH_REJECTED;
+        console.log("SearchDialog.onAccepted");
+        searchPage.criteria = createCriteria();
     }
 
     SilicaFlickable {
@@ -56,7 +62,6 @@ Dialog {
         contentHeight: column.height
 
         PullDownMenu {
-            visible: menuClear.visible
             MenuItem {
                 id: menuClear
                 text: qsTr("Clear")
@@ -67,8 +72,8 @@ Dialog {
         Column {
             id: column
 
-            x: Theme.paddingLarge
-            width: parent.width - 2 * Theme.paddingLarge
+            x: Theme.paddingMedium
+            width: parent.width - 2 * Theme.paddingMedium
             spacing: Theme.paddingMedium
 
             DialogHeader {
@@ -84,19 +89,19 @@ Dialog {
                 inputMethodHints: Qt.ImhNoAutoUppercase
                 EnterKey.enabled: true
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                EnterKey.onClicked: description.focus = true
+                EnterKey.onClicked: title.focus = true
             }
             TextField {
-                id: description
+                id: title
                 placeholderText: qsTr("Title")
                 label: qsTr("Title")
                 width: parent.width
                 EnterKey.enabled: true
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                EnterKey.onClicked: extended.focus = true
+                EnterKey.onClicked: desc.focus = true
             }
             TextField {
-                id: extended
+                id: desc
                 placeholderText: qsTr("Description")
                 label: qsTr("Description")
                 width: parent.width
@@ -115,23 +120,6 @@ Dialog {
                 value: 20
             }
         }
-    }
-
-    function clearFields() {
-        tags.text = "";
-        description.text = "";
-        extended.text = "";
-        count.value = 5;
-    }
-
-    function createCriteria() {
-        var criteria = {
-            tags: tags.text,
-            description: description.text,
-            extended: extended.text,
-            count: count.value
-        }
-        return criteria;
     }
 }
 

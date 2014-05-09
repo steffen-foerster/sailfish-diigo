@@ -25,77 +25,22 @@ THE SOFTWARE.
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "pages"
+import "services"
 import "pages/diigo" as DiigoModule
 import "pages/pinboard" as PinboardModule
-import "pages/Settings.js" as Settings
-import "pages/AppState.js" as AppState
+import "js/Settings.js" as Settings
+import "js/AppState.js" as AppState
 
 ApplicationWindow
 {
-    id: mainWindow
-    initialPage: servicePage
-    cover: Qt.resolvedUrl("cover/CoverPageInactive.qml")
-
-    Component.onCompleted: {
-        console.log("ApplicationWindow onCompleted");
-
-        if (getAppContext().state === AppState.T_MAIN_START) {
-            Settings.initialize()
-        }
-
-        var activeService = Settings.get(Settings.services.ALL, Settings.keys.SERVICE);
-        console.log("saved service: ", activeService);
-        if (activeService == Settings.services.DIIGO) {
-            startService(Settings.services.DIIGO);
-        }
-        else if (activeService == Settings.services.PINBOARD) {
-            startService(Settings.services.PINBOARD);
-        }
-        else {
-            servicePage.placeholderVisible = true
-        }
-    }
-
-    Component.onDestruction: {
-    }
-
-    QtObject {
-        id: appContext
-        property string password: ""
-        property string apiKey: SailUtil.apiKey // API-Key for Diigo
-        property string state: AppState.T_MAIN_START
-        property variant dialogProperties
-        property int service
-    }
-
-    Component {
-        id: servicePage
-        ServicePage { }
-    }
-
-    Component {
-        id: startPageDiigo
-        DiigoModule.StartPage { }
-    }
-
-    Component {
-        id: startPagePinboard
-        PinboardModule.StartPage { }
-    }
+    id: window
 
     function setActiveCover() {
-        mainWindow.cover = Qt.resolvedUrl("cover/CoverPageActive.qml")
+        window.cover = Qt.resolvedUrl("cover/CoverPageActive.qml")
     }
 
     function setInactiveCover() {
-        mainWindow.cover = Qt.resolvedUrl("cover/CoverPageInactive.qml")
-    }
-
-    function startService(service) {
-        console.log("start service: " + service);
-        getAppContext().service = service;
-        getAppContext().state = AppState.T_SERVICE_START;
-        pageStack.replace(getStartPage());
+        window.cover = Qt.resolvedUrl("cover/CoverPageInactive.qml")
     }
 
     function getAppContext() {
@@ -106,30 +51,62 @@ ApplicationWindow
         return Settings.isSignedIn(appContext)
     }
 
-    function getFolderByService() {
-        if (getAppContext().service === Settings.services.DIIGO) {
-            return "pages/diigo/";
+    function getMainPage() {
+        return mainPage;
+    }
+
+    function getSignInPage() {
+        return signInPage;
+    }
+
+    function getServiceManager() {
+        return serviceManager;
+    }
+
+    initialPage: Page{}
+    cover: Qt.resolvedUrl("cover/CoverPageInactive.qml")
+
+    Component.onCompleted: {
+        console.log("ApplicationWindow onCompleted");
+        Settings.initialize()
+
+        var activeServiceStr = Settings.get(Settings.services.ALL, Settings.keys.SERVICE);
+        var activeService = parseInt(activeServiceStr);
+
+        console.log("saved service: ", activeService);
+        if (activeService > 0) {
+            serviceManager.startService(activeService);
         }
-        else if (getAppContext().service === Settings.services.PINBOARD) {
-            return "pages/pinboard/";
+        else {
+            pageStack.replace(servicePage);
         }
     }
 
-    function getStartPage() {
-        if (getAppContext().service === Settings.services.DIIGO) {
-            return startPageDiigo;
-        }
-        else if (getAppContext().service === Settings.services.PINBOARD) {
-            return startPagePinboard;
-        }
+    QtObject {
+        id: appContext
+        property string password: ""
+        property string state: ""
+        property int service
+        property string diigoApiKey: SailUtil.apiKey
     }
 
-    function getServiceName() {
-        if (getAppContext().service === Settings.services.DIIGO) {
-            return "DIIGO";
-        }
-        else if (getAppContext().service === Settings.services.PINBOARD) {
-            return "PINBOARD";
-        }
+    Component {
+        id: signInPage
+        SignInPage { }
     }
+
+    Component {
+        id: servicePage
+        ServicePage { }
+    }
+
+    Component {
+        id: mainPage
+        MainPage { }
+    }
+
+    ServiceManager {
+        id: serviceManager
+    }
+
 }

@@ -28,14 +28,21 @@ import Sailfish.Silica 1.0
 import "../js/Settings.js" as Settings
 
 /**
- * Page to select the service provider.
+ * Page is shown if the user is not signed in.
  */
 Page {
-    id: servicePage
+    id: signInPage
 
     onStatusChanged: {
         if (status === PageStatus.Active) {
-            setInactiveCover();
+            if (isSignedIn()) {
+                var page = pageStack.replace(getMainPage());
+                page.initialize();
+                setActiveCover();
+            }
+            else {
+                setInactiveCover();
+            }
         }
     }
 
@@ -45,28 +52,21 @@ Page {
 
         PullDownMenu {
             MenuItem {
-                text: qsTr("Diigo")
+                text: qsTr("Sign in / Settings")
                 onClicked: {
-                    getServiceManager().startService(Settings.services.DIIGO);
-                }
-            }
-            MenuItem {
-                text: qsTr("Pinboard")
-                onClicked: {
-                    getServiceManager().startService(Settings.services.PINBOARD);
+                    pageStack.push(getServiceManager().getSettingsDialog());
                 }
             }
         }
 
         PageHeader {
-            title: qsTr("Service selection")
+            title: qsTr("Sign in")
         }
 
         ViewPlaceholder {
             id: placeHolder
             enabled: true
-            text: qsTr("Pull down to select your service")
+            text: qsTr("Pull down to sign in")
         }
     }
 }
-

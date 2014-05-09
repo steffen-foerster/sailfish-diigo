@@ -24,48 +24,73 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "../../components"
-import "../Settings.js" as Settings
-import "../AppState.js" as AppState
-import "../Utils.js" as Utils
+
+import "../components"
+import "../js/Settings.js" as Settings
+import "../js/Utils.js" as Utils
 
 /**
- * Service: Diigo
  * Shows the details of a bookmark.
  */
 Page {
-    id: viewBookmarkPage
+    id: viewPage
 
     property variant bookmark
 
+    function editFailureCallback(errorResult, oldBookmark) {
+        getAppContext().state = AppState.S_VIEW_BOOKMARK;
+        // restore bookmark values
+        bookmark.href = oldBookmark.href;
+        bookmark.description = oldBookmark.description;
+        bookmark.tags = oldBookmark.tags;
+        bookmark.extended = oldBookmark.extended;
+        bookmark.shared = oldBookmark.shared;
+        bookmark.toread = oldBookmark.toread;
+        // TODO show error message
+    }
+
     onStatusChanged: {
-        if (status === Component.Loading) {
-            getAppContext().state = AppState.S_VIEW_BOOKMARK;
-        }
-        if (status === PageStatus.Deactivating) {
-            getAppContext().state = AppState.T_VIEW_BOOKMARK_START;
+        if (status === PageStatus.Active) {
+            viewPage.state = getServiceManager().getServiceName();
         }
     }
 
     SilicaFlickable {
-        id: bookmarkList
+        id: details
         anchors.fill: parent
         contentHeight: itemColumn.height
 
         PullDownMenu {
-            /*
-            MenuItem {
-                text: qsTr("Share")
-                onClicked: {
-                    pageStack.push(Qt.resolvedUrl("../SharePage.qml"), {url: bookmark.url, title: bookmark.title})
-                }
-            }
-            */
             MenuItem {
                 text: qsTr("Open in browser")
                 onClicked: {
-                    console.log("opening URL: " + bookmark.url)
-                    Qt.openUrlExternally(bookmark.url)
+                    console.log("opening URL: " + bookmark.href)
+                    Qt.openUrlExternally(bookmark.href)
+                }
+            }
+            MenuItem {
+                id: menuEdit
+                text: qsTr("Edit")
+                onClicked: {
+                    var dialog = pageStack.push("EditDialog.qml");
+                    dialog.accepted.connect(function(){
+                        acceptEditCallback(dialog);
+                    });
+
+                    pageStack.push(Qt.resolvedUrl("EditBookmarkPage.qml"), {bookmark: bookmark, viewPage: viewBookmarkPage})
+                }
+            }
+            MenuItem {
+                id: menuMark
+                text: (bookmark.toread === 'yes' ? qsTr("Mark as read") : qsTr("Mark as unread"))
+                onClicked: {
+                    bookmark.toread = (bookmark.toread === 'yes' ? 'no' : 'yes')
+                    getServiceManager().updateBookmark(bookmark, function(){},
+                        function() {
+                            // failure -> reverse flag
+                            bookmark.toread = (bookmark.toread === 'yes' ? 'no' : 'yes')
+                        }
+                    )
                 }
             }
         }
@@ -96,11 +121,12 @@ Page {
             LabelText {
                 label: qsTr("Title")
                 text: bookmark.title
+                font.bold: (bookmark.toread !== undefined && bookmark.toread === 'yes')
                 separator: false
             }
             LabelText {
                 label: qsTr("URL")
-                text: bookmark.url
+                text: bookmark.href
             }
             LabelText {
                 label: qsTr("Description")
@@ -108,28 +134,27 @@ Page {
             }
             LabelText {
                 label: qsTr("Tags")
-                text: formatTags(bookmark.tags)
+                text: bookmark.tags
             }
             LabelText {
                 label: qsTr("Created at")
-                text: Utils.formatTimestamp(bookmark.created_at)
-                separator: false
-            }
-            LabelText {
-                label: qsTr("Updated at")
-                text: Utils.formatTimestamp(bookmark.updated_at)
+                text: Utils.formatTimestamp(bookmark.time)
                 separator: false
             }
         }
         VerticalScrollDecorator {}
     }
 
-    function formatTags(tags) {
-        var retval = tags;
-        if (tags) {
-            retval = tags.replace(/,/g, " ")
-        }
-        return retval;
-    }
-
+    states: [
+         State {
+             name: "PINBOARD"
+             PropertyChanges { target: menuEdit; visible: true}
+             PropertyChanges { target: menuMark; visible: true}
+         },
+         State {
+             name: "DIIGO"
+             PropertyChanges { target: menuEdit; visible: false}
+             PropertyChanges { target: menuMark; visible: false}
+         }
+     ]
 }

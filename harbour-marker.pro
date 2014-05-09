@@ -45,7 +45,27 @@ OTHER_FILES += harbour-marker.desktop \
     qml/cover/CoverPageInactive.qml \
     qml/cover/CoverPageActive.qml \
     rpm/harbour-marker.changes \
-    qml/pages/pinboard/EditBookmarkPage.qml
+    qml/pages/pinboard/EditBookmarkPage.qml \
+    qml/pages/MainPage.qml \
+    qml/pages/SignInPage.qml \
+    qml/services/ServiceManager.qml \
+    qml/components/BookmarkView.qml \
+    qml/components/TagsView.qml \
+    qml/js/Bookmark.js \
+    qml/pages/SearchPage.qml \
+    qml/pages/SearchDialog.qml \
+    qml/pages/pinboard/SettingDialog.qml \
+    qml/pages/diigo/SettingDialog.qml \
+    qml/pages/AddDialog.qml \
+    qml/pages/DetailsPage.qml \
+    qml/services/PinboardService.js \
+    qml/services/DiigoService.js \
+    qml/js/Utils.js \
+    qml/js/Settings.js \
+    qml/js/LocalStore.js \
+    qml/js/HttpClient.js \
+    qml/js/AppState.js \
+    qml/pages/EditDialog.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

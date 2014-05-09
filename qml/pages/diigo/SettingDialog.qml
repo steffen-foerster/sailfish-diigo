@@ -24,33 +24,21 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "../Settings.js" as Settings
-import "../AppState.js" as AppState
+
+import "../../js/Settings.js" as Settings
 
 /**
  * Service: Diigo
- * Page to save user settings.
+ * Page to save user settings for Diigo service.
  */
 Dialog {
     id: settingPage
-
-    onStatusChanged: {
-        if (status === PageStatus.Active) {
-            getAppContext().state = AppState.S_ADD;
-        }
-    }
 
     onAccepted: {
         Settings.set(getAppContext().service, Settings.keys.COUNT_RECENT_BOOKMARKS, recentBookmarks.value);
         Settings.setBoolean(getAppContext().service, Settings.keys.SAVE_PASSWORD, savePassword.checked);
         Settings.setPassword(password.text, savePassword.checked, getAppContext());
         Settings.set(getAppContext().service, Settings.keys.USER, user.text);
-
-        getAppContext().state = AppState.T_SETTINGS_ACCEPTED;
-    }
-
-    onRejected: {
-        getAppContext().state = AppState.T_SETTINGS_REJECTED;
     }
 
     SilicaFlickable {
@@ -70,7 +58,6 @@ Dialog {
             MenuItem {
                 text: qsTr("Change service")
                 onClicked: {
-                    getAppContext().state = AppState.T_CHANGE_SERVICE;
                     pageStack.clear();
                     pageStack.push(Qt.resolvedUrl("../ServicePage.qml"), {placeholderVisible: true});
                 }
@@ -80,8 +67,8 @@ Dialog {
         Column {
             id: column
 
-            x: Theme.paddingLarge
-            width: parent.width - 2 * Theme.paddingLarge
+            x: Theme.paddingMedium
+            width: parent.width - 2 * Theme.paddingMedium
             spacing: Theme.paddingMedium
 
             DialogHeader {

@@ -23,8 +23,10 @@ THE SOFTWARE.
 */
 
 .pragma library
-.import "../HttpClient.js" as HttpClient
-.import "../Settings.js" as Settings
+
+.import "../js/HttpClient.js" as HttpClient
+.import "../js/Settings.js" as Settings
+.import "../js/Bookmark.js" as Bookmark
 
 /**
  * Documentation of the Diigo API: https://www.diigo.com/api_dev
@@ -33,12 +35,12 @@ THE SOFTWARE.
 /**
  * Returns the recent created bookmarks.
  */
-function getRecentBookmarks(count, onSuccess, onFailure, appContext) {
+function fetchRecentBookmarks(onSuccess, onFailure, appContext) {
     var queryParams = {
-        key: appContext.apiKey,
+        key: appContext.diigoApiKey,
         user: Settings.get(Settings.services.DIIGO, Settings.keys.USER),
         start: 0,
-        count: count,
+        count: Settings.get(Settings.services.DIIGO, Settings.keys.COUNT_RECENT_BOOKMARKS),
         sort: internal.SEARCH_PARAMS.SORT_CREATED_AT,
         filter: internal.SEARCH_PARAMS.FILTER_ALL
     }
@@ -46,7 +48,9 @@ function getRecentBookmarks(count, onSuccess, onFailure, appContext) {
     HttpClient.performGetRequest(
                 internal.URL_BOOKMARK,
                 queryParams,
-                onSuccess,
+                function(bookmarks) {
+                    internal.fetchCallback(bookmarks, onSuccess)
+                },
                 onFailure,
                 Settings.get(Settings.services.DIIGO, Settings.keys.USER),
                 Settings.getPassword(appContext));
@@ -57,7 +61,7 @@ function getRecentBookmarks(count, onSuccess, onFailure, appContext) {
  */
 function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
     var queryParams = {
-        key: appContext.apiKey,
+        key: appContext.diigoApiKey,
         user: Settings.get(Settings.services.DIIGO, Settings.keys.USER),
         start: 0,
         count: searchCriteria.count,
@@ -65,16 +69,18 @@ function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
         filter: searchCriteria.filter ? internal.SEARCH_PARAMS.FILTER_ALL : internal.SEARCH_PARAMS.FILTER_PUBLIC,
     }
     if (searchCriteria.tags !== undefined && searchCriteria.tags.length > 0) {
-        queryParams.tags = searchCriteria.tags
+        queryParams.tags = searchCriteria.tags;
     }
     if (searchCriteria.list !== undefined && searchCriteria.list.length > 0) {
-        queryParams.list = searchCriteria.list
+        queryParams.list = searchCriteria.list;
     }
 
     HttpClient.performGetRequest(
                 internal.URL_BOOKMARK,
                 queryParams,
-                onSuccess,
+                function(bookmarks) {
+                    internal.fetchCallback(bookmarks, onSuccess);
+                },
                 onFailure,
                 Settings.get(Settings.services.DIIGO, Settings.keys.USER),
                 Settings.getPassword(appContext));
@@ -94,18 +100,18 @@ function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
  */
 function addBookmark(bookmark, onSuccess, onFailure, appContext) {
     var queryParams = {
-        key: appContext.apiKey,
+        key: appContext.diigoApiKey,
         user: Settings.get(Settings.services.DIIGO, Settings.keys.USER),
         title: bookmark.title,
-        url: bookmark.url,
-        shared: bookmark.shared ? "yes" : "no",
-        readLater: bookmark.readLater ? "yes" : "no"
+        url: bookmark.href,
+        shared: bookmark.shared,
+        readLater: bookmark.toread
     }
     if (bookmark.tags !== undefined && bookmark.tags.length > 0) {
-        queryParams.tags = bookmark.tags
+        queryParams.tags = internal.separateTags(bookmark.tags);
     }
     if (bookmark.desc !== undefined && bookmark.desc.length > 0) {
-        queryParams.desc = bookmark.desc
+        queryParams.desc = bookmark.desc;
     }
 
     HttpClient.performPostRequest(
@@ -137,6 +143,39 @@ var internal = {
         FILTER_ALL : "all",
 
         FILTER_PUBLIC : "public"
+    },
+
+    fetchCallback: function(bookmarks, onSuccess) {
+        var guiBookmarks = [];
+        for (var i = 0; i < bookmarks.length; i++) {
+            var guiBookmark = Bookmark.create(
+                bookmarks[i].url,
+                bookmarks[i].title,
+                bookmarks[i].desc,
+                internal.formatTags(bookmarks[i].tags),
+                bookmarks[i].shared,
+                null,
+                bookmarks[i].created_at
+            );
+            guiBookmarks.push(guiBookmark);
+        }
+        onSuccess(guiBookmarks);
+    },
+
+    formatTags: function(tags) {
+        var retval = tags;
+        if (tags) {
+            retval = tags.replace(/,/g, " ");
+        }
+        return retval;
+    },
+
+    separateTags: function(tags) {
+        var retval = tags;
+        if (tags) {
+            retval = tags.replace(/ /g, ",");
+        }
+        return retval;
     }
 
 }

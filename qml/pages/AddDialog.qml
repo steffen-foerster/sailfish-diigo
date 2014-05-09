@@ -24,34 +24,59 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "../AppState.js" as AppState
-import "../Utils.js" as Utils
+
+import "../js/Utils.js" as Utils
+import "../js/Bookmark.js" as Bookmark
 
 /**
- * Service: Pinboard
- * Page to add a bookmark.
+ * Page to add a new bookmark.
  */
 Dialog {
     id: addPage
 
+    property var bookmark: null
+
+    function autofillUrl() {
+        if (Clipboard.hasText) {
+            var urls = Clipboard.text.match(/^http[s]*:\/\/.{3,242}$/);
+            if (urls.length > 0) {
+                href.text = urls[0];
+                title.focus = true;
+            }
+        }
+    }
+
+    function clearFields() {
+        href.text = "";
+        title.text = "";
+        tags.text = "";
+        desc.text = "";
+        shared.checked = true;
+        toread.checked = false;
+    }
+
+    function createBookmark() {
+        var bookmark = Bookmark.create(
+            Utils.crop(href.text, 250),
+            Utils.crop(title.text, 250),
+            Utils.crop(desc.text, 250),
+            Utils.crop(tags.text, 250),
+            shared.checked ? "yes" : "no",
+            toread.checked ? "yes" : "no"
+        );
+        return bookmark;
+    }
+
     onStatusChanged: {
         if (status === PageStatus.Active) {
-            getAppContext().state = AppState.S_ADD;
             autofillUrl();
         }
     }
 
-    canAccept: (!href.errorHighlight && !description.errorHighlight)
+    canAccept: (!href.errorHighlight && !desc.errorHighlight)
 
     onAccepted: {
-        var startPage = pageStack.previousPage();
-        var bookmark = createBookmarkObj();
-        getAppContext().dialogProperties = bookmark;
-        getAppContext().state = AppState.T_ADD_ACCEPTED;
-    }
-
-    onRejected: {
-        getAppContext().state = AppState.T_ADD_REJECTED;
+        addPage.bookmark = createBookmark();
     }
 
     SilicaFlickable {
@@ -69,8 +94,8 @@ Dialog {
         Column {
             id: column
 
-            x: Theme.paddingLarge
-            width: parent.width - 2 * Theme.paddingLarge
+            x: Theme.paddingMedium
+            width: parent.width - 2 * Theme.paddingMedium
             spacing: Theme.paddingMedium
 
             DialogHeader {
@@ -88,14 +113,13 @@ Dialog {
                 validator: RegExpValidator { regExp: /^http[s]*:\/\/.{3,242}$/ }
                 EnterKey.enabled: text.length > 0
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                EnterKey.onClicked: description.focus = true
+                EnterKey.onClicked: title.focus = true
             }
             TextField {
-                id: description
+                id: title
                 placeholderText: qsTr("Title")
                 label: qsTr("Title")
                 width: column.width
-                inputMethodHints: Qt.ImhNoAutoUppercase
                 validator: RegExpValidator { regExp: /^.{3,250}$/ }
                 EnterKey.enabled: text.length > 0
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
@@ -109,10 +133,10 @@ Dialog {
                 inputMethodHints: Qt.ImhNoAutoUppercase
                 EnterKey.enabled: true
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                EnterKey.onClicked: extended.focus = true
+                EnterKey.onClicked: desc.focus = true
             }
             TextField {
-                id: extended
+                id: desc
                 placeholderText: qsTr("Description")
                 label: qsTr("Description")
                 width: column.width
@@ -133,37 +157,6 @@ Dialog {
                 checked: false
             }
         }
-    }
-
-    function autofillUrl() {
-        if (Clipboard.hasText) {
-            var urls = Clipboard.text.match(/^http[s]*:\/\/.{3,242}$/);
-            if (urls.length > 0) {
-                href.text = urls[0];
-                description.focus = true;
-            }
-        }
-    }
-
-    function clearFields() {
-        href.text = "";
-        description.text = "";
-        tags.text = "";
-        extended.text = "";
-        shared.checked = true;
-        toread.checked = false;
-    }
-
-    function createBookmarkObj() {
-        var bookmark = {
-            href: Utils.crop(href.text, 250),
-            description: Utils.crop(description.text, 250),
-            tags: Utils.crop(tags.text, 250 * 100),
-            extended: Utils.crop(extended.text, 65536),
-            shared: shared.checked,
-            toread: toread.checked
-        }
-        return bookmark;
     }
 }
 
