@@ -28,12 +28,13 @@ import Sailfish.Silica 1.0
 import "../js/Settings.js" as Settings
 import "PinboardService.js" as PinboardService
 import "DiigoService.js" as DiigoService
+import "Services.js" as Services
 
 QtObject {
     id: root
 
     function startService(service) {
-        Settings.set(Settings.services.ALL, Settings.keys.SERVICE, service);
+        Settings.set(Services.ALL, Settings.keys.SERVICE, service);
         getAppContext().service = service;
 
         if (isSignedIn()) {
@@ -46,19 +47,19 @@ QtObject {
     }
 
     function getSettingsDialog() {
-        if (getAppContext().service === Settings.services.DIIGO) {
+        if (getAppContext().service === Services.DIIGO) {
             return Qt.createComponent("../pages/diigo/SettingDialog.qml");
         }
-        else if (getAppContext().service === Settings.services.PINBOARD) {
+        else if (getAppContext().service === Services.PINBOARD) {
             return Qt.createComponent("../pages/pinboard/SettingDialog.qml");
         }
     }
 
     function getServiceName() {
-        if (getAppContext().service === Settings.services.DIIGO) {
+        if (getAppContext().service === Services.DIIGO) {
             return "DIIGO";
         }
-        else if (getAppContext().service === Settings.services.PINBOARD) {
+        else if (getAppContext().service === Services.PINBOARD) {
             return "PINBOARD";
         }
     }
@@ -67,7 +68,7 @@ QtObject {
      * Refresh cache if it exists.
      */
     function refresh(onSuccess, onFailure) {
-        if (getAppContext().service === Settings.services.PINBOARD) {
+        if (getAppContext().service === Services.PINBOARD) {
             PinboardService.refreshCache(onSuccess, onFailure);
         }
         else {
@@ -76,40 +77,40 @@ QtObject {
     }
 
     function deleteBookmark(bookmark, onSuccess, onFailure) {
-        if (getAppContext().service === Settings.services.PINBOARD) {
+        if (getAppContext().service === Services.PINBOARD) {
             PinboardService.deleteBookmark(bookmark, onSuccess, onFailure);
         }
     }
 
     function fetchRecentBookmarks(onSuccess, onFailure) {
-        if (getAppContext().service === Settings.services.PINBOARD) {
+        if (getAppContext().service === Services.PINBOARD) {
             PinboardService.fetchRecentBookmarks(onSuccess, onFailure);
         }
-        else if (getAppContext().service === Settings.services.DIIGO) {
+        else if (getAppContext().service === Services.DIIGO) {
             DiigoService.fetchRecentBookmarks(onSuccess, onFailure, getAppContext());
         }
     }
 
     function fetchBookmarks(criteria, onSuccess, onFailure) {
-        if (getAppContext().service === Settings.services.PINBOARD) {
+        if (getAppContext().service === Services.PINBOARD) {
             PinboardService.fetchBookmarks(criteria, onSuccess, onFailure);
         }
-        else if (getAppContext().service === Settings.services.DIIGO) {
+        else if (getAppContext().service === Services.DIIGO) {
             DiigoService.fetchBookmarks(criteria, onSuccess, onFailure, getAppContext());
         }
     }
 
     function addBookmark(bookmark, onSuccess, onFailure) {
-        if (getAppContext().service === Settings.services.PINBOARD) {
+        if (getAppContext().service === Services.PINBOARD) {
             PinboardService.addBookmark(bookmark, onSuccess, onFailure);
         }
-        else if (getAppContext().service === Settings.services.DIIGO) {
+        else if (getAppContext().service === Services.DIIGO) {
             DiigoService.addBookmark(bookmark, onSuccess, onFailure, getAppContext());
         }
     }
 
     function updateBookmark(bookmark, onSuccess, onFailure) {
-        if (getAppContext().service === Settings.services.PINBOARD) {
+        if (getAppContext().service === Services.PINBOARD) {
             PinboardService.updateBookmark(bookmark, onSuccess, onFailure);
         }
     }

@@ -28,6 +28,7 @@ THE SOFTWARE.
 .import "../js/Settings.js" as Settings
 .import "../js/LocalStore.js" as LocalStore
 .import "../js/Bookmark.js" as Bookmark
+.import "Services.js" as Services
 
 /**
  * Documentation of the Pinboard API: https://pinboard.in/api/
@@ -37,25 +38,24 @@ THE SOFTWARE.
  * Returns the recent created bookmarks from the cache.
  */
 function fetchRecentBookmarks(onSuccess, onFailure) {
-    var posts = LocalStore.getRecentPinboardPosts(
-                Settings.get(Settings.services.PINBOARD, Settings.keys.COUNT_RECENT_BOOKMARKS)
-    );
-    onSuccess(internal.mapToGiuBookmarks(posts));
+    var count = Settings.get(Services.PINBOARD, Settings.keys.COUNT_RECENT_BOOKMARKS);
+    var bookmarks = LocalStore.fetchRecentBookmarks(count, Services.PINBOARD);
+    onSuccess(bookmarks);
 }
 
 function refreshCache(onSuccess, onFailure) {
-    var lastSync = Settings.get(Settings.services.PINBOARD, Settings.keys.LAST_SYNC);
+    var lastSync = Settings.get(Services.PINBOARD, Settings.keys.LAST_SYNC);
     console.log("lastSync: " + lastSync);
     if (!lastSync || internal.canFetchAll(lastSync)) {
         var queryParams = {
-            auth_token: Settings.get(Settings.services.PINBOARD, Settings.keys.API_KEY),
+            auth_token: Settings.get(Services.PINBOARD, Settings.keys.API_KEY),
             format: "json"
         }
 
         HttpClient.performGetRequest(
                     internal.URL_BOOKMARK + internal.METHODS.ALL,
                     queryParams,
-                    function(posts) {internal.fetchAllSuccessCallback(posts, onSuccess)},
+                    function(bookmarks) {internal.fetchAllSuccessCallback(bookmarks, onSuccess)},
                     onFailure);
     }
     else {
@@ -64,8 +64,8 @@ function refreshCache(onSuccess, onFailure) {
 }
 
 function fetchBookmarks(criteria, onSuccess, onFailure) {
-    var posts = LocalStore.searchPinboardPosts(criteria);
-    onSuccess(internal.mapToGiuBookmarks(posts));
+    var bookmarks = LocalStore.searchBookmarks(criteria, Services.PINBOARD);
+    onSuccess(bookmarks);
 }
 
 /**
@@ -84,7 +84,7 @@ function fetchBookmarks(criteria, onSuccess, onFailure) {
  */
 function addBookmark(bookmark, onSuccess, onFailure) {
     var queryParams = {
-        auth_token: Settings.get(Settings.services.PINBOARD, Settings.keys.API_KEY),
+        auth_token: Settings.get(Services.PINBOARD, Settings.keys.API_KEY),
         description: bookmark.title,
         url: bookmark.href,
         shared: bookmark.shared,
@@ -110,7 +110,7 @@ function addBookmark(bookmark, onSuccess, onFailure) {
  */
 function updateBookmark(bookmark, onSuccess, onFailure) {
     var queryParams = {
-        auth_token: Settings.get(Settings.services.PINBOARD, Settings.keys.API_KEY),
+        auth_token: Settings.get(Services.PINBOARD, Settings.keys.API_KEY),
         description: bookmark.title,
         url: bookmark.href,
         shared: bookmark.shared,
@@ -137,7 +137,7 @@ function updateBookmark(bookmark, onSuccess, onFailure) {
  */
 function deleteBookmark(bookmark, onSuccess, onFailure) {
     var queryParams = {
-        auth_token: Settings.get(Settings.services.PINBOARD, Settings.keys.API_KEY),
+        auth_token: Settings.get(Services.PINBOARD, Settings.keys.API_KEY),
         url: bookmark.href,
         format: "json"
     }
@@ -164,35 +164,6 @@ var internal = {
         RECENT: "recent"
     },
 
-    mapToGiuBookmarks: function(posts) {
-        var guiBookmarks = [];
-        for (var i = 0; i < posts.length; i++) {
-            var guiBookmark = Bookmark.create(
-                posts[i].href,
-                posts[i].description,
-                posts[i].extended,
-                posts[i].tags,
-                posts[i].shared,
-                posts[i].toread,
-                posts[i].time
-            );
-            guiBookmarks.push(guiBookmark);
-        }
-        return guiBookmarks;
-    },
-
-    mapToDbBookmark: function(guiBookmark) {
-        var post = {
-            href: guiBookmark.href,
-            description: guiBookmark.title,
-            shared: guiBookmark.shared,
-            toread: guiBookmark.toread,
-            tags: (guiBookmark.tags !== undefined && guiBookmark.tags.length > 0) ? guiBookmark.tags : "",
-            extended: (guiBookmark.desc !== undefined && guiBookmark.desc.length > 0) ? guiBookmark.desc : ""
-        }
-        return post;
-    },
-
     /**
      * We can only fetch all posts every 5 minutes.
      */
@@ -206,12 +177,12 @@ var internal = {
         return diffSeconds > delay;
     },
 
-    fetchAllSuccessCallback: function(posts, onSuccess) {
+    fetchAllSuccessCallback: function(bookmarks, onSuccess) {
         var nowStr = new Date().toISOString();
         console.log("Save last sync: " + nowStr);
-        Settings.set(Settings.services.PINBOARD, Settings.keys.LAST_SYNC, nowStr);
-        console.log("Save posts ...");
-        LocalStore.savePinboardPosts(posts);
+        Settings.set(Services.PINBOARD, Settings.keys.LAST_SYNC, nowStr);
+        console.log("Save bookmarks ...");
+        LocalStore.savePinboardBookmarks(bookmarks);
         console.log("back to page");
         onSuccess();
     },
@@ -220,8 +191,7 @@ var internal = {
         console.log("addSuccessCallback, result code: " + result.result_code);
         if (result.result_code === "done") {
             console.log("Add bookmark to cache");
-            var post = internal.mapToDbBookmark(bookmark);
-            LocalStore.addOrUpdatePinboardPost(post);
+            LocalStore.addOrUpdateBookmark(bookmark, Services.PINBOARD);
             onSuccess();
         }
         else {
@@ -237,8 +207,7 @@ var internal = {
         console.log("updateSuccessCallback, result code: " + result.result_code);
         if (result.result_code === "done") {
             console.log("Update bookmark in cache");
-            var post = internal.mapToDbBookmark(bookmark);
-            LocalStore.addOrUpdatePinboardPost(post);
+            LocalStore.addOrUpdateBookmark(bookmark, Services.PINBOARD);
             onSuccess();
         }
         else {
@@ -254,7 +223,7 @@ var internal = {
         console.log("deleteSuccessCallback, result code: " + result.result_code);
         if (result.result_code === "done") {
             console.log("Remove bookmark from cache");
-            LocalStore.deletePinboardPost(bookmark.href);
+            LocalStore.deleteBookmark(bookmark.href, Services.PINBOARD);
             onSuccess();
         }
         else {

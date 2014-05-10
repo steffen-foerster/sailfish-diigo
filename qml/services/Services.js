@@ -22,52 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import QtQuick 2.0
-import Sailfish.Silica 1.0
+.pragma library
 
-import "../js/Settings.js" as Settings
-import "../services/Services.js" as Services
-
-/**
- * Page to select the service provider.
- */
-Page {
-    id: servicePage
-
-    onStatusChanged: {
-        if (status === PageStatus.Active) {
-            setInactiveCover();
-        }
-    }
-
-    SilicaFlickable {
-        anchors.fill: parent
-        width: parent.width
-
-        PullDownMenu {
-            MenuItem {
-                text: qsTr("Diigo")
-                onClicked: {
-                    getServiceManager().startService(Services.DIIGO);
-                }
-            }
-            MenuItem {
-                text: qsTr("Pinboard")
-                onClicked: {
-                    getServiceManager().startService(Services.PINBOARD);
-                }
-            }
-        }
-
-        PageHeader {
-            title: qsTr("Service selection")
-        }
-
-        ViewPlaceholder {
-            id: placeHolder
-            enabled: true
-            text: qsTr("Pull down to select your service")
-        }
-    }
-}
+var NOT_SELECTED = -1;
+var ALL = 0;
+var DIIGO = 1;
+var PINBOARD = 2;
 

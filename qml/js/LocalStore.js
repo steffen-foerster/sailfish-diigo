@@ -30,6 +30,10 @@ THE SOFTWARE.
 
 .import QtQuick.LocalStorage 2.0 as Sql
 
+.import "Utils.js" as Utils
+.import "Bookmark.js" as Bookmark
+.import "../services/Services.js" as Services
+
 var private = {
     getDatabase : function() {
         return Sql.LocalStorage.openDatabaseSync("Bookmark", "1.0", "Database of application Bookmark", 1000000);
@@ -41,12 +45,14 @@ var private = {
 // ------------------------------------------------------------
 
 function initializeDatabase(defaultSettings) {
+    console.log("initializing database");
     var db = private.getDatabase();
     db.transaction(function(tx) {
         initializeSettings(defaultSettings, tx);
         //initializeSearchStore(tx);
         initializeVersion(tx);
-        initializePinboardStore(tx);
+        // database migration
+        migrateToVersion2(tx);
     });
 }
 
@@ -80,18 +86,27 @@ function initializeVersion(tx) {
     console.debug("Table MIGRATION initialized");
 }
 
-function initializePinboardStore(tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS pinboard_post(' +
-                  '  href TEXT UNIQUE,' +
-                  '  tags TEXT,' +
-                  '  description TEXT,' +
-                  '  extended TEXT,' +
-                  '  shared TEXT,' +
-                  '  toread TEXT,' +
-                  '  time TEXT,' +
-                  '  meta TEXT,' +
-                  '  hash TEXT)');
-    console.debug("Table PINBOARD_POST initialized");
+function migrateToVersion2(tx) {
+    var res = tx.executeSql('SELECT MAX(version) max_version FROM migration;');
+    if (res.rows.item(0).max_version === 1) {
+        tx.executeSql('DROP TABLE pinboard_post IF EXISTS');
+        console.debug("Dropped table PINBOARD_POST");
+
+        tx.executeSql('CREATE TABLE IF NOT EXISTS bookmark(' +
+                      '  service INTEGER,' +
+                      '  href TEXT,' +
+                      '  tags TEXT,' +
+                      '  title TEXT,' +
+                      '  desc TEXT,' +
+                      '  shared TEXT,' +
+                      '  toread TEXT,' +
+                      '  time TEXT,' +
+                      '  PRIMARY KEY (service, href))');
+        console.debug("Table BOOKMARK initialized");
+
+        tx.executeSql('INSERT OR IGNORE INTO migration (version) VALUES (?);', [2]);
+        console.debug("Version 2 saved into table MIGRATION");
+    }
 }
 
 // ------------------------------------------------------------
@@ -122,103 +137,112 @@ function get(service, key) {
 }
 
 // ------------------------------------------------------------
-// PINBOARD_POST
+// BOOKMARK
 // ------------------------------------------------------------
 
-/*
-  Sample: [{
-    "href":"http:\/\/softwaredevelopmenttoday.blogspot.fi\/",
-    "description":"Software Development",
-    "extended":"",
-    "meta":"4e1bdda6e44ad1656add4fb566566572",
-    "hash":"f193639805ecc2fc03bb64244ebf11ed",
-    "time":"2014-04-25T13:32:00Z",
-    "shared":"yes",
-    "toread":"no",
-    "tags":"Dev"},...]
-*/
-
-function savePinboardPosts(posts) {
+function savePinboardBookmarks(bookmarks) {
+    console.log("Saving PINBOARD bookmarks ...");
     var db = private.getDatabase();
     db.transaction(function (tx) {
-        var res = tx.executeSql('DELETE FROM pinboard_post;');
+        var res = tx.executeSql('DELETE FROM bookmark WHERE service = ?;', [Services.PINBOARD]);
         console.log("Deleted posts: ", res.rowsAffected);
-        if (posts) {
-            for (var i = 0; i < posts.length; i++) {
-                var p = posts[i];
-                tx.executeSql('INSERT OR REPLACE INTO pinboard_post' +
-                              '  (href, description, extended, meta, hash, time, shared, toread, tags) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);',
-                              [p.href, p.description, p.extended, p.meta, p.hash, p.time, p.shared, p.toread, p.tags]);
+        if (bookmarks) {
+            for (var i = 0; i < bookmarks.length; i++) {
+                var b = bookmarks[i];
+                tx.executeSql('INSERT OR REPLACE INTO bookmark' +
+                              '  (service, href, title, desc, time, shared, toread, tags) VALUES(?, ?, ?, ?, ?, ?, ?, ?);',
+                              [Services.PINBOARD, b.href, b.description, b.extended, b.time, b.shared, b.toread, b.tags]);
             }
-            console.log("Inserted posts: " + posts.length);
+            console.log("Inserted PINBOARD bookmarks: " + bookmarks.length);
         }
         else {
-            console.log("posts is: ", posts);
+            console.log("bookmarks is: ", bookmarks);
         }
     });
 }
 
-/**
- * A bookmark with the same URL will be replaced.
- */
-function addOrUpdatePinboardPost(post) {
+function saveDiigoBookmarks(bookmarks) {
+    console.log("Saving DIIGO bookmarks ...");
     var db = private.getDatabase();
     db.transaction(function (tx) {
-        var time = post.time ? post.time : new Date().toISOString()
-        tx.executeSql('INSERT OR REPLACE INTO pinboard_post' +
-                      '  (href, description, extended, shared, toread, tags, time) VALUES(?, ?, ?, ?, ?, ?, ?);',
-                      [post.href, post.description, post.extended, post.shared, post.toread, post.tags, time]);
+        var res = tx.executeSql('DELETE FROM bookmark WHERE service = ?;', [Services.DIIGO]);
+        console.log("Deleted bookmarks: ", res.rowsAffected);
+        if (bookmarks) {
+            for (var i = 0; i < bookmarks.length; i++) {
+                var b = bookmarks[i];
+                tx.executeSql('INSERT OR REPLACE INTO bookmark' +
+                              '  (service, href, title, desc, time, shared, toread, tags) VALUES(?, ?, ?, ?, ?, ?, ?, ?);',
+                              [Services.DIIGO, b.href, b.title, b.desc, b.created_at, b.shared, b.toread,
+                               Utils.commaToSpaceSeparated(b.tags)]);
+            }
+            console.log("Inserted DIIGO bookmarks: " + bookmarks.length);
+        }
+        else {
+            console.log("bookmarks is: ", bookmarks);
+        }
+    });
+}
+
+// A bookmark with the same URL will be replaced.
+function addOrUpdateBookmark(bookmark, service) {
+    var db = private.getDatabase();
+    db.transaction(function (tx) {
+        var time = bookmark.time ? bookmark.time : new Date().toISOString()
+        tx.executeSql('INSERT OR REPLACE INTO bookmark' +
+                      '  (service, href, title, desc, shared, toread, tags, time) VALUES(?, ?, ?, ?, ?, ?, ?, ?);',
+                      [service, bookmark.href, bookmark.title, bookmark.desc, bookmark.shared, bookmark.toread, bookmark.tags, time]);
 
     });
 }
 
-function deletePinboardPost(href) {
+function deleteBookmark(href, service) {
     var db = private.getDatabase();
     db.transaction(function (tx) {
-        var res = tx.executeSql('DELETE FROM pinboard_post WHERE href = ?;', [href]);
-        console.log("Deleted posts: ", res.rowsAffected);
+        var res = tx.executeSql('DELETE FROM bookmark WHERE href = ? AND service = ?;', [href, service]);
+        console.log("Deleted bookmarks: ", res.rowsAffected);
     });
 }
 
-function getRecentPinboardPosts(count) {
+function fetchRecentBookmarks(count, service) {
     var db = private.getDatabase();
     var retval = [];
     db.transaction(function (tx) {
-        var res = tx.executeSql('SELECT * FROM pinboard_post ORDER BY time DESC LIMIT ?;', [count]);
-        retval = createPosts(res);
+        var res = tx.executeSql('SELECT * FROM bookmark WHERE service = ? ORDER BY time DESC LIMIT ?;', [service, count]);
+        retval = createBookmarks(res);
     });
     return retval;
 }
 
-function searchPinboardPosts(criteria) {
+function searchBookmarks(criteria, service) {
     var db = private.getDatabase();
     var retval = [];
     db.transaction(function (tx) {
-        var res = tx.executeSql(createPinboardSearchQuery(criteria));
-        retval = createPosts(res);
+        var res = tx.executeSql(createSearchQuery(criteria, service));
+        retval = createBookmarks(res);
     });
     return retval;
 }
 
-function createPosts(resultSet) {
+function createBookmarks(resultSet) {
     var retval = [];
     for (var i = 0; i < resultSet.rows.length; i++) {
-        retval.push({
-            href: resultSet.rows.item(i).href,
-            description: resultSet.rows.item(i).description,
-            extended: resultSet.rows.item(i).extended,
-            time: resultSet.rows.item(i).time,
-            shared: resultSet.rows.item(i).shared,
-            toread: resultSet.rows.item(i).toread,
-            tags: resultSet.rows.item(i).tags
-        });
+        var bookmark = Bookmark.create(
+            resultSet.rows.item(i).href,
+            resultSet.rows.item(i).title,
+            resultSet.rows.item(i).desc,
+            resultSet.rows.item(i).tags,
+            resultSet.rows.item(i).shared,
+            resultSet.rows.item(i).toread,
+            resultSet.rows.item(i).time
+        );
+        retval.push(bookmark);
     }
     return retval;
 }
 
-function createPinboardSearchQuery(criteria) {
-    var query = "SELECT * FROM pinboard_post";
-    var where = "";
+function createSearchQuery(criteria, service) {
+    var query = "SELECT * FROM bookmark";
+    var where = "service = " + service;
 
     console.log("description: ", criteria.description, " where: ", where);
     if (criteria.description && criteria.description.trim().length > 0) {
@@ -237,9 +261,7 @@ function createPinboardSearchQuery(criteria) {
             where = addCondition(where, " tags LIKE '%" + tags[i].trim() + "%'", "AND");
         }
     }
-    if (where.length > 0) {
-        query += " WHERE " + where;
-    }
+    query += " WHERE " + where;
     query += " ORDER BY time DESC";
     query += " LIMIT " + criteria.count;
 

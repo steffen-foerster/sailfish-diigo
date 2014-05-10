@@ -25,6 +25,7 @@ THE SOFTWARE.
 .pragma library
 
 .import "LocalStore.js" as LocalStore
+.import "../services/Services.js" as Services
 
 var keys = {
     USER: "user",
@@ -39,13 +40,6 @@ var keys = {
 var dBValues = {
     B_TRUE: "true",
     B_FALSE: "false"
-}
-
-var services = {
-    NOT_SELECTED: -1,
-    ALL: 0,
-    DIIGO: 1,
-    PINBOARD: 2
 }
 
 function get(service, key) {
@@ -102,7 +96,7 @@ function getApiKey(appContext) {
 
 function isSignedIn(appContext) {
     var retval = false;
-    if (appContext.service === services.DIIGO) {
+    if (appContext.service === Services.DIIGO) {
         var user = get(appContext.service, keys.USER);
         var password = getPassword(appContext);
         var hasUser = (user !== undefined && user.length > 0);
@@ -111,7 +105,7 @@ function isSignedIn(appContext) {
         console.log("hasPassword: " + hasPassword);
         retval = hasUser && hasPassword;
     }
-    else if (appContext.service === services.PINBOARD) {
+    else if (appContext.service === Services.PINBOARD) {
         var apiKey = get(appContext.service, keys.API_KEY);
         retval = (apiKey !== undefined && apiKey.length > 0);
     }
@@ -123,7 +117,7 @@ function isSignedIn(appContext) {
  */
 function initialize() {
     var defaultValues = [{
-        service: services.DIIGO,
+        service: Services.DIIGO,
         values: {
           user: "",
           password: "",
@@ -131,15 +125,15 @@ function initialize() {
           count_recent_bookmarks: 10
         }
       }, {
-        service: services.PINBOARD,
+        service: Services.PINBOARD,
         values: {
           api_key: "",
           count_recent_bookmarks: 10
         }
       }, {
-        service: services.ALL,
+        service: Services.ALL,
         values: {
-          service: services.NOT_SELECTED
+          service: Services.NOT_SELECTED
         }
       }
     ];

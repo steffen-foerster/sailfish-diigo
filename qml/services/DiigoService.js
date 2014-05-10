@@ -25,8 +25,10 @@ THE SOFTWARE.
 .pragma library
 
 .import "../js/HttpClient.js" as HttpClient
+.import "../js/Utils.js" as Utils
 .import "../js/Settings.js" as Settings
 .import "../js/Bookmark.js" as Bookmark
+.import "Services.js" as Services
 
 /**
  * Documentation of the Diigo API: https://www.diigo.com/api_dev
@@ -38,9 +40,9 @@ THE SOFTWARE.
 function fetchRecentBookmarks(onSuccess, onFailure, appContext) {
     var queryParams = {
         key: appContext.diigoApiKey,
-        user: Settings.get(Settings.services.DIIGO, Settings.keys.USER),
+        user: Settings.get(Services.DIIGO, Settings.keys.USER),
         start: 0,
-        count: Settings.get(Settings.services.DIIGO, Settings.keys.COUNT_RECENT_BOOKMARKS),
+        count: Settings.get(Services.DIIGO, Settings.keys.COUNT_RECENT_BOOKMARKS),
         sort: internal.SEARCH_PARAMS.SORT_CREATED_AT,
         filter: internal.SEARCH_PARAMS.FILTER_ALL
     }
@@ -52,7 +54,7 @@ function fetchRecentBookmarks(onSuccess, onFailure, appContext) {
                     internal.fetchCallback(bookmarks, onSuccess)
                 },
                 onFailure,
-                Settings.get(Settings.services.DIIGO, Settings.keys.USER),
+                Settings.get(Services.DIIGO, Settings.keys.USER),
                 Settings.getPassword(appContext));
 }
 
@@ -62,7 +64,7 @@ function fetchRecentBookmarks(onSuccess, onFailure, appContext) {
 function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
     var queryParams = {
         key: appContext.diigoApiKey,
-        user: Settings.get(Settings.services.DIIGO, Settings.keys.USER),
+        user: Settings.get(Services.DIIGO, Settings.keys.USER),
         start: 0,
         count: searchCriteria.count,
         sort: searchCriteria.sort,
@@ -82,7 +84,7 @@ function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
                     internal.fetchCallback(bookmarks, onSuccess);
                 },
                 onFailure,
-                Settings.get(Settings.services.DIIGO, Settings.keys.USER),
+                Settings.get(Services.DIIGO, Settings.keys.USER),
                 Settings.getPassword(appContext));
 }
 
@@ -101,14 +103,14 @@ function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
 function addBookmark(bookmark, onSuccess, onFailure, appContext) {
     var queryParams = {
         key: appContext.diigoApiKey,
-        user: Settings.get(Settings.services.DIIGO, Settings.keys.USER),
+        user: Settings.get(Services.DIIGO, Settings.keys.USER),
         title: bookmark.title,
         url: bookmark.href,
         shared: bookmark.shared,
         readLater: bookmark.toread
     }
     if (bookmark.tags !== undefined && bookmark.tags.length > 0) {
-        queryParams.tags = internal.separateTags(bookmark.tags);
+        queryParams.tags = Utils.spaceToCommaSeparated(bookmark.tags);
     }
     if (bookmark.desc !== undefined && bookmark.desc.length > 0) {
         queryParams.desc = bookmark.desc;
@@ -119,7 +121,7 @@ function addBookmark(bookmark, onSuccess, onFailure, appContext) {
                 queryParams,
                 onSuccess,
                 onFailure,
-                Settings.get(Settings.services.DIIGO, Settings.keys.USER),
+                Settings.get(Services.DIIGO, Settings.keys.USER),
                 Settings.getPassword(appContext));
 }
 
@@ -152,7 +154,7 @@ var internal = {
                 bookmarks[i].url,
                 bookmarks[i].title,
                 bookmarks[i].desc,
-                internal.formatTags(bookmarks[i].tags),
+                Utils.commaToSpaceSeparated(bookmarks[i].tags),
                 bookmarks[i].shared,
                 null,
                 bookmarks[i].created_at
@@ -160,22 +162,6 @@ var internal = {
             guiBookmarks.push(guiBookmark);
         }
         onSuccess(guiBookmarks);
-    },
-
-    formatTags: function(tags) {
-        var retval = tags;
-        if (tags) {
-            retval = tags.replace(/,/g, " ");
-        }
-        return retval;
-    },
-
-    separateTags: function(tags) {
-        var retval = tags;
-        if (tags) {
-            retval = tags.replace(/ /g, ",");
-        }
-        return retval;
     }
 
 }

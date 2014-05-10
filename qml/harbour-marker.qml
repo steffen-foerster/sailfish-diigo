@@ -27,6 +27,7 @@ import Sailfish.Silica 1.0
 import "pages"
 import "services"
 import "js/Settings.js" as Settings
+import "services/Services.js" as Services
 
 ApplicationWindow
 {
@@ -67,7 +68,7 @@ ApplicationWindow
         console.log("ApplicationWindow onCompleted");
         Settings.initialize();
 
-        var activeServiceStr = Settings.get(Settings.services.ALL, Settings.keys.SERVICE);
+        var activeServiceStr = Settings.get(Services.ALL, Settings.keys.SERVICE);
         var activeService = parseInt(activeServiceStr);
 
         console.log("saved service: ", activeService);
