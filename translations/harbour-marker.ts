@@ -13,61 +13,6 @@
     </message>
 </context>
 <context>
-    <name>AddBookmarkPage</name>
-    <message>
-        <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add bookmark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>URL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The bookmark is &quot;unread&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Public</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save the bookmark as public</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Read Later</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter URL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tags, comma-separated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tags, separated by space</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>AddDialog</name>
     <message>
         <source>Clear</source>
@@ -211,7 +156,7 @@
     </message>
 </context>
 <context>
-    <name>EditBookmarkPage</name>
+    <name>EditDialog</name>
     <message>
         <source>Clear</source>
         <translation type="unfinished"></translation>
@@ -346,61 +291,6 @@
     </message>
 </context>
 <context>
-    <name>SearchPage</name>
-    <message>
-        <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>List name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Public and private</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show public and private bookmarks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sort by</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Created at</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Updated at</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Popularity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tags, separated by space</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tags, comma-separated</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ServicePage</name>
     <message>
         <source>Diigo</source>
@@ -470,84 +360,6 @@
     </message>
     <message>
         <source>Sign in / Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>StartPage</name>
-    <message>
-        <source>Add bookmark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sign in / Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Your recent bookmarks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Search result</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ViewBookmarkPage</name>
-    <message>
-        <source>Open in browser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bookmark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>URL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tags</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Created at</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Updated at</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mark as read</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mark as to read</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

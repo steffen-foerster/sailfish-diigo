@@ -94,8 +94,7 @@ Dialog {
         Column {
             id: column
 
-            x: Theme.paddingMedium
-            width: parent.width - 2 * Theme.paddingMedium
+            width: parent.width
             spacing: Theme.paddingMedium
 
             DialogHeader {

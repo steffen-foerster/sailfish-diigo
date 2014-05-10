@@ -37,13 +37,20 @@ Page {
 
     property variant bookmark
 
+    function acceptEditCallback(dialog) {
+        getServiceManager().updateBookmark(bookmark, function(){},
+            function(errorResult) {
+                viewPage.editFailureCallback(errorResult, dialog.oldBookmark)
+            }
+        );
+    }
+
     function editFailureCallback(errorResult, oldBookmark) {
-        getAppContext().state = AppState.S_VIEW_BOOKMARK;
         // restore bookmark values
         bookmark.href = oldBookmark.href;
-        bookmark.description = oldBookmark.description;
+        bookmark.title = oldBookmark.title;
         bookmark.tags = oldBookmark.tags;
-        bookmark.extended = oldBookmark.extended;
+        bookmark.desc = oldBookmark.desc;
         bookmark.shared = oldBookmark.shared;
         bookmark.toread = oldBookmark.toread;
         // TODO show error message
@@ -72,12 +79,10 @@ Page {
                 id: menuEdit
                 text: qsTr("Edit")
                 onClicked: {
-                    var dialog = pageStack.push("EditDialog.qml");
+                    var dialog = pageStack.push("EditDialog.qml", {bookmark: bookmark});
                     dialog.accepted.connect(function(){
                         acceptEditCallback(dialog);
                     });
-
-                    pageStack.push(Qt.resolvedUrl("EditBookmarkPage.qml"), {bookmark: bookmark, viewPage: viewBookmarkPage})
                 }
             }
             MenuItem {
@@ -146,15 +151,15 @@ Page {
     }
 
     states: [
-         State {
-             name: "PINBOARD"
-             PropertyChanges { target: menuEdit; visible: true}
-             PropertyChanges { target: menuMark; visible: true}
-         },
-         State {
-             name: "DIIGO"
-             PropertyChanges { target: menuEdit; visible: false}
-             PropertyChanges { target: menuMark; visible: false}
-         }
-     ]
+        State {
+            name: "PINBOARD"
+            PropertyChanges { target: menuEdit; visible: true}
+            PropertyChanges { target: menuMark; visible: true}
+        },
+        State {
+            name: "DIIGO"
+            PropertyChanges { target: menuEdit; visible: false}
+            PropertyChanges { target: menuMark; visible: false}
+        }
+    ]
 }
