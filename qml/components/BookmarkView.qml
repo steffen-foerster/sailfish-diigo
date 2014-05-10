@@ -33,6 +33,20 @@ Item {
 
     property string pageHeader: qsTr("Your recent bookmarks")
 
+    function add() {
+        var dialog = pageStack.push("../pages/AddDialog.qml");
+        dialog.accepted.connect(function(){
+            acceptAddCallback(dialog);
+        });
+    }
+
+    function search() {
+        var dialog = pageStack.push("../pages/SearchDialog.qml");
+        dialog.accepted.connect(function(){
+            acceptSearchCallback(dialog);
+        });
+    }
+
     function refresh() {
         console.log("refresh");
 
@@ -65,8 +79,12 @@ Item {
     function acceptSettingsCallback(dialog) {
         console.log("settings accepted" + dialog);
 
-        // TODO check sign in
-        fetchRecentBookmarks();
+        if (isSignedIn()) {
+            fetchRecentBookmarks();
+        }
+        else {
+            pageStack.replace(getSignInPage());
+        }
     }
 
     function acceptSearchCallback(dialog) {
@@ -83,6 +101,8 @@ Item {
 
     function acceptAddCallback(dialog) {
         console.log("add accepted: " + dialog);
+
+        busyIndicator.running = true;
 
         getServiceManager().addBookmark(dialog.bookmark,
                                         fetchRecentBookmarks,
@@ -102,11 +122,24 @@ Item {
     height: mainView.height; width: mainView.width
 
     Item {
+        id: busyIndicator
+
+        property alias running: busyIndicator.visible
+
         anchors.fill: parent
+        visible: false
+        z: 1000
+
+        Rectangle {
+            anchors.fill: parent
+            color: "black"
+            opacity: 0.5
+        }
+
         BusyIndicator {
-            id: busyIndicator
+            visible: busyIndicator.visible
+            running: visible
             anchors.centerIn: parent
-            running: false
             size: BusyIndicatorSize.Large
         }
     }
@@ -139,19 +172,13 @@ Item {
             MenuItem {
                 text: qsTr("Search")
                 onClicked: {
-                    var dialog = pageStack.push("../pages/SearchDialog.qml");
-                    dialog.accepted.connect(function(){
-                        acceptSearchCallback(dialog);
-                    });
+                    search();
                 }
             }
             MenuItem {
-                text: qsTr("Add bookmark")
+                text: qsTr("Add or import bookmark")
                 onClicked: {
-                    var dialog = pageStack.push("../pages/AddDialog.qml");
-                    dialog.accepted.connect(function(){
-                        acceptAddCallback(dialog);
-                    });
+                    add();
                 }
             }
         }
@@ -237,14 +264,14 @@ Item {
                 property variant index
 
                 MenuItem {
-                    text: "Open in browser"
+                    text: qsTr("Open in browser")
                     onClicked: {
                         console.log("opening URL: " + bookmarkModel.get(index).href)
                         Qt.openUrlExternally(bookmarkModel.get(index).href)
                     }
                 }
                 MenuItem {
-                    text: "Delete"
+                    text: qsTr("Delete")
                     onClicked: {
                         remorse.execute(bookmarkList.contextMenu.parent,
                                         "Deleting",
@@ -253,7 +280,7 @@ Item {
                     }
                 }
                 MenuItem {
-                    text: "Copy URL to clipboard"
+                    text: qsTr("Copy URL to clipboard")
                     onClicked: {
                         Clipboard.text = bookmarkModel.get(index).href
                     }

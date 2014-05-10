@@ -23,6 +23,7 @@ THE SOFTWARE.
 */
 
 .pragma library
+
 .import "LocalStore.js" as LocalStore
 
 var keys = {

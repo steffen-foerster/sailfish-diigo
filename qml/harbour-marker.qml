@@ -26,10 +26,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "pages"
 import "services"
-import "pages/diigo" as DiigoModule
-import "pages/pinboard" as PinboardModule
 import "js/Settings.js" as Settings
-import "js/AppState.js" as AppState
 
 ApplicationWindow
 {
@@ -64,11 +61,11 @@ ApplicationWindow
     }
 
     initialPage: Page{}
-    cover: Qt.resolvedUrl("cover/CoverPageInactive.qml")
+    cover: null //Qt.resolvedUrl("cover/CoverPageInactive.qml")
 
     Component.onCompleted: {
         console.log("ApplicationWindow onCompleted");
-        Settings.initialize()
+        Settings.initialize();
 
         var activeServiceStr = Settings.get(Settings.services.ALL, Settings.keys.SERVICE);
         var activeService = parseInt(activeServiceStr);

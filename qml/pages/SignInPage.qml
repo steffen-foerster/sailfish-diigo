@@ -38,7 +38,6 @@ Page {
             if (isSignedIn()) {
                 var page = pageStack.replace(getMainPage());
                 page.initialize();
-                setActiveCover();
             }
             else {
                 setInactiveCover();

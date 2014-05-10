@@ -24,9 +24,6 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "../pages/AppState.js" as AppState
-import "../pages/Utils.js" as Utils
-import "../pages"
 
 CoverBackground {
 
@@ -34,7 +31,7 @@ CoverBackground {
 
     CoverPlaceholder {
         anchors.centerIn: parent
-        text: qsTr("Sign in")
+        text: qsTr("Bookmark\nSign in")
     }
 
 }

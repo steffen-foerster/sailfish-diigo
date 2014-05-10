@@ -37,12 +37,10 @@ Dialog {
     property var bookmark: null
 
     function autofillUrl() {
-        if (Clipboard.hasText) {
-            var urls = Clipboard.text.match(/^http[s]*:\/\/.{3,242}$/);
-            if (urls.length > 0) {
-                href.text = urls[0];
-                title.focus = true;
-            }
+        var url = Utils.getUrlFromClipboard(Clipboard.hasText, Clipboard.text);
+        if (url) {
+            href.text = url;
+            title.focus = true;
         }
     }
 
@@ -67,8 +65,10 @@ Dialog {
         return bookmark;
     }
 
+    state: "ADD"
+
     onStatusChanged: {
-        if (status === PageStatus.Active) {
+        if (status === PageStatus.Active && state === "ADD") {
             autofillUrl();
         }
     }
@@ -88,6 +88,19 @@ Dialog {
                 id: menuClear
                 text: qsTr("Clear")
                 onClicked: clearFields()
+            }
+            MenuItem {
+                id: menuImport
+                text: qsTr("Import from browser")
+                onClicked: {
+                    var importPage = pageStack.push("ImportPage.qml");
+                    importPage.selected.connect(function(browserBookmark){
+                        addPage.state = "IMPORT"
+                        clearFields();
+                        href.text = browserBookmark.href
+                        title.text = browserBookmark.title
+                    });
+                }
             }
         }
 
@@ -157,6 +170,15 @@ Dialog {
             }
         }
     }
+
+    states: [
+        State {
+            name: "ADD"
+        },
+        State {
+            name: "IMPORT"
+        }
+    ]
 }
 
 

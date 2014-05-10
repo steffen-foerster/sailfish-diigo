@@ -64,8 +64,10 @@ OTHER_FILES += harbour-marker.desktop \
     qml/js/Settings.js \
     qml/js/LocalStore.js \
     qml/js/HttpClient.js \
-    qml/js/AppState.js \
-    qml/pages/EditDialog.qml
+    qml/pages/EditDialog.qml \
+    qml/pages/ImportDialog.qml \
+    qml/services/Importer.js \
+    qml/pages/ImportPage.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

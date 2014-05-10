@@ -31,7 +31,20 @@ Page {
     id: mainPage
 
     function initialize() {
+        setActiveCover();
         bookmarks.refresh();
+    }
+
+    function activateBookmarkView() {
+        mainView.currentIndex = 0
+    }
+
+    function add() {
+        bookmarks.add();
+    }
+
+    function search() {
+        bookmarks.search();
     }
 
     SlideshowView {
@@ -50,12 +63,33 @@ Page {
     }
 
     Rectangle {
+        id: fadeZone1
+        anchors.bottom: mainView.bottom
+        color: "black"
+        opacity: 0.5
+        height: Theme.paddingLarge
+        width: parent.width
+        z: 1
+    }
+
+    Rectangle {
+        id: fadeZone2
+        anchors.top: mainView.bottom
+        color: "black"
+        opacity: 0.5
+        height: Theme.paddingMedium
+        width: parent.width
+        z: 1
+    }
+
+    Rectangle {
         id: viewIndicator
         anchors.top: mainView.bottom
         color: Theme.highlightColor
         height: Theme.paddingMedium
         width: mainView.width / 2
         x: mainView.currentIndex * width
+        z: 2
 
         Behavior on x {
             NumberAnimation {
@@ -63,4 +97,5 @@ Page {
             }
         }
     }
+
 }

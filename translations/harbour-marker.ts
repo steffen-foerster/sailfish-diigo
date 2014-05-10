@@ -62,6 +62,10 @@
         <source>The bookmark is &quot;unread&quot;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Import from browser</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BookmarkView</name>
@@ -86,11 +90,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add bookmark</source>
+        <source>No bookmarks found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No bookmarks found</source>
+        <source>Add or import bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open in browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy URL to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -108,7 +124,8 @@
 <context>
     <name>CoverPageInactive</name>
     <message>
-        <source>Sign in</source>
+        <source>Bookmark
+Sign in</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -226,6 +243,17 @@
     </message>
     <message>
         <source>Cannot execute action</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ImportPage</name>
+    <message>
+        <source>Select bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No bookmarks found</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -36,3 +36,31 @@ function crop(value, maxLength) {
 function formatTimestamp(timestamp) {
     return timestamp.substr(0, 10);
 }
+
+function getUrlFromClipboard(hasText, text) {
+    console.log("hasText: ", hasText, ", text: ", text);
+    var retval = null
+    if (hasText) {
+        var urls = text.match(/^http[s]*:\/\/.{3,242}$/);
+        if (urls.length > 0) {
+            retval = urls[0];
+        }
+    }
+    return retval;
+}
+
+function commaToSpaceSeparated(tags) {
+    var retval = tags;
+    if (tags) {
+        retval = tags.replace(/,/g, " ");
+    }
+    return retval;
+}
+
+function spaceToCommaSeparated(tags) {
+    var retval = tags;
+    if (tags) {
+        retval = tags.replace(/ /g, ",");
+    }
+    return retval;
+}

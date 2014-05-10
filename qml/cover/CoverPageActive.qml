@@ -24,8 +24,8 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "../pages/AppState.js" as AppState
-import "../pages/Utils.js" as Utils
+
+import "../js/Utils.js" as Utils
 import "../pages"
 
 CoverBackground {
@@ -34,7 +34,7 @@ CoverBackground {
 
     CoverPlaceholder {
         anchors.centerIn: parent
-        text: qsTr("Search or add with ") + getServiceName()
+        text: qsTr("Search or add with ") + getServiceManager().getServiceName()
     }
 
     Label {
@@ -74,43 +74,31 @@ CoverBackground {
     }
 
     function addBookmarkAction () {
-        var navigationSuccess = navigateToStartPage();
-
-        if (navigationSuccess) {
-            pageStack.completeAnimation();
-
-            getAppContext().state = AppState.T_START_ADD;
-            pageStack.push(Qt.resolvedUrl("../" + getFolderByService() + "AddBookmarkPage.qml"));
-            mainWindow.activate()
-        }
+        var mainPage = navigateToMainPage();
+        pageStack.completeAnimation();
+        mainPage.add();
+        window.activate();
     }
 
     function searchAction () {
-        var navigationSuccess = navigateToStartPage();
-
-        if (navigationSuccess) {
-            pageStack.completeAnimation();
-
-            getAppContext().state = AppState.T_START_SEARCH;
-            pageStack.push(Qt.resolvedUrl("../" + getFolderByService() + "SearchPage.qml"));
-            mainWindow.activate()
-        }
+        var mainPage = navigateToMainPage();
+        pageStack.completeAnimation();
+        mainPage.search();
+        window.activate();
     }
 
-    function navigateToStartPage() {
-        var success = false;
-        if (getAppContext().state === AppState.S_START) {
-            // we are ready
-            success = true;
+    function navigateToMainPage() {
+        if (pageStack.depth === 1) {
+            var mainPage = pageStack.currentPage;
+            mainPage.activateBookmarkView();
         }
         else {
             pageStack.clear();
-            getAppContext().state = AppState.T_SERVICE_START; // init start page
-            pageStack.push(getStartPage());
+            var page = pageStack.replace(getMainPage());
+            page.initialize();
             success = true;
         }
-
-        return success;
+        return pageStack.currentPage;
     }
 
     function getFirstLettersOfUrl() {
@@ -128,13 +116,7 @@ CoverBackground {
     }
 
     function hasUrlInClipboard() {
-        if (Clipboard.hasText) {
-            var urls = Clipboard.text.match(/^http[s]*:\/\/.{3,242}$/);
-            if (urls && urls.length > 0) {
-                return true;
-            }
-        }
-        return false;
+        return Utils.getUrlFromClipboard(Clipboard.hasText, Clipboard.text) ? true : false;
     }
 
 }
