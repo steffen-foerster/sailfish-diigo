@@ -173,6 +173,21 @@ Sign in</source>
     </message>
 </context>
 <context>
+    <name>DiigoService</name>
+    <message>
+        <source>Cannot add bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Service request failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot update bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>EditDialog</name>
     <message>
         <source>Clear</source>

@@ -34,15 +34,6 @@ THE SOFTWARE.
  * Documentation of the Pinboard API: https://pinboard.in/api/
  */
 
-/**
- * Returns the recent created bookmarks from the cache.
- */
-function fetchRecentBookmarks(onSuccess, onFailure) {
-    var count = Settings.get(Services.PINBOARD, Settings.keys.COUNT_RECENT_BOOKMARKS);
-    var bookmarks = LocalStore.fetchRecentBookmarks(count, Services.PINBOARD);
-    onSuccess(bookmarks);
-}
-
 function refreshCache(onSuccess, onFailure) {
     var lastSync = Settings.get(Services.PINBOARD, Settings.keys.LAST_SYNC);
     console.log("lastSync: " + lastSync);
@@ -63,6 +54,18 @@ function refreshCache(onSuccess, onFailure) {
     }
 }
 
+/**
+ * Returns the recent created bookmarks from the cache.
+ */
+function fetchRecentBookmarks(onSuccess, onFailure) {
+    var count = Settings.get(Services.PINBOARD, Settings.keys.COUNT_RECENT_BOOKMARKS);
+    var bookmarks = LocalStore.fetchRecentBookmarks(count, Services.PINBOARD);
+    onSuccess(bookmarks);
+}
+
+/**
+ * Returns the bookmarks which fulfills the criteria.
+ */
 function fetchBookmarks(criteria, onSuccess, onFailure) {
     var bookmarks = LocalStore.searchBookmarks(criteria, Services.PINBOARD);
     onSuccess(bookmarks);
@@ -171,7 +174,7 @@ var internal = {
         var dateLastSync = Date.parse(lastSync);
         var now = Date.now();
         var diffSeconds = (now - dateLastSync) / (1000);
-        var delay = (5 * 60) + 10; // 10 extra seconds
+        var delay = (5 * 60) + 10; // 300 + 10 extra seconds
         console.log("diffSeconds: ", diffSeconds);
 
         return diffSeconds > delay;

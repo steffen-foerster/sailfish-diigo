@@ -28,64 +28,41 @@ THE SOFTWARE.
 .import "../js/Utils.js" as Utils
 .import "../js/Settings.js" as Settings
 .import "../js/Bookmark.js" as Bookmark
+.import "../js/LocalStore.js" as LocalStore
 .import "Services.js" as Services
 
 /**
  * Documentation of the Diigo API: https://www.diigo.com/api_dev
  */
 
-/**
- * Returns the recent created bookmarks.
- */
-function fetchRecentBookmarks(onSuccess, onFailure, appContext) {
-    var queryParams = {
-        key: appContext.diigoApiKey,
-        user: Settings.get(Services.DIIGO, Settings.keys.USER),
-        start: 0,
-        count: Settings.get(Services.DIIGO, Settings.keys.COUNT_RECENT_BOOKMARKS),
-        sort: internal.SEARCH_PARAMS.SORT_CREATED_AT,
-        filter: internal.SEARCH_PARAMS.FILTER_ALL
-    }
+var COUNT_FETCH_ALL = 100;
 
-    HttpClient.performGetRequest(
-                internal.URL_BOOKMARK,
-                queryParams,
-                function(bookmarks) {
-                    internal.fetchCallback(bookmarks, onSuccess)
-                },
-                onFailure,
-                Settings.get(Services.DIIGO, Settings.keys.USER),
-                Settings.getPassword(appContext));
+function refreshCache(onSuccess, onFailure, appContext) {
+    var lastSync = Settings.get(Services.DIIGO, Settings.keys.LAST_SYNC);
+    console.log("lastSync: " + lastSync);
+    if (!lastSync || internal.canFetchAll(lastSync)) {
+        internal.fetchBookmarks(onSuccess, onFailure, appContext, 0, []);
+    }
+    else {
+        onSuccess();
+    }
 }
 
 /**
- * Returns the bookmarks to the given criteria.
+ * Returns the recent created bookmarks from the cache.
  */
-function fetchBookmarks(searchCriteria, onSuccess, onFailure, appContext) {
-    var queryParams = {
-        key: appContext.diigoApiKey,
-        user: Settings.get(Services.DIIGO, Settings.keys.USER),
-        start: 0,
-        count: searchCriteria.count,
-        sort: searchCriteria.sort,
-        filter: searchCriteria.filter ? internal.SEARCH_PARAMS.FILTER_ALL : internal.SEARCH_PARAMS.FILTER_PUBLIC,
-    }
-    if (searchCriteria.tags !== undefined && searchCriteria.tags.length > 0) {
-        queryParams.tags = searchCriteria.tags;
-    }
-    if (searchCriteria.list !== undefined && searchCriteria.list.length > 0) {
-        queryParams.list = searchCriteria.list;
-    }
+function fetchRecentBookmarks(onSuccess, onFailure) {
+    var count = Settings.get(Services.DIIGO, Settings.keys.COUNT_RECENT_BOOKMARKS);
+    var bookmarks = LocalStore.fetchRecentBookmarks(count, Services.DIIGO);
+    onSuccess(bookmarks);
+}
 
-    HttpClient.performGetRequest(
-                internal.URL_BOOKMARK,
-                queryParams,
-                function(bookmarks) {
-                    internal.fetchCallback(bookmarks, onSuccess);
-                },
-                onFailure,
-                Settings.get(Services.DIIGO, Settings.keys.USER),
-                Settings.getPassword(appContext));
+/**
+ * Returns the bookmarks which fulfills the criteria.
+ */
+function fetchBookmarks(criteria, onSuccess, onFailure) {
+    var bookmarks = LocalStore.searchBookmarks(criteria, Services.DIIGO);
+    onSuccess(bookmarks);
 }
 
 /**
@@ -119,7 +96,35 @@ function addBookmark(bookmark, onSuccess, onFailure, appContext) {
     HttpClient.performPostRequest(
                 internal.URL_BOOKMARK,
                 queryParams,
-                onSuccess,
+                function(result) {internal.addSuccessCallback(result, bookmark, onSuccess, onFailure)},
+                onFailure,
+                Settings.get(Services.DIIGO, Settings.keys.USER),
+                Settings.getPassword(appContext));
+}
+
+/**
+ * Updates the given bookmark.
+ */
+function updateBookmark(bookmark, onSuccess, onFailure, appContext) {
+    var queryParams = {
+        key: appContext.diigoApiKey,
+        user: Settings.get(Services.DIIGO, Settings.keys.USER),
+        title: bookmark.title,
+        url: bookmark.href,
+        shared: bookmark.shared,
+        readLater: bookmark.toread
+    }
+    if (bookmark.tags !== undefined && bookmark.tags.length > 0) {
+        queryParams.tags = Utils.spaceToCommaSeparated(bookmark.tags);
+    }
+    if (bookmark.desc !== undefined && bookmark.desc.length > 0) {
+        queryParams.desc = bookmark.desc;
+    }
+
+    HttpClient.performPostRequest(
+                internal.URL_BOOKMARK,
+                queryParams,
+                function(result) {internal.updateSuccessCallback(result, bookmark, onSuccess, onFailure)},
                 onFailure,
                 Settings.get(Services.DIIGO, Settings.keys.USER),
                 Settings.getPassword(appContext));
@@ -147,22 +152,105 @@ var internal = {
         FILTER_PUBLIC : "public"
     },
 
-    fetchCallback: function(bookmarks, onSuccess) {
-        var guiBookmarks = [];
-        for (var i = 0; i < bookmarks.length; i++) {
-            var guiBookmark = Bookmark.create(
-                bookmarks[i].url,
-                bookmarks[i].title,
-                bookmarks[i].desc,
-                Utils.commaToSpaceSeparated(bookmarks[i].tags),
-                bookmarks[i].shared,
-                null,
-                bookmarks[i].created_at
-            );
-            guiBookmarks.push(guiBookmark);
-        }
-        onSuccess(guiBookmarks);
-    }
+    /**
+     * Diigo hasn't a fixed limit for fetching of bookmarks.
+     * We fetch only all bookmarks every 60 seconds.
+     */
+    canFetchAll: function(lastSync) {
+        var dateLastSync = Date.parse(lastSync);
+        var now = Date.now();
+        var diffSeconds = (now - dateLastSync) / (1000);
+        var delay = 60;
+        console.log("diffSeconds: ", diffSeconds);
 
+        return diffSeconds > delay;
+    },
+
+    fetchBookmarks: function(onSuccess, onFailure, appContext, startOffset, allBookmarks) {
+        var queryParams = {
+            key: appContext.diigoApiKey,
+            user: Settings.get(Services.DIIGO, Settings.keys.USER),
+            start: startOffset,
+            count: COUNT_FETCH_ALL,
+            sort: internal.SEARCH_PARAMS.SORT_CREATED_AT,
+            filter: internal.SEARCH_PARAMS.FILTER_ALL
+        }
+
+        HttpClient.performGetRequest(
+                    internal.URL_BOOKMARK,
+                    queryParams,
+                    function(bookmarks) {
+                        internal.fetchCallback(bookmarks, onSuccess, onFailure, appContext, allBookmarks)
+                    },
+                    onFailure,
+                    Settings.get(Services.DIIGO, Settings.keys.USER),
+                    Settings.getPassword(appContext));
+    },
+
+    fetchCallback: function(fetchedBookmarks, onSuccess, onFailure, appContext, allBookmarks) {
+        console.log("fetched bookmarks: " + fetchedBookmarks.length);
+        for (var i = 0; i < fetchedBookmarks.length; i++) {
+            var guiBookmark = Bookmark.create(
+                fetchedBookmarks[i].url,
+                fetchedBookmarks[i].title,
+                fetchedBookmarks[i].desc,
+                Utils.commaToSpaceSeparated(fetchedBookmarks[i].tags),
+                fetchedBookmarks[i].shared,
+                null,
+                fetchedBookmarks[i].created_at
+            );
+            allBookmarks.push(guiBookmark);
+        }
+        console.log("total fetched bookmarks: " + allBookmarks.length);
+
+        if (fetchedBookmarks.length < COUNT_FETCH_ALL) {
+            var nowStr = new Date().toISOString();
+            console.log("Save last sync: " + nowStr);
+            Settings.set(Services.DIIGO, Settings.keys.LAST_SYNC, nowStr);
+            console.log("Save bookmarks ...");
+            LocalStore.saveDiigoBookmarks(allBookmarks);
+            console.log("back to page");
+            onSuccess();
+        }
+        else {
+            // fetch next bookmarks
+            var startOffset = allBookmarks.length;
+            internal.fetchBookmarks(onSuccess, onFailure, appContext, startOffset, allBookmarks);
+        }
+    },
+
+    addSuccessCallback: function(result, bookmark, onSuccess, onFailure) {
+        console.log("addSuccessCallback, message: " + result.message);
+        var msgLower = result.message.toLowerCase();
+        if (msgLower.indexOf("added") > -1) {
+            console.log("Add bookmark to cache");
+            LocalStore.addOrUpdateBookmark(bookmark, Services.DIIGO);
+            onSuccess();
+        }
+        else {
+            var errorResponse = {
+                errorMessage: qsTr("Cannot add bookmark"),
+                detailMessage: qsTr("Service request failed")
+            };
+            onFailure(errorResponse);
+        }
+    },
+
+    updateSuccessCallback: function(result, bookmark, onSuccess, onFailure) {
+        console.log("updateSuccessCallback, message: " + result.message);
+        var msgLower = result.message.toLowerCase();
+        if (msgLower.indexOf("saved") > -1) {
+            console.log("Update bookmark in cache");
+            LocalStore.addOrUpdateBookmark(bookmark, Services.DIIGO);
+            onSuccess();
+        }
+        else {
+            var errorResponse = {
+                errorMessage: qsTr("Cannot update bookmark"),
+                detailMessage: qsTr("Service request failed")
+            };
+            onFailure(errorResponse);
+        }
+    },
 }
 

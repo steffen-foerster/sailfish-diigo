@@ -158,7 +158,7 @@ Page {
         },
         State {
             name: "DIIGO"
-            PropertyChanges { target: menuEdit; visible: false}
+            PropertyChanges { target: menuEdit; visible: true}
             PropertyChanges { target: menuMark; visible: false}
         }
     ]

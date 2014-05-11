@@ -71,8 +71,8 @@ QtObject {
         if (getAppContext().service === Services.PINBOARD) {
             PinboardService.refreshCache(onSuccess, onFailure);
         }
-        else {
-            onSuccess();
+        else if (getAppContext().service === Services.DIIGO) {
+            DiigoService.refreshCache(onSuccess, onFailure, getAppContext());
         }
     }
 
@@ -87,7 +87,7 @@ QtObject {
             PinboardService.fetchRecentBookmarks(onSuccess, onFailure);
         }
         else if (getAppContext().service === Services.DIIGO) {
-            DiigoService.fetchRecentBookmarks(onSuccess, onFailure, getAppContext());
+            DiigoService.fetchRecentBookmarks(onSuccess, onFailure);
         }
     }
 
@@ -96,7 +96,7 @@ QtObject {
             PinboardService.fetchBookmarks(criteria, onSuccess, onFailure);
         }
         else if (getAppContext().service === Services.DIIGO) {
-            DiigoService.fetchBookmarks(criteria, onSuccess, onFailure, getAppContext());
+            DiigoService.fetchBookmarks(criteria, onSuccess, onFailure);
         }
     }
 
@@ -112,6 +112,9 @@ QtObject {
     function updateBookmark(bookmark, onSuccess, onFailure) {
         if (getAppContext().service === Services.PINBOARD) {
             PinboardService.updateBookmark(bookmark, onSuccess, onFailure);
+        }
+        else if (getAppContext().service === Services.DIIGO) {
+            DiigoService.updateBookmark(bookmark, onSuccess, onFailure, getAppContext());
         }
     }
 }

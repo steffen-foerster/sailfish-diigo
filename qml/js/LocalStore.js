@@ -172,7 +172,7 @@ function saveDiigoBookmarks(bookmarks) {
                 var b = bookmarks[i];
                 tx.executeSql('INSERT OR REPLACE INTO bookmark' +
                               '  (service, href, title, desc, time, shared, toread, tags) VALUES(?, ?, ?, ?, ?, ?, ?, ?);',
-                              [Services.DIIGO, b.href, b.title, b.desc, b.created_at, b.shared, b.toread,
+                              [Services.DIIGO, b.href, b.title, b.desc, b.time, b.shared, b.toread,
                                Utils.commaToSpaceSeparated(b.tags)]);
             }
             console.log("Inserted DIIGO bookmarks: " + bookmarks.length);
@@ -226,7 +226,7 @@ function searchBookmarks(criteria, service) {
 function createBookmarks(resultSet) {
     var retval = [];
     for (var i = 0; i < resultSet.rows.length; i++) {
-        var bookmark = Bookmark.create(
+        var bookmark = Bookmark.create(                    
             resultSet.rows.item(i).href,
             resultSet.rows.item(i).title,
             resultSet.rows.item(i).desc,

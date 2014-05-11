@@ -51,7 +51,7 @@ Dialog {
         bookmark.href = Utils.crop(href.text, 250);
         bookmark.title = Utils.crop(title.text, 250);
         bookmark.tags = Utils.crop(tags.text, 250);
-        bookmark.desc = Utils.crop(extended.text, 250);
+        bookmark.desc = Utils.crop(desc.text, 250);
         bookmark.shared = shared.checked ? "yes" : "no";
         bookmark.toread = toread.checked ? "yes" : "no"
     }
