@@ -278,6 +278,7 @@ Item {
                                         getDeleteFunction(bookmarkModel, index),
                                         3000)
                     }
+                    visible: state === "PINBOARD"
                 }
                 MenuItem {
                     text: qsTr("Copy URL to clipboard")
@@ -313,5 +314,14 @@ Item {
             text: qsTr("No bookmarks found")
         }
     }
+
+    states: [
+        State {
+            name: "PINBOARD"
+        },
+        State {
+            name: "DIIGO"
+        }
+    ]
 
 }

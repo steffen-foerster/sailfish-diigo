@@ -47,6 +47,12 @@ Page {
         bookmarks.search();
     }
 
+    onStatusChanged: {
+        if (status === PageStatus.Active) {
+            bookmarks.state = getServiceManager().getServiceName();
+        }
+    }
+
     SlideshowView {
         id: mainView
 
