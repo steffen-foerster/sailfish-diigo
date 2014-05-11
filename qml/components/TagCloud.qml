@@ -1,5 +1,5 @@
 /**
- * Written by Justin Armstrong <qtdev@badpint.org> in 2011.
+ * The tag cloud code is written by Justin Armstrong <qtdev@badpint.org> in 2011.
  */
 
 import QtQuick 2.0

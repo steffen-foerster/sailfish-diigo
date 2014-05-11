@@ -416,4 +416,11 @@ Sign in</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>TagsView</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>
