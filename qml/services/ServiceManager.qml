@@ -117,4 +117,13 @@ QtObject {
             DiigoService.updateBookmark(bookmark, onSuccess, onFailure, getAppContext());
         }
     }
+
+    function getTags() {
+        if (getAppContext().service === Services.PINBOARD) {
+            return PinboardService.getTags();
+        }
+        else if (getAppContext().service === Services.DIIGO) {
+            return DiigoService.getTags();
+        }
+    }
 }

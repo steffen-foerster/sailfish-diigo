@@ -152,6 +152,10 @@ function deleteBookmark(bookmark, onSuccess, onFailure) {
                 onFailure);
 }
 
+function getTags() {
+    return LocalStore.getTags(Services.PINBOARD);
+}
+
 // -------------------------------------------------------
 // private functions
 // -------------------------------------------------------

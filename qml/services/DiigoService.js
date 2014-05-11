@@ -130,6 +130,10 @@ function updateBookmark(bookmark, onSuccess, onFailure, appContext) {
                 Settings.getPassword(appContext));
 }
 
+function getTags() {
+    return LocalStore.getTags(Services.DIIGO);
+}
+
 // -------------------------------------------------------
 // private section
 // -------------------------------------------------------
@@ -154,13 +158,13 @@ var internal = {
 
     /**
      * Diigo hasn't a fixed limit for fetching of bookmarks.
-     * We fetch only all bookmarks every 60 seconds.
+     * We fetch only all bookmarks every 300 seconds.
      */
     canFetchAll: function(lastSync) {
         var dateLastSync = Date.parse(lastSync);
         var now = Date.now();
         var diffSeconds = (now - dateLastSync) / (1000);
-        var delay = 60;
+        var delay = 300;
         console.log("diffSeconds: ", diffSeconds);
 
         return diffSeconds > delay;
@@ -197,7 +201,7 @@ var internal = {
                 Utils.commaToSpaceSeparated(fetchedBookmarks[i].tags),
                 fetchedBookmarks[i].shared,
                 null,
-                fetchedBookmarks[i].created_at
+                internal.replaceSlash(fetchedBookmarks[i].created_at)
             );
             allBookmarks.push(guiBookmark);
         }
@@ -222,8 +226,8 @@ var internal = {
     addSuccessCallback: function(result, bookmark, onSuccess, onFailure) {
         console.log("addSuccessCallback, message: " + result.message);
         var msgLower = result.message.toLowerCase();
-        if (msgLower.indexOf("added") > -1) {
-            console.log("Add bookmark to cache");
+        if (msgLower.indexOf("saved") > -1 || msgLower.indexOf("added") > -1) {
+            console.log("Add bookmark to cache:", bookmark.href);
             LocalStore.addOrUpdateBookmark(bookmark, Services.DIIGO);
             onSuccess();
         }
@@ -239,8 +243,8 @@ var internal = {
     updateSuccessCallback: function(result, bookmark, onSuccess, onFailure) {
         console.log("updateSuccessCallback, message: " + result.message);
         var msgLower = result.message.toLowerCase();
-        if (msgLower.indexOf("saved") > -1) {
-            console.log("Update bookmark in cache");
+        if (msgLower.indexOf("saved") > -1 || msgLower.indexOf("added") > -1) {
+            console.log("Update bookmark in cache:", bookmark.href);
             LocalStore.addOrUpdateBookmark(bookmark, Services.DIIGO);
             onSuccess();
         }
@@ -252,5 +256,9 @@ var internal = {
             onFailure(errorResponse);
         }
     },
+
+    replaceSlash: function(timestamp) {
+        return timestamp.replace(/\//g, "-");
+    }
 }
 

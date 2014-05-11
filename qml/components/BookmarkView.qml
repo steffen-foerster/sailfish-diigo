@@ -26,12 +26,17 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 import "../js/Bookmark.js" as Bookmark
+import "../js/Settings.js" as Settings
 import "../js/Utils.js" as Utils
 
 Item {
     id: root
 
-    property string pageHeader: qsTr("Your recent bookmarks")
+    signal fetched
+
+    function initialize() {
+        refresh();
+    }
 
     function add() {
         var dialog = pageStack.push("../pages/AddDialog.qml");
@@ -56,10 +61,25 @@ Item {
         getServiceManager().refresh(fetchRecentBookmarks, serviceErrorCallback);
     }
 
+    function searchByTags(tags) {
+        bookmarkModel.clear();
+        busyIndicator.running = true;
+
+        var criteria = {
+            tags: tags,
+            title: "",
+            desc: "",
+            count: Settings.get(getAppContext().service, Settings.keys.COUNT_RECENT_BOOKMARKS)
+        }
+
+        getServiceManager().fetchBookmarks(criteria,
+                                           fetchBookmarksCallback,
+                                           serviceErrorCallback);
+    }
+
     function fetchRecentBookmarks() {
         console.log("fetchRecentBookmarks");
 
-        pageHeader = qsTr("Your recent bookmarks")
         bookmarkModel.clear();
         busyIndicator.running = true;
 
@@ -74,6 +94,9 @@ Item {
         for (var i = 0; i < bookmarks.length; i++) {
             bookmarkModel.append(bookmarks[i]);
         }
+
+        console.log("signal fetched emitted");
+        root.fetched();
     }
 
     function acceptSettingsCallback(dialog) {
@@ -90,7 +113,6 @@ Item {
     function acceptSearchCallback(dialog) {
         console.log("search accepted: " + dialog);
 
-        pageHeader = qsTr("Search result");
         bookmarkModel.clear();
         busyIndicator.running = true;
 
@@ -151,7 +173,7 @@ Item {
 
         anchors.fill: parent
         width: parent.width
-        spacing: Theme.paddingLarge
+        spacing: 0
 
         PullDownMenu {
             MenuItem {
@@ -164,7 +186,7 @@ Item {
                 }
             }
             MenuItem {
-                text: qsTr("Refresh")
+                text: qsTr("Recent bookmarks")
                 onClicked: {
                     refresh();
                 }
@@ -181,10 +203,6 @@ Item {
                     add();
                 }
             }
-        }
-
-        header: PageHeader {
-            title: pageHeader
         }
 
         model: ListModel {
@@ -219,6 +237,11 @@ Item {
 
             Column {
                 id: itemColumn
+                Rectangle {
+                    height: Theme.paddingLarge / 2
+                    width: wrapper.ListView.view.width
+                    opacity: 0
+                }
                 Label {
                     id: lbTitle
                     anchors {
@@ -255,6 +278,11 @@ Item {
                         visible: model.shared === 'no'
                     }
                 }
+                Rectangle {
+                    height: Theme.paddingLarge / 2
+                    width: wrapper.ListView.view.width
+                    opacity: 0
+                }
             }
         }
 
@@ -278,7 +306,7 @@ Item {
                                         getDeleteFunction(bookmarkModel, index),
                                         3000)
                     }
-                    visible: state === "PINBOARD"
+                    visible: root.state === "PINBOARD"
                 }
                 MenuItem {
                     text: qsTr("Copy URL to clipboard")

@@ -89,7 +89,7 @@ function initializeVersion(tx) {
 function migrateToVersion2(tx) {
     var res = tx.executeSql('SELECT MAX(version) max_version FROM migration;');
     if (res.rows.item(0).max_version === 1) {
-        tx.executeSql('DROP TABLE pinboard_post IF EXISTS');
+        tx.executeSql('DROP TABLE IF EXISTS pinboard_post');
         console.debug("Dropped table PINBOARD_POST");
 
         tx.executeSql('CREATE TABLE IF NOT EXISTS bookmark(' +
@@ -255,12 +255,18 @@ function createSearchQuery(criteria, service) {
     }
 
     console.log("tags: ", criteria.tags, " where: ", where);
+    var tagsCondition = ""
     if (criteria.tags && criteria.tags.trim().length > 0) {
         var tags = criteria.tags.split(" ");
         for (var i = 0; i < tags.length; i++) {
-            where = addCondition(where, " tags LIKE '%" + tags[i].trim() + "%'", "AND");
+            tagsCondition = addCondition(tagsCondition, " tags LIKE '%" + tags[i].trim() + "%'", "OR");
         }
     }
+
+    if (tagsCondition.length > 0) {
+        where = addCondition(where, "(" + tagsCondition + ")", "AND");
+    }
+
     query += " WHERE " + where;
     query += " ORDER BY time DESC";
     query += " LIMIT " + criteria.count;
@@ -274,6 +280,41 @@ function addCondition(where, condition, operator) {
         where += " " + operator + " ";
     }
     return where + condition;
+}
+
+function getTags(service) {
+    var db = private.getDatabase();
+    var retval = [];
+    db.transaction(function (tx) {
+        var tagsToCount = {};
+        var res = tx.executeSql('SELECT * FROM bookmark WHERE service = ?', [service]);
+        for (var i = 0; i < res.rows.length; i++) {
+            var tagList = res.rows.item(i).tags;
+            if (tagList) {
+                var tags = tagList.split(" ");
+                for (var t = 0; t < tags.length; t++) {
+                    var lowerTag = tags[t].toLowerCase()
+                    if (lowerTag in tagsToCount) {
+                        tagsToCount[lowerTag] ++;
+                    }
+                    else {
+                        tagsToCount[lowerTag] = 1;
+                    }
+                }
+            }
+        }
+        for (var aTag in tagsToCount) {
+            retval.push({name: aTag, score: tagsToCount[aTag], selected: false});
+        }
+        retval.sort(function(t1, t2){
+            if ( t1.name < t2.name )
+               return -1;
+            if ( t1.name > t2.name )
+               return 1;
+            return 0;
+        });
+    });
+    return retval;
 }
 
 // ------------------------------------------------------------

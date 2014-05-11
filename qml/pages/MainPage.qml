@@ -32,7 +32,11 @@ Page {
 
     function initialize() {
         setActiveCover();
-        bookmarks.refresh();
+        bookmarksView.fetched.connect(tagsView.loadTags);
+        tagsView.tagsSelected.connect(mainPage.searchByTags);
+
+        bookmarksView.initialize();
+        tagsView.initialize();
     }
 
     function activateBookmarkView() {
@@ -40,16 +44,21 @@ Page {
     }
 
     function add() {
-        bookmarks.add();
+        bookmarksView.add();
     }
 
     function search() {
-        bookmarks.search();
+        bookmarksView.search();
+    }
+
+    function searchByTags(tags) {
+        activateBookmarkView();
+        bookmarksView.searchByTags(tags);
     }
 
     onStatusChanged: {
         if (status === PageStatus.Active) {
-            bookmarks.state = getServiceManager().getServiceName();
+            bookmarksView.state = getServiceManager().getServiceName();
         }
     }
 
@@ -58,42 +67,23 @@ Page {
 
         itemWidth: width
         itemHeight: height
-        height: window.height - viewIndicator.height
+        height: window.height - (viewIndicator.height + tabHeader.childrenRect.height)
         clip:true
 
         anchors { top: parent.top; left: parent.left; right: parent.right }
         model: VisualItemModel {
-            BookmarkView {id: bookmarks}
-            TagsView { id: tags }
+            BookmarkView {id: bookmarksView}
+            TagsView { id: tagsView }
         }
     }
 
-    Rectangle {
-        id: fadeZone1
-        anchors.bottom: mainView.bottom
-        color: "black"
-        opacity: 0.5
-        height: Theme.paddingLarge
-        width: parent.width
-        z: 1
-    }
-
-    Rectangle {
-        id: fadeZone2
-        anchors.top: mainView.bottom
-        color: "black"
-        opacity: 0.5
-        height: Theme.paddingMedium
-        width: parent.width
-        z: 1
-    }
 
     Rectangle {
         id: viewIndicator
         anchors.top: mainView.bottom
         color: Theme.highlightColor
         height: Theme.paddingMedium
-        width: mainView.width / 2
+        width: mainView.width / mainView.count
         x: mainView.currentIndex * width
         z: 2
 
@@ -104,4 +94,36 @@ Page {
         }
     }
 
+    Rectangle {
+        anchors.top: mainView.bottom
+        color: "black"
+        opacity: 0.5
+        height: Theme.paddingMedium
+        width: mainView.width
+        z: 1
+    }
+
+    Row {
+        id: tabHeader
+        anchors.top: viewIndicator.bottom
+
+        Repeater {
+            model: [qsTr("Bookmarks"), qsTr("Tags")]
+            Rectangle {
+                color: "black"
+                height: Theme.paddingLarge * 2
+                width: mainView.width / mainView.count
+
+                Label {
+                    anchors.centerIn: parent
+                    text: modelData
+                    color: Theme.highlightColor
+                    font {
+                        bold: true
+                        pixelSize: Theme.fontSizeExtraSmall
+                    }
+                }
+            }
+        }
+    }
 }

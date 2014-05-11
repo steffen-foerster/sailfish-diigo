@@ -70,19 +70,7 @@
 <context>
     <name>BookmarkView</name>
     <message>
-        <source>Your recent bookmarks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Search result</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -107,6 +95,10 @@
     </message>
     <message>
         <source>Copy URL to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recent bookmarks</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -273,6 +265,17 @@ Sign in</source>
     </message>
 </context>
 <context>
+    <name>MainPage</name>
+    <message>
+        <source>Bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MessageBookmarkList</name>
     <message>
         <source>Not signed in</source>
@@ -403,6 +406,13 @@ Sign in</source>
     </message>
     <message>
         <source>Sign in / Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TagCloud</name>
+    <message>
+        <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
