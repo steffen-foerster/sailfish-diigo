@@ -354,6 +354,10 @@ Sign in</source>
         <source>Service selection</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Phone</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SettingDialog</name>
@@ -419,7 +423,7 @@ Sign in</source>
 <context>
     <name>TagsView</name>
     <message>
-        <source>Search</source>
+        <source>Search by selected tags</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

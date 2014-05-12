@@ -33,6 +33,8 @@ ApplicationWindow
 {
     id: window
 
+    signal bookmarksUpdated
+
     function setActiveCover() {
         window.cover = Qt.resolvedUrl("cover/CoverPageActive.qml")
     }
@@ -120,7 +122,7 @@ ApplicationWindow
 
         function showText(text) {
             infoText.text = text
-            infoPanel.opacity = 0.9
+            infoPanel.opacity = 1
             infoPanel.visible = true
 
             console.log("INFO: " + text)
@@ -138,7 +140,7 @@ ApplicationWindow
             anchors.topMargin: Theme.paddingMedium
             x: Theme.paddingMedium
             width: parent.width - 2 * Theme.paddingMedium
-            color: Theme.highlightColor
+            color: Theme.primaryColor
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.Wrap
         }

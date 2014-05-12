@@ -28,4 +28,5 @@ var NOT_SELECTED = -1;
 var ALL = 0;
 var DIIGO = 1;
 var PINBOARD = 2;
+var LOCAL = 3;
 

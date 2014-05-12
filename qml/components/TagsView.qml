@@ -56,13 +56,14 @@ Item {
     SilicaFlickable {
         id: flickable
         anchors.fill: parent
+        anchors.bottomMargin: Theme.paddingMedium
         width: parent.width
         contentWidth: parent.width
         contentHeight: flow.childrenRect.height
 
         PullDownMenu {
             MenuItem {
-                text: qsTr("Search")
+                text: qsTr("Search by selected tags")
                 onClicked: {
                     var tags = ""
                     for (var i = 0; i < tagModel.count; i++) {
@@ -80,6 +81,8 @@ Item {
         Flow {
             id: flow
             x: Theme.paddingMedium
+            y: Theme.paddingMedium
+
             width: parent.width - 2 * Theme.paddingMedium
             spacing: 10
 

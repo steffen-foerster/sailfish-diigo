@@ -101,7 +101,7 @@ Dialog {
                     label: qsTrId("Recent bookmarks")
                     width: parent.width
                     minimumValue: 5
-                    maximumValue: 50
+                    maximumValue: 100
                     stepSize: 5
                     valueText: value
                     value: Settings.get(getAppContext().service, Settings.keys.COUNT_RECENT_BOOKMARKS)

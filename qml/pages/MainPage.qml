@@ -32,7 +32,7 @@ Page {
 
     function initialize() {
         setActiveCover();
-        bookmarksView.fetched.connect(tagsView.loadTags);
+        window.bookmarksUpdated.connect(tagsView.loadTags);
         tagsView.tagsSelected.connect(mainPage.searchByTags);
 
         bookmarksView.initialize();

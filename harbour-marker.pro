@@ -69,7 +69,9 @@ OTHER_FILES += harbour-marker.desktop \
     qml/services/Importer.js \
     qml/pages/ImportPage.qml \
     qml/services/Services.js \
-    qml/components/TagCloud.qml
+    qml/components/TagCloud.qml \
+    qml/services/LocalService.js \
+    qml/pages/local/SettingDialog.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

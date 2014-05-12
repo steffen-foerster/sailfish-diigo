@@ -25,55 +25,67 @@ THE SOFTWARE.
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-import "../js/Settings.js" as Settings
-import "../services/Services.js" as Services
+import "../../js/Settings.js" as Settings
 
 /**
- * Page to select the service provider.
+ * Page to save user settings for Local service.
  */
-Page {
-    id: servicePage
+Dialog {
+    id: settingPage
 
-    onStatusChanged: {
-        if (status === PageStatus.Active) {
-            setInactiveCover();
-        }
+    onAccepted: {
+        Settings.set(getAppContext().service, Settings.keys.COUNT_RECENT_BOOKMARKS, recentBookmarks.value);
     }
 
     SilicaFlickable {
         anchors.fill: parent
-        width: parent.width
+        contentHeight: column.height
 
         PullDownMenu {
             MenuItem {
-                text: qsTr("Phone")
+                text: qsTr("Reset to defaults")
                 onClicked: {
-                    getServiceManager().startService(Services.LOCAL);
+                    apiKey.text = ""
+                    recentBookmarks.value = 10
                 }
             }
             MenuItem {
-                text: qsTr("Diigo")
+                text: qsTr("Change service")
                 onClicked: {
-                    getServiceManager().startService(Services.DIIGO);
-                }
-            }
-            MenuItem {
-                text: qsTr("Pinboard")
-                onClicked: {
-                    getServiceManager().startService(Services.PINBOARD);
+                    pageStack.clear();
+                    pageStack.push(Qt.resolvedUrl("../ServicePage.qml"));
                 }
             }
         }
 
-        PageHeader {
-            title: qsTr("Service selection")
+        Column {
+            spacing: Theme.paddingMedium
+            width: parent.width
+
+            DialogHeader {
+                id: header
+                acceptText: qsTr("Save")
+                title: qsTr("Settings")
+            }
+
+            Column {
+                id: column
+
+                width: parent.width
+                spacing: Theme.paddingMedium
+
+                Slider {
+                    id: recentBookmarks
+                    label: qsTrId("Recent bookmarks")
+                    width: parent.width
+                    minimumValue: 5
+                    maximumValue: 100
+                    stepSize: 5
+                    valueText: value
+                    value: Settings.get(getAppContext().service, Settings.keys.COUNT_RECENT_BOOKMARKS)
+                }
+            }
         }
 
-        ViewPlaceholder {
-            id: placeHolder
-            enabled: true
-            text: qsTr("Pull down to select your service")
-        }
     }
 }
-

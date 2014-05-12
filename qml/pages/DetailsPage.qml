@@ -38,7 +38,11 @@ Page {
     property variant bookmark
 
     function acceptEditCallback(dialog) {
-        getServiceManager().updateBookmark(bookmark, function(){},
+        getServiceManager().updateBookmark(bookmark,
+            function(){
+                console.log("signal bookmarksUpdated emitted");
+                window.bookmarksUpdated();
+            },
             function(errorResult) {
                 viewPage.editFailureCallback(errorResult, dialog.oldBookmark)
             }
@@ -160,6 +164,11 @@ Page {
             name: "DIIGO"
             PropertyChanges { target: menuEdit; visible: true}
             PropertyChanges { target: menuMark; visible: false}
+        },
+        State {
+            name: "PHONE"
+            PropertyChanges { target: menuEdit; visible: true}
+            PropertyChanges { target: menuMark; visible: true}
         }
     ]
 }

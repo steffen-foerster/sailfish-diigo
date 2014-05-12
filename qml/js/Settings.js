@@ -60,7 +60,7 @@ function setBoolean(service, key, value) {
 }
 
 /**
- * We need only for Diigo a password.
+ * We need a password only for Diigo.
  */
 function getPassword(appContext) {
     console.log("getPassword, service " + appContext.service);
@@ -109,6 +109,10 @@ function isSignedIn(appContext) {
         var apiKey = get(appContext.service, keys.API_KEY);
         retval = (apiKey !== undefined && apiKey.length > 0);
     }
+    else if (appContext.service === Services.LOCAL) {
+        retval = true;
+    }
+
     return retval;
 }
 
@@ -119,18 +123,23 @@ function initialize() {
     var defaultValues = [{
         service: Services.DIIGO,
         values: {
-          user: "",
-          password: "",
-          save_password: dBValues.B_FALSE,
-          count_recent_bookmarks: 10
+            user: "",
+            password: "",
+            save_password: dBValues.B_FALSE,
+            count_recent_bookmarks: 20
         }
-      }, {
+    }, {
         service: Services.PINBOARD,
         values: {
-          api_key: "",
-          count_recent_bookmarks: 10
+            api_key: "",
+            count_recent_bookmarks: 20
         }
-      }, {
+    }, {
+        service: Services.LOCAL,
+        values: {
+            count_recent_bookmarks: 20
+        }
+    }, {
         service: Services.ALL,
         values: {
           service: Services.NOT_SELECTED

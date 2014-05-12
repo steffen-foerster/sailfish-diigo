@@ -32,8 +32,6 @@ import "../js/Utils.js" as Utils
 Item {
     id: root
 
-    signal fetched
-
     function initialize() {
         refresh();
     }
@@ -83,7 +81,8 @@ Item {
         bookmarkModel.clear();
         busyIndicator.running = true;
 
-        getServiceManager().fetchRecentBookmarks(fetchBookmarksCallback, serviceErrorCallback);
+        getServiceManager().fetchRecentBookmarks(fetchBookmarksCallback,
+                                                 serviceErrorCallback);
     }
 
     function fetchBookmarksCallback(bookmarks) {
@@ -95,8 +94,8 @@ Item {
             bookmarkModel.append(bookmarks[i]);
         }
 
-        console.log("signal fetched emitted");
-        root.fetched();
+        console.log("signal bookmarksUpdated emitted");
+        window.bookmarksUpdated();
     }
 
     function acceptSettingsCallback(dialog) {
@@ -306,7 +305,7 @@ Item {
                                         getDeleteFunction(bookmarkModel, index),
                                         3000)
                     }
-                    visible: root.state === "PINBOARD"
+                    visible: root.state === "PINBOARD" || root.state === "PHONE"
                 }
                 MenuItem {
                     text: qsTr("Copy URL to clipboard")
@@ -320,7 +319,10 @@ Item {
                     var itemToDelete = Bookmark.copy(model.get(index));
                     var f = function() {
                         model.remove(index);
-                        getServiceManager().deleteBookmark(itemToDelete, function() {},
+                        getServiceManager().deleteBookmark(itemToDelete,
+                            function() {
+                                window.bookmarksUpdated();
+                            },
                             function(error) {
                                 bookmarkModel.insert(index, itemToDelete)
                                 infoPanel.showError(error);
@@ -349,6 +351,9 @@ Item {
         },
         State {
             name: "DIIGO"
+        },
+        State {
+            name: "PHONE"
         }
     ]
 
