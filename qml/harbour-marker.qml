@@ -62,7 +62,7 @@ ApplicationWindow
     }
 
     initialPage: Page{}
-    cover: null //Qt.resolvedUrl("cover/CoverPageInactive.qml")
+    cover: null
 
     Component.onCompleted: {
         console.log("ApplicationWindow onCompleted");
@@ -107,4 +107,61 @@ ApplicationWindow
         id: serviceManager
     }
 
+    // Source: Written by Dickson Leong (Application: Tweetian) - thanks!
+    Rectangle {
+        id: infoPanel
+
+        width: parent.width
+        height: infoText.height + 2 * Theme.paddingMedium
+
+        color: Theme.highlightBackgroundColor
+        opacity: 0.0
+        z: 10
+
+        function showText(text) {
+            infoText.text = text
+            infoPanel.opacity = 0.9
+            infoPanel.visible = true
+
+            console.log("INFO: " + text)
+            closeTimer.restart()
+        }
+
+        function showError(error) {
+            var msg = error.errorMessage + "\n" + error.detailMessage;
+            showText(msg);
+        }
+
+        Label {
+            id: infoText
+            anchors.top: parent.top
+            anchors.topMargin: Theme.paddingMedium
+            x: Theme.paddingMedium
+            width: parent.width - 2 * Theme.paddingMedium
+            color: Theme.highlightColor
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+        }
+
+        Behavior on opacity { FadeAnimation {} }
+        Behavior on visible { FadeAnimation {} }
+
+        Timer {
+            id: closeTimer
+            interval: 6000
+            onTriggered: {
+                infoPanel.opacity = 0.0
+                infoPanel.visible = false
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                closeTimer.stop()
+                infoPanel.opacity = 0.0
+                infoPanel.visible = false
+            }
+        }
+    }
 }

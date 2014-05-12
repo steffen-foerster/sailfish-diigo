@@ -91,9 +91,9 @@ Page {
                 onClicked: {
                     bookmark.toread = (bookmark.toread === 'yes' ? 'no' : 'yes')
                     getServiceManager().updateBookmark(bookmark, function(){},
-                        function() {
-                            // failure -> reverse flag
+                        function(error) {
                             bookmark.toread = (bookmark.toread === 'yes' ? 'no' : 'yes')
+                            infoPanel.showError(error);
                         }
                     )
                 }

@@ -244,14 +244,14 @@ function createSearchQuery(criteria, service) {
     var query = "SELECT * FROM bookmark";
     var where = "service = " + service;
 
-    console.log("description: ", criteria.description, " where: ", where);
-    if (criteria.description && criteria.description.trim().length > 0) {
-        where = addCondition(where, "description LIKE '%" + criteria.description + "%'", "AND");
+    console.log("title: ", criteria.title, " where: ", where);
+    if (criteria.title && criteria.title.trim().length > 0) {
+        where = addCondition(where, "title LIKE '%" + criteria.title + "%'", "AND");
     }
 
-    console.log("extended: ", criteria.extended, "where: ", where);
-    if (criteria.extended && criteria.extended.trim().length > 0) {
-        where = addCondition(where, "extended LIKE '%" + criteria.extended + "%'", "AND");
+    console.log("desc: ", criteria.desc, "where: ", where);
+    if (criteria.desc && criteria.desc.trim().length > 0) {
+        where = addCondition(where, "desc LIKE '%" + criteria.desc + "%'", "AND");
     }
 
     console.log("tags: ", criteria.tags, " where: ", where);

@@ -133,12 +133,12 @@ Item {
 
     function serviceErrorCallback(error) {
         console.log("serviceErrorCallback");
-        console.error(error.detailMessage);
+        //console.error(error.detailMessage);
 
         bookmarkModel.clear();
         busyIndicator.running = false;
 
-        // TODO show error
+        infoPanel.showError(error);
     }
 
     height: mainView.height; width: mainView.width
@@ -150,7 +150,7 @@ Item {
 
         anchors.fill: parent
         visible: false
-        z: 1000
+        z: 1
 
         Rectangle {
             anchors.fill: parent
@@ -321,9 +321,9 @@ Item {
                     var f = function() {
                         model.remove(index);
                         getServiceManager().deleteBookmark(itemToDelete, function() {},
-                            function() {
-                                // error -> insert removed item
+                            function(error) {
                                 bookmarkModel.insert(index, itemToDelete)
+                                infoPanel.showError(error);
                             }
                         )
                     }
@@ -338,7 +338,7 @@ Item {
 
         ViewPlaceholder {
             id: placeHolder
-            enabled: bookmarkModel.count === 0 && !busyIndicator.enabled
+            enabled: bookmarkModel.count === 0 && !busyIndicator.running
             text: qsTr("No bookmarks found")
         }
     }
