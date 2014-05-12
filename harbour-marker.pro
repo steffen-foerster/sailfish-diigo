@@ -31,7 +31,6 @@ OTHER_FILES += harbour-marker.desktop \
     qml/pages/ServicePage.qml \
     qml/cover/CoverPageInactive.qml \
     qml/cover/CoverPageActive.qml \
-    rpm/harbour-marker.changes \
     qml/pages/MainPage.qml \
     qml/pages/SignInPage.qml \
     qml/services/ServiceManager.qml \

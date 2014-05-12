@@ -105,7 +105,9 @@ Item {
             fetchRecentBookmarks();
         }
         else {
-            pageStack.replace(getSignInPage());
+            console.log("not signed in");
+            pageStack.clear();
+            pageStack.push(getSignInPage());
         }
     }
 

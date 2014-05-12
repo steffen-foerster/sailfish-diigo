@@ -9,12 +9,12 @@
 # - Summary of changes
 
 * Mon May 12 2014 Steffen Förster 0.4.0-1
-- New features for Diigo: edit
-- New features common: local bookmark manager, tag cloud, bookmark import
+- New features for Diigo (edit)
+- New features common local bookmark manager, tag cloud, bookmark import
 - Bug fixes
 
 * Tue May 06 2014 Steffen Förster 0.3.0-1
-- New features for Pinboard: edit, delete, mark
+- New features for Pinboard (edit, delete, mark)
 - Bug fixes
 
 * Mon Apr 28 2014 Steffen Förster 0.2.1-1
