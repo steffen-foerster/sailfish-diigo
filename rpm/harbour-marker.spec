@@ -13,7 +13,7 @@ Name:       harbour-marker
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Native client for bookmark services Diigo and Pinboard
-Version:    0.3.0
+Version:    0.4.0
 Release:    1
 Group:      Qt/Qt
 License:    The MIT License (MIT)
@@ -29,6 +29,7 @@ BuildRequires:  desktop-file-utils
 
 %description
 This application uses the API of Diigo and Pinboard to manage your bookmarks.
+You can use the application as a local bookmark manager, too.
 
 
 %prep

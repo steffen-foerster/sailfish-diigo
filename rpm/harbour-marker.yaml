@@ -1,6 +1,6 @@
 Name: harbour-marker
 Summary: Native client for bookmark services Diigo and Pinboard
-Version: 0.3.0
+Version: 0.4.0
 Release: 1
 # The contents of the Group field must be one of the groups listed here:
 # http://gitorious.org/meego-developer-tools/spectacle/blobs/master/data/GROUPS
@@ -13,6 +13,7 @@ Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
   This application uses the API of Diigo and Pinboard to manage your bookmarks.
+  You can use the application as a local bookmark manager, too.
 
 Configure: none
 # The qtc5 builder inserts macros to allow QtCreator to have fine

@@ -25,6 +25,7 @@ THE SOFTWARE.
 #include "sail_util.h"
 #include "config.h"
 #include <QFile>
+#include <QDir>
 #include <QTextStream>
 
 SailUtil::SailUtil(QObject *parent) :
@@ -45,7 +46,7 @@ bool SailUtil::openBrowser(QString url) {
 }
 
 QString SailUtil::getBrowserBookmarks() {
-    QFile file("/home/nemo/.local/share/org.sailfishos/sailfish-browser/bookmarks.json");
+    QFile file(QDir::home().absolutePath() + "/.local/share/org.sailfishos/sailfish-browser/bookmarks.json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         return "[]";
     }

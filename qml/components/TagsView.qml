@@ -42,7 +42,7 @@ Item {
 
     function loadTags() {
         console.log("loading tags ...");
-        var tags = getServiceManager().getTags();
+        var tags = window.getServiceManager().getTags();
         console.log("loadTags, tags: ", tags.length);
 
         tagModel.clear();
