@@ -40,9 +40,9 @@ Item {
     function initialize() {
     }
 
-    function loadTags() {
+    function loadTags(serviceManager) {
         console.log("loading tags ...");
-        var tags = window.getServiceManager().getTags();
+        var tags = serviceManager.getTags();
         console.log("loadTags, tags: ", tags.length);
 
         tagModel.clear();

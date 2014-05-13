@@ -32,7 +32,15 @@ Page {
 
     function initialize() {
         setActiveCover();
-        window.bookmarksUpdated.connect(tagsView.loadTags);
+
+        window.bookmarksUpdated.connect(function() {
+            if (window) {
+                tagsView.loadTags(window.getServiceManager())
+            }
+            else {
+                console.log("WARN window object is undefined");
+            }
+        });
         tagsView.tagsSelected.connect(mainPage.searchByTags);
 
         bookmarksView.initialize();
