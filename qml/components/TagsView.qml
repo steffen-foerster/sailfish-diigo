@@ -36,7 +36,6 @@ Item {
     property color textColor: Theme.primaryColor
     property color highlightedTextColor: Theme.primaryColor
     property color highlightColor: Theme.highlightColor
-    property int behaviorDelay: 250
 
     function initialize() {
     }
@@ -156,7 +155,7 @@ Item {
         }
 
         function show() {
-            searchPanel.height = Theme.itemSizeExtraLarge + Theme.paddingLarge;
+            searchPanel.height = Theme.itemSizeLarge
             searchButton.scale = 1.0;
             dismissButton.scale = 1.0;
         }
@@ -164,27 +163,24 @@ Item {
         anchors {
             bottom: parent.bottom
         }
-        color: Qt.darker(Theme.highlightColor, 1.60)
+        color: Qt.darker(Theme.highlightColor, 1.80)
         width: parent.width
         height: 0
         z: 10
 
         Behavior on height {
-            NumberAnimation {
-                duration: behaviorDelay
+            FadeAnimation {
+                property: "height"
             }
         }
 
-        Image {
-            id: searchButton
-            anchors.verticalCenter: parent.verticalCenter
-            source: "image://theme/icon-m-search"
-            scale: 0
-            x: (parent.width / 4) * 1 - (searchButton.sourceSize.width / 2)
-
-            MouseArea {
-                anchors.fill: parent
+        Row {
+            BackgroundItem {
+                width: searchPanel.width / 2
+                height: searchPanel.height
+                highlightedColor: Qt.darker(Theme.highlightColor, 1.40)
                 onClicked:  {
+                    searchPanel.hide();
                     var tags = ""
                     for (var i = 0; i < tagModel.count; i++) {
                         if (tagModel.get(i).selected) {
@@ -195,35 +191,40 @@ Item {
                         root.tagsSelected(tags.trim());
                     }
                 }
-            }
+                Image {
+                    id: searchButton
+                    anchors.centerIn: parent
+                    source: "image://theme/icon-m-search"
+                    scale: 0
 
-            Behavior on scale {
-                NumberAnimation {
-                    duration: behaviorDelay
+                    Behavior on scale {
+                        FadeAnimation {
+                            property: "scale"
+                        }
+                    }
                 }
             }
-        }
-
-        Image {
-            id: dismissButton
-            anchors.verticalCenter: parent.verticalCenter
-            source: "image://theme/icon-m-dismiss"
-            scale: 0
-            x: (parent.width / 4) * 3 - (dismissButton.sourceSize.width / 2)
-
-            MouseArea {
-                anchors.fill: parent
+            BackgroundItem {
+                width: searchPanel.width / 2
+                height: searchPanel.height
+                highlightedColor: Qt.darker(Theme.highlightColor, 1.40)
                 onClicked:  {
                     searchPanel.hide();
                     for (var i = 0; i < tagModel.count; i++) {
                         tagModel.get(i).selected = false
                     }
                 }
-            }
+                Image {
+                    id: dismissButton
+                    anchors.centerIn: parent
+                    source: "image://theme/icon-m-dismiss"
+                    scale: 0
 
-            Behavior on scale {
-                NumberAnimation {
-                    duration: behaviorDelay
+                    Behavior on scale {
+                        FadeAnimation {
+                            property: "scale"
+                        }
+                    }
                 }
             }
         }
