@@ -420,11 +420,4 @@ Sign in</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
-<context>
-    <name>TagsView</name>
-    <message>
-        <source>Search by selected tags</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
 </TS>

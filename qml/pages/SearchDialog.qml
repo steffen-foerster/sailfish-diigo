@@ -105,8 +105,8 @@ Dialog {
                 label: qsTr("Description")
                 width: parent.width
                 EnterKey.enabled: true
-                EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                EnterKey.onClicked: count.focus = true
+                EnterKey.iconSource: "image://theme/icon-m-enter-close"
+                EnterKey.onClicked: focus = false
             }
             Slider {
                 id: count

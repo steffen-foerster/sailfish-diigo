@@ -36,6 +36,7 @@ Item {
     property color textColor: Theme.primaryColor
     property color highlightedTextColor: Theme.primaryColor
     property color highlightColor: Theme.highlightColor
+    property int behaviorDelay: 250
 
     function initialize() {
     }
@@ -46,6 +47,7 @@ Item {
         console.log("loadTags, tags: ", tags.length);
 
         tagModel.clear();
+        searchPanel.hide();
         for (var i = 0; i < tags.length; i++) {
             tagModel.append(tags[i]);
         }
@@ -55,28 +57,15 @@ Item {
 
     SilicaFlickable {
         id: flickable
-        anchors.fill: parent
-        anchors.bottomMargin: Theme.paddingMedium
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
+        height: parent.height - searchPanel.height - Theme.paddingMedium
         width: parent.width
         contentWidth: parent.width
         contentHeight: flow.childrenRect.height
-
-        PullDownMenu {
-            MenuItem {
-                text: qsTr("Search by selected tags")
-                onClicked: {
-                    var tags = ""
-                    for (var i = 0; i < tagModel.count; i++) {
-                        if (tagModel.get(i).selected) {
-                            tags += " " + tagModel.get(i).name
-                        }
-                    }
-                    if (tags.length > 0) {
-                        root.tagsSelected(tags.trim());
-                    }
-                }
-            }
-        }
 
         Flow {
             id: flow
@@ -100,7 +89,9 @@ Item {
                         text: model.name
                         color: model.selected ? highlightedTextColor : textColor;
                         font.bold: model.selected
-                        anchors.centerIn: parent
+                        anchors {
+                            centerIn: parent
+                        }
 
                         //QML won't allow "onScoreChanged" due to QTBUG-17965, so
                         // we create a local ref to score and put a changed handler on that
@@ -120,20 +111,121 @@ Item {
                         }
                     }
                     radius: 6
-                    width: textBlock.width + 8
+                    width: textBlock.width + 14
                     height: flow.maxHeight + 2  //all rows are the same height
-                    color: model.selected ? highlightColor : "transparent"
+                    color: "transparent"
+                    border {
+                        color: model.selected ? highlightColor : "transparent"
+                        width: 3
+                    }
 
                     MouseArea {
                         anchors.fill: parent
                         onClicked:  {
-                            tagModel.setProperty(index, "selected", !selected)
+                            tagModel.setProperty(index, "selected", !model.selected);
                             focus = true;
+                            searchPanel.computeState();
                         }
                     }
                 }
             }
             VerticalScrollDecorator {}
+        }
+    }
+
+    Rectangle {
+        id: searchPanel
+
+        function computeState() {
+            var itemSelected = false;
+            for (var i = 0; i < tagModel.count; i++) {
+                itemSelected |= tagModel.get(i).selected;
+            }
+            if (itemSelected) {
+                searchPanel.show();
+            }
+            else {
+                searchPanel.hide();
+            }
+        }
+
+        function hide() {
+            searchPanel.height = 0;
+            searchButton.scale = 0;
+            dismissButton.scale = 0;
+        }
+
+        function show() {
+            searchPanel.height = Theme.itemSizeExtraLarge + Theme.paddingLarge;
+            searchButton.scale = 1.0;
+            dismissButton.scale = 1.0;
+        }
+
+        anchors {
+            bottom: parent.bottom
+        }
+        color: Qt.darker(Theme.highlightColor, 1.60)
+        width: parent.width
+        height: 0
+        z: 10
+
+        Behavior on height {
+            NumberAnimation {
+                duration: behaviorDelay
+            }
+        }
+
+        Image {
+            id: searchButton
+            anchors.verticalCenter: parent.verticalCenter
+            source: "image://theme/icon-m-search"
+            scale: 0
+            x: (parent.width / 4) * 1 - (searchButton.sourceSize.width / 2)
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked:  {
+                    var tags = ""
+                    for (var i = 0; i < tagModel.count; i++) {
+                        if (tagModel.get(i).selected) {
+                            tags += " " + tagModel.get(i).name
+                        }
+                    }
+                    if (tags.length > 0) {
+                        root.tagsSelected(tags.trim());
+                    }
+                }
+            }
+
+            Behavior on scale {
+                NumberAnimation {
+                    duration: behaviorDelay
+                }
+            }
+        }
+
+        Image {
+            id: dismissButton
+            anchors.verticalCenter: parent.verticalCenter
+            source: "image://theme/icon-m-dismiss"
+            scale: 0
+            x: (parent.width / 4) * 3 - (dismissButton.sourceSize.width / 2)
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked:  {
+                    searchPanel.hide();
+                    for (var i = 0; i < tagModel.count; i++) {
+                        tagModel.get(i).selected = false
+                    }
+                }
+            }
+
+            Behavior on scale {
+                NumberAnimation {
+                    duration: behaviorDelay
+                }
+            }
         }
     }
 }

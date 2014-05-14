@@ -91,8 +91,8 @@ Dialog {
                     label: qsTr("API Token")
                     width: parent.width
                     EnterKey.enabled: text.length > 0
-                    EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                    EnterKey.onClicked: recentBookmarks.focus = true
+                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
+                    EnterKey.onClicked: focus = false
                     text: Settings.get(getAppContext().service, Settings.keys.API_KEY)
                 }
 

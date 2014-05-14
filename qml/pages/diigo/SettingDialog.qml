@@ -94,8 +94,8 @@ Dialog {
                 width: parent.width
                 echoMode: TextInput.Password
                 EnterKey.enabled: text.length > 0
-                EnterKey.iconSource: "image://theme/icon-m-enter-accept"
-                EnterKey.onClicked: settingPage.accept()
+                EnterKey.iconSource: "image://theme/icon-m-enter-close"
+                EnterKey.onClicked: focus = false
                 text: Settings.getPassword(getAppContext())
             }
 

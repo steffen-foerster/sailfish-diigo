@@ -153,8 +153,8 @@ Dialog {
                 label: qsTr("Description")
                 width: column.width
                 EnterKey.enabled: true
-                EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                EnterKey.onClicked: shared.focus = true
+                EnterKey.iconSource: "image://theme/icon-m-enter-close"
+                EnterKey.onClicked: focus = false
             }
             TextSwitch {
                 id: shared
