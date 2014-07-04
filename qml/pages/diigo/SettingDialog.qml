@@ -59,7 +59,7 @@ Dialog {
                 text: qsTr("Change service")
                 onClicked: {
                     pageStack.clear();
-                    pageStack.push(Qt.resolvedUrl("../ServicePage.qml"), {placeholderVisible: true});
+                    pageStack.push(Qt.resolvedUrl("../ServicePage.qml"));
                 }
             }
         }
