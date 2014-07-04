@@ -36,11 +36,11 @@ ApplicationWindow
     signal bookmarksUpdated
 
     function setActiveCover() {
-        window.cover = Qt.resolvedUrl("cover/CoverPageActive.qml")
+        window.cover = Qt.resolvedUrl("cover/CoverPageActive.qml");
     }
 
     function setInactiveCover() {
-        window.cover = Qt.resolvedUrl("cover/CoverPageInactive.qml")
+        window.cover = Qt.resolvedUrl("cover/CoverPageInactive.qml");
     }
 
     function getAppContext() {
@@ -48,7 +48,7 @@ ApplicationWindow
     }
 
     function isSignedIn() {
-        return Settings.isSignedIn(appContext)
+        return Settings.isSignedIn(appContext);
     }
 
     function getMainPage() {
@@ -61,6 +61,12 @@ ApplicationWindow
 
     function getServiceManager() {
         return serviceManager;
+    }
+
+    function openInDefaultBrowser(url) {
+        console.log("opening URL: " + url)
+        infoPanel.showText(qsTr("Opening in default browser ..."), 500, 2000)
+        Qt.openUrlExternally(url)
     }
 
     initialPage: Page{}
@@ -120,18 +126,25 @@ ApplicationWindow
         opacity: 0.0
         z: 10
 
-        function showText(text) {
-            infoText.text = text
-            infoPanel.opacity = 1
-            infoPanel.visible = true
+        function showText(text, delayTime, closeTime) {
+            infoText.text = text;
+            console.log("INFO: " + text);
 
-            console.log("INFO: " + text)
-            closeTimer.restart()
+            delayTimer.interval = !delayTime ? 0 : delayTime;
+            closeTimer.interval = !closeTime ? 5000 : closeTime;
+
+            delayTimer.restart();
         }
 
         function showError(error) {
             var msg = error.errorMessage + "\n" + error.detailMessage;
             showText(msg);
+        }
+
+        function performShow() {
+            infoPanel.opacity = 1;
+            infoPanel.visible = true;
+            closeTimer.restart();
         }
 
         Label {
@@ -154,6 +167,13 @@ ApplicationWindow
             onTriggered: {
                 infoPanel.opacity = 0.0
                 infoPanel.visible = false
+            }
+        }
+
+        Timer {
+            id: delayTimer
+            onTriggered: {
+                infoPanel.performShow();
             }
         }
 
