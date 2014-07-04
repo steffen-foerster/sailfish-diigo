@@ -31,6 +31,6 @@ THE SOFTWARE.
 
 - I used some ideas of the file https://github.com/tworaz/sailfish-ytplayer/pages/Settings.js from Peter Tworek.
 - The tag cloud is based on the code from Justin Armstrong http://developer.nokia.com/community/wiki/QML_Tag_Cloud.
-- The code from the info panel is borrowed from https://github.com/veskuh/Tweetian/blob/sailfish-port/qml/tweetian-harmattan/main.qml
+- The code of the info panel is borrowed from the application Tweetian https://github.com/veskuh/Tweetian/blob/sailfish-port/qml/tweetian-harmattan/main.qml
 
 
