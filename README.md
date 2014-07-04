@@ -1,7 +1,7 @@
-sailfish-diigo
+Bookmark
 ==============
 
-Bookmark manager for sailfish
+Bookmark manager for Sailfish OS.
 
 ## License
 
