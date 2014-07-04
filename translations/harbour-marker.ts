@@ -63,7 +63,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Import from browser</source>
+        <source>Import from default browser</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -86,10 +86,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Open in browser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -99,6 +95,10 @@
     </message>
     <message>
         <source>Recent bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open in default browser</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -123,10 +123,6 @@ Sign in</source>
 </context>
 <context>
     <name>DetailsPage</name>
-    <message>
-        <source>Open in browser</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Edit</source>
         <translation type="unfinished"></translation>
@@ -161,6 +157,10 @@ Sign in</source>
     </message>
     <message>
         <source>Mark as unread</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open in default browser</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -405,11 +405,16 @@ Sign in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pull down to sign in</source>
+        <source>Sign in / Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sign in / Settings</source>
+        <source>Change service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pull down to sign in to
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -417,6 +422,13 @@ Sign in</source>
     <name>TagCloud</name>
     <message>
         <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>harbour-marker</name>
+    <message>
+        <source>Opening in default browser ...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
