@@ -96,7 +96,6 @@ CoverBackground {
             pageStack.clear();
             var page = pageStack.replace(getMainPage());
             page.initialize();
-            success = true;
         }
         return pageStack.currentPage;
     }
