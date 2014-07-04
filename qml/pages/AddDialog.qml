@@ -91,7 +91,7 @@ Dialog {
             }
             MenuItem {
                 id: menuImport
-                text: qsTr("Import from browser")
+                text: qsTr("Import from default browser")
                 onClicked: {
                     var importPage = pageStack.push("ImportPage.qml");
                     importPage.selected.connect(function(browserBookmark){

@@ -29,6 +29,7 @@ Column {
     property alias text: text.text
     property alias font: text.font
     property alias separator: separator.visible
+    property alias color: text.color
 
     spacing: Theme.paddingMedium
 
@@ -45,7 +46,6 @@ Column {
         width: parent.width
         color: Theme.highlightColor
         font.pixelSize: Theme.fontSizeExtraSmall
-        //horizontalAlignment: Text.AlignRight
     }
     Label {
         id: text

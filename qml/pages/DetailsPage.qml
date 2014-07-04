@@ -67,16 +67,15 @@ Page {
     }
 
     SilicaFlickable {
-        id: details
+        id: detailsView
         anchors.fill: parent
         contentHeight: itemColumn.height
 
         PullDownMenu {
             MenuItem {
-                text: qsTr("Open in browser")
+                text: qsTr("Open in default browser")
                 onClicked: {
-                    console.log("opening URL: " + bookmark.href)
-                    Qt.openUrlExternally(bookmark.href)
+                    openInDefaultBrowser(bookmark.href);
                 }
             }
             MenuItem {
@@ -106,8 +105,7 @@ Page {
 
         Column {
             id: itemColumn
-            x: Theme.paddingLarge
-            width: parent.width - 2 * Theme.paddingLarge
+            width: parent.width
             height: childrenRect.height + 2 * Theme.paddingLarge
             spacing: Theme.paddingMedium
 
@@ -128,24 +126,59 @@ Page {
             }
 
             LabelText {
+                anchors {
+                    left: parent.left
+                    margins: Theme.paddingLarge
+                }
                 label: qsTr("Title")
                 text: bookmark.title
                 font.bold: (bookmark.toread !== undefined && bookmark.toread === 'yes')
                 separator: false
             }
-            LabelText {
-                label: qsTr("URL")
-                text: bookmark.href
+            BackgroundItem {
+                id: clickableUrl
+                contentHeight: labelUrl.height
+                height: contentHeight
+                width: detailsView.width
+                anchors {
+                    left: parent.left
+                }
+
+                LabelText {
+                    id: labelUrl
+                    anchors {
+                        left: parent.left
+                        margins: Theme.paddingLarge
+                    }
+                    label: qsTr("URL")
+                    text: bookmark.href
+                    color: clickableUrl.highlighted ? Theme.highlightColor : Theme.primaryColor
+                }
+                onClicked: {
+                    openInDefaultBrowser(bookmark.href);
+                }
             }
             LabelText {
+                anchors {
+                    left: parent.left
+                    margins: Theme.paddingLarge
+                }
                 label: qsTr("Description")
                 text: bookmark.desc
             }
             LabelText {
+                anchors {
+                    left: parent.left
+                    margins: Theme.paddingLarge
+                }
                 label: qsTr("Tags")
                 text: bookmark.tags
             }
             LabelText {
+                anchors {
+                    left: parent.left
+                    margins: Theme.paddingLarge
+                }
                 label: qsTr("Created at")
                 text: Utils.formatTimestamp(bookmark.time)
                 separator: false

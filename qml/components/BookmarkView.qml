@@ -249,7 +249,7 @@ Item {
                         left: parent.left
                         margins: Theme.paddingLarge
                     }
-                    color: Theme.primaryColor
+                    color: wrapper.highlighted ? Theme.highlightColor : Theme.primaryColor
                     font {
                         pixelSize: Theme.fontSizeSmall
                         bold: model.toread === 'yes'
@@ -293,10 +293,9 @@ Item {
                 property variant index
 
                 MenuItem {
-                    text: qsTr("Open in browser")
+                    text: qsTr("Open in default browser")
                     onClicked: {
-                        console.log("opening URL: " + bookmarkModel.get(index).href)
-                        Qt.openUrlExternally(bookmarkModel.get(index).href)
+                        openInDefaultBrowser(bookmarkModel.get(index).href);
                     }
                 }
                 MenuItem {
