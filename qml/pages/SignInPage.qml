@@ -51,6 +51,13 @@ Page {
 
         PullDownMenu {
             MenuItem {
+                text: qsTr("Change service")
+                onClicked: {
+                    pageStack.clear();
+                    pageStack.push(Qt.resolvedUrl("ServicePage.qml"));
+                }
+            }
+            MenuItem {
                 text: qsTr("Sign in / Settings")
                 onClicked: {
                     pageStack.push(getServiceManager().getSettingsDialog());
@@ -65,7 +72,7 @@ Page {
         ViewPlaceholder {
             id: placeHolder
             enabled: true
-            text: qsTr("Pull down to sign in")
+            text: qsTr("Pull down to sign in to\n") + getServiceManager().getServiceName()
         }
     }
 }
