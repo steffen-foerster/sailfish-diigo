@@ -3,7 +3,8 @@ The MIT License (MIT)
 
 Copyright (c) 2014 Steffen Förster
 
-The tag cloud code is written by Justin Armstrong <qtdev@badpint.org> in 2011.
+The tag cloud code is written by Justin Armstrong <qtdev@badpint.org> in 2011
+http://developer.nokia.com/community/wiki/QML_Tag_Cloud
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

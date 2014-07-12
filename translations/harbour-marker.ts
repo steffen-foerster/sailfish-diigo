@@ -66,6 +66,10 @@
         <source>Import from default browser</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Scan QR code</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BookmarkView</name>
@@ -82,10 +86,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add or import bookmark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -99,6 +99,10 @@
     </message>
     <message>
         <source>Open in default browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add bookmark</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -310,6 +314,38 @@ Sign in</source>
     </message>
     <message>
         <source>Cannot remove bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ScanPage</name>
+    <message>
+        <source>No code detected! Try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scanning and processing barcode ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tap on viewfinder to scan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scan QR code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The QR code should be smaller than the red border.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ScanPage_Old</name>
+    <message>
+        <source>Scan in progress!
+
+Use the viewfinder of the camera application to focus on a QR code.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

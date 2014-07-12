@@ -22,35 +22,47 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include "sail_util.h"
-#include "config.h"
-#include <QFile>
+#include <QStandardPaths>
 #include <QDir>
-#include <QTextStream>
+#include <QImage>
+#include "qzxing/qzxing.h"
+#include "BarcodeDecoder.h"
+#include "ImagePostProcessing.h"
 
-SailUtil::SailUtil(QObject *parent) :
-    QObject(parent)
+BarcodeDecoder::BarcodeDecoder(QObject *parent) : QObject(parent)
 {
-}
+    // prepare cache directory
+    QString cacheFolderLocation = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    cacheCaptureLocation = cacheFolderLocation + "/capture_qrcode.jpg";
+    QDir cacheDir(cacheFolderLocation);
 
-QString SailUtil::getApiKey() const {
-#ifndef CONFIG
-#error "Please define API_KEY"
-#else
-    return API_KEY;
-#endif
-}
-
-bool SailUtil::openBrowser(QString url) {
-    return QDesktopServices::openUrl(QUrl(url));
-}
-
-QString SailUtil::getBrowserBookmarks() {
-    QFile file(QDir::home().absolutePath() + "/.local/share/org.sailfishos/sailfish-browser/bookmarks.json");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return "[]";
+    if (!cacheDir.exists()) {
+        cacheDir.mkpath(".");
     }
 
-    QTextStream in(&file);
-    return in.readAll();
+    // ZXing
+    decoder = new QZXing();
+}
+
+BarcodeDecoder::~BarcodeDecoder() {
+    delete decoder;
+    decoder = 0;
+}
+
+QString BarcodeDecoder::getCaptureLocation() const {
+    return cacheCaptureLocation;
+}
+
+QString BarcodeDecoder::decodeBarcodeFromCache() {
+    QImage img(cacheCaptureLocation);
+
+    // improve image to increase decoding result
+    QImage * origin = &img;
+    QImage * improvedImage = ImagePostProcessing::improveImage(origin);
+
+    QVariantHash result = decoder->decodeImageEx((*improvedImage));
+
+    delete improvedImage;
+
+    return result["content"].toString();
 }

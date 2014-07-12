@@ -115,7 +115,7 @@ ApplicationWindow
         id: serviceManager
     }
 
-    // Source: Written by Dickson Leong (Application: Tweetian) - thanks!
+    // infoPanel borrowed from https://github.com/veskuh/Tweetian/blob/sailfish-port/qml/tweetian-harmattan/main.qml - Thanks!
     Rectangle {
         id: infoPanel
 
