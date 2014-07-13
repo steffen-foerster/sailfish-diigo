@@ -20,7 +20,9 @@ QT += dbus \
 SOURCES += src/harbour-marker.cpp \
     src/SailUtil.cpp \
     src/scanner/ImagePostProcessing.cpp \
-    src/scanner/BarcodeDecoder.cpp
+    src/scanner/BarcodeDecoder.cpp \
+    src/scanner/BarcodeScanner.cpp \
+    src/scanner/ScanWorker.cpp
 
 OTHER_FILES += harbour-marker.desktop \
     translations/*.ts \
@@ -70,7 +72,9 @@ HEADERS += \
     src/config.h \
     src/SailUtil.h \
     src/scanner/ImagePostProcessing.h \
-    src/scanner/BarcodeDecoder.h
+    src/scanner/BarcodeDecoder.h \
+    src/scanner/BarcodeScanner.h \
+    src/scanner/ScanWorker.h
 
 # include library qzxing
 include(src/scanner/qzxing/QZXing.pri)
