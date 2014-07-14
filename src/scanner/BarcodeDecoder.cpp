@@ -56,7 +56,7 @@ QString BarcodeDecoder::getCaptureLocation() const {
 QString BarcodeDecoder::decodeBarcodeFromCache() {
     QImage img(cacheCaptureLocation);
 
-    // improve image to increase decoding result
+    // improve image to get better decoding result
     QImage * origin = &img;
     QImage * improvedImage = ImagePostProcessing::improveImage(origin);
 

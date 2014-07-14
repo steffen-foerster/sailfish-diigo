@@ -35,6 +35,10 @@ ApplicationWindow
 
     signal bookmarksUpdated
 
+    function getVersion() {
+        return "0.5.0";
+    }
+
     function setActiveCover() {
         window.cover = Qt.resolvedUrl("cover/CoverPageActive.qml");
     }

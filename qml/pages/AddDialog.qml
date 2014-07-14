@@ -86,20 +86,8 @@ Dialog {
         PullDownMenu {
             MenuItem {
                 id: menuClear
-                text: qsTr("Clear")
+                text: qsTr("Clear fields")
                 onClicked: clearFields()
-            }
-            MenuItem {
-                id: menuScan
-                text: qsTr("Scan QR code")
-                onClicked: {
-                    addPage.state = "SCAN"
-                    var scanPage = pageStack.push("ScanPage.qml");
-                    scanPage.scanned.connect(function(scannedUrl){
-                        clearFields();
-                        href.text = scannedUrl
-                    });
-                }
             }
             MenuItem {
                 id: menuImport
@@ -111,6 +99,18 @@ Dialog {
                         clearFields();
                         href.text = browserBookmark.href
                         title.text = browserBookmark.title
+                    });
+                }
+            }
+            MenuItem {
+                id: menuScan
+                text: qsTr("Scan QR code")
+                onClicked: {
+                    addPage.state = "SCAN"
+                    var scanPage = pageStack.push("ScanPage.qml");
+                    scanPage.scanned.connect(function(scannedUrl){
+                        clearFields();
+                        href.text = scannedUrl
                     });
                 }
             }

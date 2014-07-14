@@ -13,11 +13,38 @@
     </message>
 </context>
 <context>
-    <name>AddDialog</name>
+    <name>AboutPage</name>
     <message>
-        <source>Clear</source>
+        <source>About Bookmark</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Author</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Source code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This application is a bookmark manager with three modes: phone, Pinboard and Diigo. You can choose your preferred mode on the page Settings. A nice feature is the QR code scanner. Bookmark is open source and licensed under the MIT License</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>References</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This project uses code and ideas of other projects, see README.md on Github.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AddDialog</name>
     <message>
         <source>Save</source>
         <translation type="unfinished"></translation>
@@ -68,6 +95,10 @@
     </message>
     <message>
         <source>Scan QR code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear fields</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -335,6 +366,14 @@ Sign in</source>
         <source>The QR code should be smaller than the red border.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Scanning failed (code: %1)! Try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scan in progress!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ScanPage_Old</name>
@@ -427,6 +466,10 @@ Use the viewfinder of the camera application to focus on a QR code.</source>
     </message>
     <message>
         <source>API Token</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

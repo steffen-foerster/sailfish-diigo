@@ -135,6 +135,7 @@ Page {
                 font.bold: (bookmark.toread !== undefined && bookmark.toread === 'yes')
                 separator: false
             }
+
             BackgroundItem {
                 id: clickableUrl
                 contentHeight: labelUrl.height
@@ -158,6 +159,7 @@ Page {
                     openInDefaultBrowser(bookmark.href);
                 }
             }
+
             LabelText {
                 anchors {
                     left: parent.left

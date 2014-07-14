@@ -31,11 +31,11 @@ THE SOFTWARE.
 class ImagePostProcessing {
 
 public:
-    static QImage * improveImage(QImage * origin);
+    static QImage * improveImage(QImage *origin);
 
 private:
-    static QImage * greyScale(QImage * origin);
-    static QImage * sharpen(QImage * origin);
+    static QImage * greyScale(QImage *origin);
+    static QImage * sharpen(QImage *origin);
 
 };
 

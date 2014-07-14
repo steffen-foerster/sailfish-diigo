@@ -89,6 +89,12 @@ Page {
                         }
                         busyIndicator.running = false
                     }
+
+                    onError: {
+                        console.log("scanning failed: ", errorCode)
+                        statusText.text = qsTr("Scanning failed (code: %1)! Try again.").arg(errorCode)
+                        busyIndicator.running = false
+                    }
                 }
 
                 VideoOutput {
@@ -102,6 +108,7 @@ Page {
                     MouseArea {
                         anchors.fill: parent;
                         onClicked: {
+                            statusText.text = qsTr("Scan in progress!")
                             busyIndicator.running = true
                             scanner.startScanning()
                         }
@@ -123,28 +130,6 @@ Page {
                     }
                     color: "transparent"
                 }
-
-                Item {
-                    id: busyIndicator
-
-                    property alias running: busyIndicator.visible
-
-                    anchors.fill: parent
-                    visible: false
-                    z: 10
-
-                    Rectangle {
-                        anchors.fill: parent
-                        color: "transparent"
-                    }
-
-                    BusyIndicator {
-                        visible: busyIndicator.visible
-                        running: visible
-                        anchors.centerIn: parent
-                        size: BusyIndicatorSize.Large
-                    }
-                }
             }
 
             Text {
@@ -164,6 +149,14 @@ Page {
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.Center
                 color: Theme.secondaryHighlightColor
+            }
+
+            BusyIndicator {
+                id: busyIndicator
+                visible: running
+                running: false
+                anchors.horizontalCenter: parent.horizontalCenter
+                size: BusyIndicatorSize.Large
             }
         }
     }

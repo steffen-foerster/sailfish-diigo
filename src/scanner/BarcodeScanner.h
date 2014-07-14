@@ -40,6 +40,7 @@ THE SOFTWARE.
 class BarcodeScanner : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
 
 public:
     BarcodeScanner(QObject *parent = 0);
@@ -50,6 +51,8 @@ public:
 
     Q_INVOKABLE void startScanning();
 
+    Q_ENUMS(ErrorCode)
+
     void processCameraLock();
     void processCapturing();
     void processDecode();
@@ -57,15 +60,24 @@ public:
     // see qdeclarativecamera_p.h
     QObject *mediaObject() { return camera; }
 
+    enum ErrorCode {
+        LockFailed,
+        CameraUnavailable,
+        CaptureFailed,
+        ImageSaveFailed
+    };
+
 signals:
     void captureFinished(const QString &location);
     void decodingFinished(const QString &code);
-    void error(const QString &errorCode);
+    void error(ErrorCode errorCode);
     void mediaObjectChanged();
 
 public slots:
     void slotLockStatusChanged(QCamera::LockStatus status);
     void slotImageSaved();
+    void slotLockFailed();
+    void slotCaptureFailed();
 
 protected:
     // see qdeclarativecamera_p.h

@@ -61,7 +61,8 @@ OTHER_FILES += harbour-marker.desktop \
     qml/services/Services.js \
     qml/services/LocalService.js \
     qml/pages/local/SettingDialog.qml \
-    qml/pages/ScanPage.qml
+    qml/pages/ScanPage.qml \
+    qml/pages/AboutPage.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

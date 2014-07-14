@@ -50,6 +50,9 @@ BarcodeScanner::BarcodeScanner(QObject * parent) : QObject(parent)
 
     connect(imageCapture, SIGNAL(imageSaved(int, QString)), this, SLOT(slotImageSaved()));
 
+    connect(camera, SIGNAL(lockFailed()), this, SLOT(slotLockFailed()));
+    connect(imageCapture, SIGNAL(error(int, QCameraImageCapture::Error, const QString&)), this, SLOT(slotCaptureFailed()));
+
     qDebug() << "end init BarcodeScanner";
 }
 
@@ -71,8 +74,14 @@ void BarcodeScanner::componentComplete() {
 
 void BarcodeScanner::startScanning() {
     if (scanRunning) {
-         qDebug() << "abort: scan is running";
-         return;
+        qDebug() << "abort: scan is running";
+        return;
+    }
+
+    if (camera->availability() != QMultimedia::Available) {
+        qDebug() << "camera is not available";
+        emit error(BarcodeScanner::CameraUnavailable);
+        return;
     }
 
     scanRunning = true;
@@ -124,3 +133,20 @@ void BarcodeScanner::processDecode() {
     scanRunning = false;
     emit decodingFinished(code);
 }
+
+// ------------------------------------------------------------
+// Error handling
+// ------------------------------------------------------------
+
+void BarcodeScanner::slotLockFailed() {
+    qDebug() << "lock failed, " << QThread::currentThread();
+    scanRunning = false;
+    emit error(BarcodeScanner::LockFailed);
+}
+
+void BarcodeScanner::slotCaptureFailed() {
+    qDebug() << "capture failed, " << QThread::currentThread();
+    scanRunning = false;
+    emit error(BarcodeScanner::CaptureFailed);
+}
+

@@ -35,7 +35,7 @@ THE SOFTWARE.
 /**
  * Improves the given image for the decoding process.
  */
-QImage * ImagePostProcessing::improveImage(QImage * origin) {
+QImage * ImagePostProcessing::improveImage(QImage *origin) {
     QImage scaledImage = origin->scaled(640, origin->height(), Qt::KeepAspectRatio, Qt::FastTransformation);
     //scaledImage.save("/home/nemo/.cache/harbour-marker/harbour-marker/scaled.jpg", "JPG");
 
@@ -51,7 +51,7 @@ QImage * ImagePostProcessing::improveImage(QImage * origin) {
 /**
  * Converting the given image to grey scale.
  */
-QImage * ImagePostProcessing::greyScale(QImage * origin){
+QImage * ImagePostProcessing::greyScale(QImage *origin){
     QImage * newImage = new QImage(origin->width(), origin->height(), QImage::Format_ARGB32);
 
     for(int y = 0; y < newImage->height(); y++){
@@ -77,7 +77,7 @@ QImage * ImagePostProcessing::greyScale(QImage * origin){
 /**
  * Sharpening of the given image.
  */
-QImage * ImagePostProcessing::sharpen(QImage * origin){
+QImage * ImagePostProcessing::sharpen(QImage *origin){
     QImage * newImage = new QImage(* origin);
 
     int kernel [5][5]= {{0,0,0,0,0},
