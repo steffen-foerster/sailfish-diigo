@@ -48,7 +48,7 @@ THE SOFTWARE.
 import QtQuick 2.0
 import QtMultimedia 5.0
 import Sailfish.Silica 1.0
-import harbour.marker.BarcodeDecoder 1.0
+import harbour.marker.BarcodeScanner 1.0
 
 // TODO Add error handling code (camera is busy, cature failed, save failed)
 Page {
@@ -75,53 +75,25 @@ Page {
                 width: parent.width * 2/3
                 height: ((parent.width * 2/3) / 3) * 4
 
-                Camera {
-                    id: camera
+                BarcodeScanner {
+                    id: scanner
 
-                    imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
-
-                    exposure {
-                        exposureCompensation: 2.0
-                        exposureMode: Camera.ExposureAuto
-                    }
-
-                    flash.mode: Camera.FlashOff // better results
-
-                    digitalZoom : 3.0
-
-                    focus {
-                        focusMode: Camera.FocusMacro
-                        focusPointMode: Camera.FocusPointCenter
-                    }
-
-                    imageCapture {
-                        onImageSaved: {
-                            console.log("image saved, id: ", requestId, ", location: ", path)
-                            var result = BarcodeDecoder.decodeBarcodeFromCache()
-                            if (result.length > 0) {
-                                pageStack.navigateBack();
-                                scanPage.scanned(result);
-                            }
-                            else {
-                                statusText.text = qsTr("No code detected! Try again.")
-                            }
-                            busyIndicator.running = false
+                    onDecodingFinished: {
+                        console.log("decoding finished, code: ", code)
+                        if (code.length > 0) {
+                            pageStack.navigateBack();
+                            scanPage.scanned(code);
                         }
-                    }
-
-                    onLockStatusChanged: {
-                        console.log("state: " + camera.lockStatus)
-                        if (camera.lockStatus === Camera.Locked) {
-                            statusText.text = qsTr("Scanning and processing barcode ...")
-                            camera.imageCapture.captureToLocation(BarcodeDecoder.captureLocation)
-                            camera.unlock()
+                        else {
+                            statusText.text = qsTr("No code detected! Try again.")
                         }
+                        busyIndicator.running = false
                     }
                 }
 
                 VideoOutput {
                     id: viewFinder
-                    source: camera
+                    source: scanner
                     anchors.fill: parent
                     focus : visible // to receive focus and capture key events when visible
                     fillMode: VideoOutput.PreserveAspectFit
@@ -131,7 +103,7 @@ Page {
                         anchors.fill: parent;
                         onClicked: {
                             busyIndicator.running = true
-                            camera.searchAndLock()
+                            scanner.startScanning()
                         }
                     }
                 }

@@ -34,9 +34,10 @@ THE SOFTWARE.
 
 #include "SailUtil.h"
 #include "scanner/BarcodeDecoder.h"
+#include "scanner/BarcodeScanner.h"
 
 /**
- * @brief The singleton type provider function (callback) to access the BarcodeDecoder from the QML code.
+ * The singleton type provider function (callback) to access the BarcodeDecoder from the QML code.
  */
 static QObject *decoder_singleton_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
@@ -54,6 +55,8 @@ int main(int argc, char *argv[])
     QScopedPointer<SailUtil> sailUtil(new SailUtil(app.data()));
 
     qmlRegisterSingletonType<BarcodeDecoder>("harbour.marker.BarcodeDecoder", 1, 0, "BarcodeDecoder", decoder_singleton_provider);
+
+    qmlRegisterType<BarcodeScanner>("harbour.marker.BarcodeScanner", 1, 0, "BarcodeScanner");
 
     view->rootContext()->setContextProperty("SailUtil", sailUtil.data());
     view->setSource(SailfishApp::pathTo("qml/harbour-marker.qml"));

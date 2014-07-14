@@ -15,14 +15,14 @@ TARGET = harbour-marker
 CONFIG += sailfishapp
 
 QT += dbus \
-    multimedia
+    multimedia \
+    concurrent
 
 SOURCES += src/harbour-marker.cpp \
     src/SailUtil.cpp \
     src/scanner/ImagePostProcessing.cpp \
     src/scanner/BarcodeDecoder.cpp \
-    src/scanner/BarcodeScanner.cpp \
-    src/scanner/ScanWorker.cpp
+    src/scanner/BarcodeScanner.cpp
 
 OTHER_FILES += harbour-marker.desktop \
     translations/*.ts \
@@ -73,8 +73,7 @@ HEADERS += \
     src/SailUtil.h \
     src/scanner/ImagePostProcessing.h \
     src/scanner/BarcodeDecoder.h \
-    src/scanner/BarcodeScanner.h \
-    src/scanner/ScanWorker.h
+    src/scanner/BarcodeScanner.h
 
 # include library qzxing
 include(src/scanner/qzxing/QZXing.pri)

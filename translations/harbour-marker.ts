@@ -324,10 +324,6 @@ Sign in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Scanning and processing barcode ...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Tap on viewfinder to scan</source>
         <translation type="unfinished"></translation>
     </message>
