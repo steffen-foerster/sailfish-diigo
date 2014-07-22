@@ -14,8 +14,15 @@ TARGET = harbour-marker
 
 CONFIG += sailfishapp
 
+QT += dbus \
+    multimedia \
+    concurrent
+
 SOURCES += src/harbour-marker.cpp \
-    src/sail_util.cpp \
+    src/SailUtil.cpp \
+    src/scanner/ImagePostProcessing.cpp \
+    src/scanner/BarcodeDecoder.cpp \
+    src/scanner/BarcodeScanner.cpp
 
 OTHER_FILES += harbour-marker.desktop \
     translations/*.ts \
@@ -53,7 +60,9 @@ OTHER_FILES += harbour-marker.desktop \
     qml/pages/ImportPage.qml \
     qml/services/Services.js \
     qml/services/LocalService.js \
-    qml/pages/local/SettingDialog.qml
+    qml/pages/local/SettingDialog.qml \
+    qml/pages/ScanPage.qml \
+    qml/pages/AboutPage.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line
@@ -62,5 +71,11 @@ CONFIG += sailfishapp_i18n
 
 HEADERS += \
     src/config.h \
-    src/sail_util.h
+    src/SailUtil.h \
+    src/scanner/ImagePostProcessing.h \
+    src/scanner/BarcodeDecoder.h \
+    src/scanner/BarcodeScanner.h
+
+# include library qzxing
+include(src/scanner/qzxing/QZXing.pri)
 

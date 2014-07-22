@@ -47,6 +47,12 @@ Dialog {
 
         PullDownMenu {
             MenuItem {
+                text: qsTr("About")
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("../AboutPage.qml"));
+                }
+            }
+            MenuItem {
                 text: qsTr("Reset to defaults")
                 onClicked: {
                     user.text = ""

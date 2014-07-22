@@ -199,7 +199,7 @@ Item {
                 }
             }
             MenuItem {
-                text: qsTr("Add or import bookmark")
+                text: qsTr("Add bookmark")
                 onClicked: {
                     add();
                 }

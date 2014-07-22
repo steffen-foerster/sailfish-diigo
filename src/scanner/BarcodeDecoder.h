@@ -22,35 +22,46 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include "sail_util.h"
-#include "config.h"
-#include <QFile>
-#include <QDir>
-#include <QTextStream>
+#ifndef BARCODEDECODER_H
+#define BARCODEDECODER_H
 
-SailUtil::SailUtil(QObject *parent) :
-    QObject(parent)
+#include <QObject>
+#include <QString>
+#include "qzxing/qzxing.h"
+
+class BarcodeDecoder : public QObject
 {
-}
+    Q_OBJECT
 
-QString SailUtil::getApiKey() const {
-#ifndef CONFIG
-#error "Please define API_KEY"
-#else
-    return API_KEY;
-#endif
-}
+    Q_PROPERTY(QString captureLocation READ getCaptureLocation)
 
-bool SailUtil::openBrowser(QString url) {
-    return QDesktopServices::openUrl(QUrl(url));
-}
+public:
+    explicit BarcodeDecoder(QObject *parent = 0);
+    virtual ~BarcodeDecoder();
 
-QString SailUtil::getBrowserBookmarks() {
-    QFile file(QDir::home().absolutePath() + "/.local/share/org.sailfishos/sailfish-browser/bookmarks.json");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return "[]";
-    }
+    Q_INVOKABLE QString decodeBarcodeFromCache();
 
-    QTextStream in(&file);
-    return in.readAll();
-}
+    void setDecoderFormat(const int &format);
+    QString getCaptureLocation() const;
+
+    enum CodeFormat {
+        CodeFormat_QR_CODE = 0,
+        CodeFormat_EAN = 1,
+        CodeFormat_UPC = 2,
+        CodeFormat_DATA_MATRIX = 3,
+        CodeFormat_CODE_39_128 = 4,
+        CodeFormat_ITF = 5,
+        CodeFormat_Aztec = 6
+    };
+
+signals:
+
+public slots:
+
+private:
+    QString cacheCaptureLocation;
+    class QZXing *decoder;
+
+};
+
+#endif // BARCODEDECODER_H

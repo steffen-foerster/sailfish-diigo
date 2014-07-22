@@ -73,7 +73,7 @@ Dialog {
         }
     }
 
-    canAccept: (!href.errorHighlight && !desc.errorHighlight)
+    canAccept: (!href.errorHighlight && !title.errorHighlight)
 
     onAccepted: {
         addPage.bookmark = createBookmark();
@@ -86,19 +86,31 @@ Dialog {
         PullDownMenu {
             MenuItem {
                 id: menuClear
-                text: qsTr("Clear")
+                text: qsTr("Clear fields")
                 onClicked: clearFields()
             }
             MenuItem {
                 id: menuImport
                 text: qsTr("Import from default browser")
                 onClicked: {
+                    addPage.state = "IMPORT"
                     var importPage = pageStack.push("ImportPage.qml");
                     importPage.selected.connect(function(browserBookmark){
-                        addPage.state = "IMPORT"
                         clearFields();
                         href.text = browserBookmark.href
                         title.text = browserBookmark.title
+                    });
+                }
+            }
+            MenuItem {
+                id: menuScan
+                text: qsTr("Scan QR code")
+                onClicked: {
+                    addPage.state = "SCAN"
+                    var scanPage = pageStack.push("ScanPage.qml");
+                    scanPage.scanned.connect(function(scannedUrl){
+                        clearFields();
+                        href.text = scannedUrl
                     });
                 }
             }
@@ -177,6 +189,9 @@ Dialog {
         },
         State {
             name: "IMPORT"
+        },
+        State {
+            name: "SCAN"
         }
     ]
 }

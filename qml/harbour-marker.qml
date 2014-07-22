@@ -35,6 +35,10 @@ ApplicationWindow
 
     signal bookmarksUpdated
 
+    function getVersion() {
+        return "0.5.2";
+    }
+
     function setActiveCover() {
         window.cover = Qt.resolvedUrl("cover/CoverPageActive.qml");
     }
@@ -115,7 +119,7 @@ ApplicationWindow
         id: serviceManager
     }
 
-    // Source: Written by Dickson Leong (Application: Tweetian) - thanks!
+    // infoPanel borrowed from https://github.com/veskuh/Tweetian/blob/sailfish-port/qml/tweetian-harmattan/main.qml - Thanks!
     Rectangle {
         id: infoPanel
 

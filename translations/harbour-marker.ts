@@ -13,11 +13,38 @@
     </message>
 </context>
 <context>
-    <name>AddDialog</name>
+    <name>AboutPage</name>
     <message>
-        <source>Clear</source>
+        <source>About Bookmark</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Author</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Source code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This application is a bookmark manager with three modes: phone, Pinboard and Diigo. You can choose your preferred mode on the page Settings. A nice feature is the QR code scanner. Bookmark is open source and licensed under the MIT License</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>References</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This project uses code and ideas of other projects, see README.md on Github.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AddDialog</name>
     <message>
         <source>Save</source>
         <translation type="unfinished"></translation>
@@ -66,6 +93,14 @@
         <source>Import from default browser</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Scan QR code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear fields</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BookmarkView</name>
@@ -82,10 +117,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add or import bookmark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -99,6 +130,10 @@
     </message>
     <message>
         <source>Open in default browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add bookmark</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -314,6 +349,37 @@ Sign in</source>
     </message>
 </context>
 <context>
+    <name>ScanPage</name>
+    <message>
+        <source>No code detected! Try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tap on viewfinder to scan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scanning failed (code: %1)! Try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scan in progress!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please close the Jolla Camera app.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The bar code should be smaller than the red border.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scan QR code</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SearchDialog</name>
     <message>
         <source>Clear</source>
@@ -395,6 +461,10 @@ Sign in</source>
     </message>
     <message>
         <source>API Token</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
