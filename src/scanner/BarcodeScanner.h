@@ -49,12 +49,16 @@ public:
     // see qdeclarativecamera_p.h
     Q_PROPERTY(QObject *mediaObject READ mediaObject NOTIFY mediaObjectChanged SCRIPTABLE false DESIGNABLE false)
 
+    Q_INVOKABLE void setDecoderFormat(const int &format);
     Q_INVOKABLE void startScanning();
 
-    Q_ENUMS(ErrorCode)
+    // page have to stop the camera if application is deactivated
+    Q_INVOKABLE void startCamera();
 
-    void processCameraLock();
-    void processCapturing();
+    Q_ENUMS(ErrorCode)
+    Q_ENUMS(BarcodeDecoder::CodeFormat)
+
+    // must be public, to start in new thread
     void processDecode();
 
     // see qdeclarativecamera_p.h
@@ -64,11 +68,12 @@ public:
         LockFailed,
         CameraUnavailable,
         CaptureFailed,
-        ImageSaveFailed
+        CameraError,
+        JollaCameraRunning
     };
 
 signals:
-    void captureFinished(const QString &location);
+    void cameraStarted();
     void decodingFinished(const QString &code);
     void error(ErrorCode errorCode);
     void mediaObjectChanged();
@@ -76,8 +81,14 @@ signals:
 public slots:
     void slotLockStatusChanged(QCamera::LockStatus status);
     void slotImageSaved();
+
+    void slotDecodingFinished();
     void slotLockFailed();
     void slotCaptureFailed();
+    void slotCameraError(QCamera::Error value);
+    void slotStatusChanged(QCamera::Status status);
+    void slotStateChanged(QCamera::State state);
+
 
 protected:
     // see qdeclarativecamera_p.h
@@ -85,11 +96,14 @@ protected:
     void componentComplete();
 
 private:
+    void createConnections();
+    bool isJollaCameraRunning();
+
     BarcodeDecoder* decoder;
     QCameraImageCapture* imageCapture;
     QCamera* camera;
     bool flagComponentComplete;
-    bool scanRunning;
+    bool flagScanRunning;
 };
 
 #endif // BARCODESCANNER_H

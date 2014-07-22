@@ -51,7 +51,7 @@ Page {
                 label: qsTr("About Bookmark")
                 text: qsTr("This application is a bookmark manager with three modes: phone, Pinboard and Diigo. \
 You can choose your preferred mode on the page Settings. A nice feature is the QR code scanner. \
-Bookmark is open source and licensed under the MIT License")
+Bookmark is open source and licensed under the MIT License.")
                 separator: true
             }
 

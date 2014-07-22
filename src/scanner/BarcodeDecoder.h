@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 #include <QObject>
 #include <QString>
+#include "qzxing/qzxing.h"
 
 class BarcodeDecoder : public QObject
 {
@@ -40,7 +41,18 @@ public:
 
     Q_INVOKABLE QString decodeBarcodeFromCache();
 
+    void setDecoderFormat(const int &format);
     QString getCaptureLocation() const;
+
+    enum CodeFormat {
+        CodeFormat_QR_CODE = 0,
+        CodeFormat_EAN = 1,
+        CodeFormat_UPC = 2,
+        CodeFormat_DATA_MATRIX = 3,
+        CodeFormat_CODE_39_128 = 4,
+        CodeFormat_ITF = 5,
+        CodeFormat_Aztec = 6
+    };
 
 signals:
 

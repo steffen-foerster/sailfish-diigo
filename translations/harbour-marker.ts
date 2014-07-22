@@ -359,14 +359,6 @@ Sign in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Scan QR code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The QR code should be smaller than the red border.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Scanning failed (code: %1)! Try again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -374,13 +366,16 @@ Sign in</source>
         <source>Scan in progress!</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>ScanPage_Old</name>
     <message>
-        <source>Scan in progress!
-
-Use the viewfinder of the camera application to focus on a QR code.</source>
+        <source>Please close the Jolla Camera app.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The bar code should be smaller than the red border.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scan QR code</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

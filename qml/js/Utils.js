@@ -42,7 +42,7 @@ function getUrlFromClipboard(hasText, text) {
     var retval = null
     if (hasText) {
         var urls = text.match(/^http[s]*:\/\/.{3,242}$/);
-        if (urls.length > 0) {
+        if (urls && urls.length > 0) {
             retval = urls[0];
         }
     }

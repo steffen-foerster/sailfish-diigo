@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+#include <QDebug>
 #include <QStandardPaths>
 #include <QDir>
 #include <QImage>
@@ -47,6 +48,34 @@ BarcodeDecoder::BarcodeDecoder(QObject *parent) : QObject(parent)
 BarcodeDecoder::~BarcodeDecoder() {
     delete decoder;
     decoder = 0;
+}
+
+void BarcodeDecoder::setDecoderFormat(const int &format) {
+    qDebug() << "using decoder format: " + format;
+    if (format == CodeFormat_QR_CODE) {
+        decoder->setDecoder(QZXing::DecoderFormat_QR_CODE);
+    }
+    else if (format == CodeFormat_EAN) {
+        decoder->setDecoder(QZXing::DecoderFormat_EAN_8 | QZXing::DecoderFormat_EAN_13);
+    }
+    else if (format == CodeFormat_UPC) {
+        decoder->setDecoder(QZXing::DecoderFormat_UPC_A | QZXing::DecoderFormat_UPC_E);
+    }
+    else if (format == CodeFormat_DATA_MATRIX) {
+        decoder->setDecoder(QZXing::DecoderFormat_DATA_MATRIX);
+    }
+    else if (format == CodeFormat_CODE_39_128) {
+        decoder->setDecoder(QZXing::DecoderFormat_CODE_39 | QZXing::DecoderFormat_CODE_128);
+    }
+    else if (format == CodeFormat_ITF) {
+        decoder->setDecoder(QZXing::DecoderFormat_ITF);
+    }
+    else if (format == CodeFormat_Aztec) {
+        decoder->setDecoder(QZXing::DecoderFormat_Aztec);
+    }
+    else {
+        qDebug() << "unknown decoder format: " + format;
+    }
 }
 
 QString BarcodeDecoder::getCaptureLocation() const {
