@@ -31,15 +31,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This application is a bookmark manager with three modes: phone, Pinboard and Diigo. You can choose your preferred mode on the page Settings. A nice feature is the QR code scanner. Bookmark is open source and licensed under the MIT License</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>References</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This project uses code and ideas of other projects, see README.md on Github.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This application is a bookmark manager with three modes: phone, Pinboard and Diigo. You can choose your preferred mode on the page Settings. A nice feature is the QR code scanner. Bookmark is open source and licensed under the MIT License.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
