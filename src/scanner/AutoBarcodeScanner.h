@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#ifndef BARCODESCANNER_H
-#define BARCODESCANNER_H
+#ifndef AUTOBARCODESCANNER_H
+#define AUTOBARCODESCANNER_H
 
 #include <QCamera>
 #include <QCameraImageCapture>
@@ -37,32 +37,38 @@ THE SOFTWARE.
 #include <QtQml/qqmlparserstatus.h>
 #include "BarcodeDecoder.h"
 
-class BarcodeScanner : public QObject, public QQmlParserStatus
+class AutoBarcodeScanner : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
 
 public:
-    BarcodeScanner(QObject *parent = 0);
-    virtual ~BarcodeScanner();
+    AutoBarcodeScanner(QObject *parent = 0);
+    virtual ~AutoBarcodeScanner();
 
     // see qdeclarativecamera_p.h
     Q_PROPERTY(QObject *mediaObject READ mediaObject NOTIFY mediaObjectChanged SCRIPTABLE false DESIGNABLE false)
 
-    Q_INVOKABLE void setDecoderFormat(const int &format);
-    Q_INVOKABLE void startScanning();
+    Q_INVOKABLE void startScanning(int timeout);
+    Q_INVOKABLE void stopScanning();
+    Q_INVOKABLE bool toggleFlash(bool status);
+    Q_INVOKABLE void zoomTo(qreal digitalZoom);
+    Q_INVOKABLE void setDecoderFormat(int format);
+    Q_INVOKABLE void setViewFinderRect(int x, int y, int width, int height) {
+        m_viewFinderRect = QRect(x, y, width, height);
+    }
 
     // page have to stop the camera if application is deactivated
     Q_INVOKABLE void startCamera();
 
     Q_ENUMS(ErrorCode)
-    Q_ENUMS(BarcodeDecoder::CodeFormat)
+    Q_ENUMS(AutoBarcodeScanner::CodeFormat)
 
     // must be public, to start in new thread
     void processDecode();
 
     // see qdeclarativecamera_p.h
-    QObject *mediaObject() { return camera; }
+    QObject *mediaObject() { return m_camera; }
 
     enum ErrorCode {
         LockFailed,
@@ -79,12 +85,7 @@ signals:
     void mediaObjectChanged();
 
 public slots:
-    void slotLockStatusChanged(QCamera::LockStatus status);
-    void slotImageSaved();
-
-    void slotDecodingFinished();
-    void slotLockFailed();
-    void slotCaptureFailed();
+    void slotScanningTimeout();
     void slotCameraError(QCamera::Error value);
     void slotStatusChanged(QCamera::Status status);
     void slotStateChanged(QCamera::State state);
@@ -97,13 +98,21 @@ protected:
 
 private:
     void createConnections();
+    void createTimer();
     bool isJollaCameraRunning();
 
-    BarcodeDecoder* decoder;
-    QCameraImageCapture* imageCapture;
-    QCamera* camera;
-    bool flagComponentComplete;
-    bool flagScanRunning;
+    BarcodeDecoder* m_decoder;
+    QCameraImageCapture* m_imageCapture;
+    QCamera* m_camera;
+    bool m_flagComponentComplete;
+    bool m_flagScanRunning;
+    bool m_flagScanAbort;
+    QTimer* m_timeoutTimer;
+
+    QMutex m_scanProcessMutex;
+    QWaitCondition m_scanProcessStopped;
+
+    QRect m_viewFinderRect;
 };
 
-#endif // BARCODESCANNER_H
+#endif // AUTOBARCODESCANNER_H

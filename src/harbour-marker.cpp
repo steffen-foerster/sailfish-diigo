@@ -33,8 +33,7 @@ THE SOFTWARE.
 #include <QDebug>
 
 #include "SailUtil.h"
-#include "scanner/BarcodeDecoder.h"
-#include "scanner/BarcodeScanner.h"
+#include "scanner/AutoBarcodeScanner.h"
 
 int main(int argc, char *argv[])
 {
@@ -42,7 +41,7 @@ int main(int argc, char *argv[])
     QScopedPointer<QQuickView> view(SailfishApp::createView());
     QScopedPointer<SailUtil> sailUtil(new SailUtil(app.data()));
 
-    qmlRegisterType<BarcodeScanner>("harbour.marker.BarcodeScanner", 1, 0, "BarcodeScanner");
+    qmlRegisterType<AutoBarcodeScanner>("harbour.marker.AutoBarcodeScanner", 1, 0, "AutoBarcodeScanner");
 
     view->rootContext()->setContextProperty("SailUtil", sailUtil.data());
     view->setSource(SailfishApp::pathTo("qml/harbour-marker.qml"));

@@ -22,7 +22,7 @@ SOURCES += src/harbour-marker.cpp \
     src/SailUtil.cpp \
     src/scanner/ImagePostProcessing.cpp \
     src/scanner/BarcodeDecoder.cpp \
-    src/scanner/BarcodeScanner.cpp
+    src/scanner/AutoBarcodeScanner.cpp
 
 OTHER_FILES += harbour-marker.desktop \
     translations/*.ts \
@@ -61,9 +61,9 @@ OTHER_FILES += harbour-marker.desktop \
     qml/services/Services.js \
     qml/services/LocalService.js \
     qml/pages/local/SettingDialog.qml \
-    qml/pages/ScanPage.qml \
     qml/pages/AboutPage.qml \
-    README.md
+    README.md \
+    qml/pages/AutoScanPage.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line
@@ -75,7 +75,7 @@ HEADERS += \
     src/SailUtil.h \
     src/scanner/ImagePostProcessing.h \
     src/scanner/BarcodeDecoder.h \
-    src/scanner/BarcodeScanner.h
+    src/scanner/AutoBarcodeScanner.h
 
 # include library qzxing
 include(src/scanner/qzxing/QZXing.pri)

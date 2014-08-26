@@ -34,7 +34,7 @@ THE SOFTWARE.
 .import "Bookmark.js" as Bookmark
 .import "../services/Services.js" as Services
 
-var private = {
+var privateScope = {
     getDatabase : function() {
         return Sql.LocalStorage.openDatabaseSync("Bookmark", "1.0", "Database of application Bookmark", 1000000);
     }
@@ -46,7 +46,7 @@ var private = {
 
 function initializeDatabase(defaultSettings) {
     console.log("initializing database");
-    var db = private.getDatabase();
+    var db = privateScope.getDatabase();
     db.transaction(function(tx) {
         initializeSettings(defaultSettings, tx);
         //initializeSearchStore(tx);
@@ -115,14 +115,14 @@ function migrateToVersion2(tx) {
 
 function set(service, key, value) {
     console.debug("saving setting " + key + ", service: " + service);
-    var db = private.getDatabase();
+    var db = privateScope.getDatabase();
     db.transaction(function (tx) {
         tx.executeSql('INSERT OR REPLACE INTO settings VALUES(?, ?, ?);', [service, key, value]);
     });
 }
 
 function get(service, key) {
-    var db = private.getDatabase();
+    var db = privateScope.getDatabase();
     var retval = undefined;
     db.transaction(function (tx) {
         var res = tx.executeSql('SELECT value FROM settings WHERE service = ? AND key = ?;', [service, key]);
@@ -142,7 +142,7 @@ function get(service, key) {
 
 function savePinboardBookmarks(bookmarks) {
     console.log("Saving PINBOARD bookmarks ...");
-    var db = private.getDatabase();
+    var db = privateScope.getDatabase();
     db.transaction(function (tx) {
         var res = tx.executeSql('DELETE FROM bookmark WHERE service = ?;', [Services.PINBOARD]);
         console.log("Deleted posts: ", res.rowsAffected);
@@ -163,7 +163,7 @@ function savePinboardBookmarks(bookmarks) {
 
 function saveDiigoBookmarks(bookmarks) {
     console.log("Saving DIIGO bookmarks ...");
-    var db = private.getDatabase();
+    var db = privateScope.getDatabase();
     db.transaction(function (tx) {
         var res = tx.executeSql('DELETE FROM bookmark WHERE service = ?;', [Services.DIIGO]);
         console.log("Deleted bookmarks: ", res.rowsAffected);
@@ -185,7 +185,7 @@ function saveDiigoBookmarks(bookmarks) {
 
 // A bookmark with the same URL will be replaced.
 function addOrUpdateBookmark(bookmark, service) {
-    var db = private.getDatabase();
+    var db = privateScope.getDatabase();
     db.transaction(function (tx) {
         var time = bookmark.time ? bookmark.time : new Date().toISOString()
         tx.executeSql('INSERT OR REPLACE INTO bookmark' +
@@ -196,7 +196,7 @@ function addOrUpdateBookmark(bookmark, service) {
 }
 
 function deleteBookmark(href, service) {
-    var db = private.getDatabase();
+    var db = privateScope.getDatabase();
     db.transaction(function (tx) {
         var res = tx.executeSql('DELETE FROM bookmark WHERE href = ? AND service = ?;', [href, service]);
         console.log("Deleted bookmarks: ", res.rowsAffected);
@@ -204,7 +204,7 @@ function deleteBookmark(href, service) {
 }
 
 function fetchRecentBookmarks(count, service) {
-    var db = private.getDatabase();
+    var db = privateScope.getDatabase();
     var retval = [];
     db.transaction(function (tx) {
         var res = tx.executeSql('SELECT * FROM bookmark WHERE service = ? ORDER BY time DESC LIMIT ?;', [service, count]);
@@ -214,7 +214,7 @@ function fetchRecentBookmarks(count, service) {
 }
 
 function searchBookmarks(criteria, service) {
-    var db = private.getDatabase();
+    var db = privateScope.getDatabase();
     var retval = [];
     db.transaction(function (tx) {
         var res = tx.executeSql(createSearchQuery(criteria, service));
@@ -283,7 +283,7 @@ function addCondition(where, condition, operator) {
 }
 
 function getTags(service) {
-    var db = private.getDatabase();
+    var db = privateScope.getDatabase();
     var retval = [];
     db.transaction(function (tx) {
         var tagsToCount = {};
@@ -322,7 +322,7 @@ function getTags(service) {
 // ------------------------------------------------------------
 
 function saveSearch(name, criteria) {
-    var db = private.getDatabase();
+    var db = privateScope.getDatabase();
     db.transaction(function (tx) {
         var res = tx.executeSql('DELETE FROM search WHERE LOWER(name) = ?;', [name.toLowerCase()]);
         if (res.rowsAffected > 0) {
@@ -336,7 +336,7 @@ function saveSearch(name, criteria) {
 }
 
 function getSavedSearches() {
-    var db = private.getDatabase();
+    var db = privateScope.getDatabase();
     var retval = [];
     db.transaction(function (tx) {
         var res = tx.executeSql('SELECT * FROM search ORDER BY name');

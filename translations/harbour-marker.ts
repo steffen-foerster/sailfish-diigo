@@ -103,6 +103,41 @@
     </message>
 </context>
 <context>
+    <name>AutoScanPage</name>
+    <message>
+        <source>Scan in progress for %1 seconds!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No code detected! Try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please close the Jolla Camera app.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scanning failed (code: %1)! Try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About CodeReader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BookmarkView</name>
     <message>
         <source>Settings</source>

@@ -107,7 +107,7 @@ Dialog {
                 text: qsTr("Scan QR code")
                 onClicked: {
                     addPage.state = "SCAN"
-                    var scanPage = pageStack.push("ScanPage.qml");
+                    var scanPage = pageStack.push("AutoScanPage.qml");
                     scanPage.scanned.connect(function(scannedUrl){
                         clearFields();
                         href.text = scannedUrl
