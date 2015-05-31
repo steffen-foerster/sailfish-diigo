@@ -94,10 +94,10 @@ function addBookmark(bookmark, onSuccess, onFailure) {
         toread: bookmark.toread,
         format: "json"
     }
-    if (bookmark.tags !== undefined && bookmark.tags.length > 0) {
+    if (bookmark.tags !== undefined && bookmark.tags !== null && bookmark.tags.length > 0) {
         queryParams.tags = bookmark.tags;
     }
-    if (bookmark.desc !== undefined && bookmark.desc.length > 0) {
+    if (bookmark.desc !== undefined && bookmark.desc !== null && bookmark.desc.length > 0) {
         queryParams.extended = bookmark.desc;
     }
 
@@ -121,10 +121,10 @@ function updateBookmark(bookmark, onSuccess, onFailure) {
         dt: bookmark.time,
         format: "json"
     }
-    if (bookmark.tags !== undefined && bookmark.tags.length > 0) {
+    if (bookmark.tags !== undefined && bookmark.tags !== null && bookmark.tags.length > 0) {
         queryParams.tags = bookmark.tags;
     }
-    if (bookmark.desc !== undefined && bookmark.desc.length > 0) {
+    if (bookmark.desc !== undefined && bookmark.desc !== null && bookmark.desc.length > 0) {
         queryParams.extended = bookmark.desc;
     }
 

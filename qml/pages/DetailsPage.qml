@@ -132,7 +132,7 @@ Page {
                 }
                 label: qsTr("Title")
                 text: bookmark.title
-                font.bold: (bookmark.toread !== undefined && bookmark.toread === 'yes')
+                font.bold: bookmark.toread === 'yes'
                 separator: false
             }
 
@@ -166,7 +166,7 @@ Page {
                     margins: Theme.paddingLarge
                 }
                 label: qsTr("Description")
-                text: bookmark.desc
+                text: Utils.getBlankIfNull(bookmark.desc)
             }
             LabelText {
                 anchors {
@@ -174,7 +174,7 @@ Page {
                     margins: Theme.paddingLarge
                 }
                 label: qsTr("Tags")
-                text: bookmark.tags
+                text: Utils.getBlankIfNull(bookmark.tags)
             }
             LabelText {
                 anchors {

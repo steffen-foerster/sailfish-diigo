@@ -83,7 +83,6 @@ Dialog {
 
             DialogHeader {
                 acceptText: qsTr("Save")
-                title: qsTr("Edit bookmark")
             }
 
             TextField {
@@ -112,7 +111,7 @@ Dialog {
             }
             TextField {
                 id: tags
-                text: bookmark.tags
+                text: Utils.getBlankIfNull(bookmark.tags)
                 placeholderText: qsTr("Tags, separated by space")
                 label: qsTr("Tags, separated by space")
                 width: column.width
@@ -123,7 +122,7 @@ Dialog {
             }
             TextField {
                 id: desc
-                text: bookmark.desc
+                text: Utils.getBlankIfNull(bookmark.desc)
                 placeholderText: qsTr("Description")
                 label: qsTr("Description")
                 width: column.width
@@ -133,13 +132,13 @@ Dialog {
             }
             TextSwitch {
                 id: shared
-                checked: (bookmark.shared !== undefined && bookmark.shared === "yes")
+                checked: (bookmark.shared === "yes")
                 text: qsTr("Public")
                 description: qsTr("Save the bookmark as public")
             }
             TextSwitch {
                 id: toread
-                checked: (bookmark.toread !== undefined && bookmark.toread === "yes")
+                checked: (bookmark.toread === "yes")
                 text: qsTr("Read Later")
                 description: qsTr("The bookmark is \"unread\"");
             }

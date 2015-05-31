@@ -36,7 +36,7 @@ ApplicationWindow
     signal bookmarksUpdated
 
     function getVersion() {
-        return "0.5.3";
+        return "0.5.4";
     }
 
     function setActiveCover() {

@@ -99,15 +99,15 @@ function isSignedIn(appContext) {
     if (appContext.service === Services.DIIGO) {
         var user = get(appContext.service, keys.USER);
         var password = getPassword(appContext);
-        var hasUser = (user !== undefined && user.length > 0);
+        var hasUser = (user !== undefined && user !== null && user.length > 0);
         console.log("hasUser: " + hasUser);
-        var hasPassword = (password !== undefined && password.length > 0);
+        var hasPassword = (password !== undefined && password !== null && password.length > 0);
         console.log("hasPassword: " + hasPassword);
         retval = hasUser && hasPassword;
     }
     else if (appContext.service === Services.PINBOARD) {
         var apiKey = get(appContext.service, keys.API_KEY);
-        retval = (apiKey !== undefined && apiKey.length > 0);
+        retval = (apiKey !== undefined && apiKey !== null && apiKey.length > 0);
     }
     else if (appContext.service === Services.LOCAL) {
         retval = true;

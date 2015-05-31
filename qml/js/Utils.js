@@ -25,7 +25,7 @@ THE SOFTWARE.
 .pragma library
 
 function crop(value, maxLength) {
-    if (value !== undefined && value.length > maxLength) {
+    if (value !== undefined && value !== null && value.length > maxLength) {
         return value.substr(0, maxLength);
     }
     else {
@@ -63,4 +63,12 @@ function spaceToCommaSeparated(tags) {
         retval = tags.replace(/ /g, ",");
     }
     return retval;
+}
+
+function getBlankIfNull(strValue) {
+    return (strValue === null || strValue === undefined) ? "" : strValue;
+}
+
+function getZeroIfNull(numValue) {
+    return (numValue === null || numValue === undefined) ? 0 : numValue;
 }

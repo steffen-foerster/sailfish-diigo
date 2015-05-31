@@ -26,6 +26,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 import "../../js/Settings.js" as Settings
+import "../../js/Utils.js" as Utils
 
 /**
  * Service: Diigo
@@ -43,7 +44,7 @@ Dialog {
 
     SilicaFlickable {
         anchors.fill: parent
-        contentHeight: column.height
+        contentHeight: header.height + column.height
 
         PullDownMenu {
             MenuItem {
@@ -70,17 +71,17 @@ Dialog {
             }
         }
 
+        DialogHeader {
+            id: header
+            acceptText: qsTr("Save")
+        }
+
         Column {
             id: column
 
             width: parent.width
             spacing: Theme.paddingMedium
-
-            DialogHeader {
-                id: header
-                acceptText: qsTr("Save")
-                title: qsTr("Settings")
-            }
+            anchors.top: header.bottom
 
             TextField {
                 id: user
@@ -90,7 +91,7 @@ Dialog {
                 EnterKey.enabled: text.length > 0
                 EnterKey.iconSource: "image://theme/icon-m-enter-next"
                 EnterKey.onClicked: password.focus = true
-                text: Settings.get(getAppContext().service, Settings.keys.USER)
+                text: Utils.getBlankIfNull(Settings.get(getAppContext().service, Settings.keys.USER))
             }
 
             TextField {
@@ -102,12 +103,12 @@ Dialog {
                 EnterKey.enabled: text.length > 0
                 EnterKey.iconSource: "image://theme/icon-m-enter-close"
                 EnterKey.onClicked: focus = false
-                text: Settings.getPassword(getAppContext())
+                text: Utils.getBlankIfNull(Settings.getPassword(getAppContext()))
             }
 
             Label {
                 anchors {
-                    right: header.right
+                    right: password.right
                     rightMargin: Theme.paddingLarge
                 }
                 text: qsTr("Note: It's comfortable but not secure")
@@ -132,7 +133,7 @@ Dialog {
                 maximumValue: 100
                 stepSize: 5
                 valueText: value
-                value: Settings.get(getAppContext().service, Settings.keys.COUNT_RECENT_BOOKMARKS)
+                value: Utils.getZeroIfNull(Settings.get(getAppContext().service, Settings.keys.COUNT_RECENT_BOOKMARKS))
             }
         }
     }

@@ -86,10 +86,10 @@ function addBookmark(bookmark, onSuccess, onFailure, appContext) {
         shared: bookmark.shared,
         readLater: bookmark.toread
     }
-    if (bookmark.tags !== undefined && bookmark.tags.length > 0) {
+    if (bookmark.tags !== undefined && bookmark.tags !== null && bookmark.tags.length > 0) {
         queryParams.tags = Utils.spaceToCommaSeparated(bookmark.tags);
     }
-    if (bookmark.desc !== undefined && bookmark.desc.length > 0) {
+    if (bookmark.desc !== undefined && bookmark.desc !== null && bookmark.desc.length > 0) {
         queryParams.desc = bookmark.desc;
     }
 
@@ -114,10 +114,10 @@ function updateBookmark(bookmark, onSuccess, onFailure, appContext) {
         shared: bookmark.shared,
         readLater: bookmark.toread
     }
-    if (bookmark.tags !== undefined && bookmark.tags.length > 0) {
+    if (bookmark.tags !== undefined && bookmark.tags !== null && bookmark.tags.length > 0) {
         queryParams.tags = Utils.spaceToCommaSeparated(bookmark.tags);
     }
-    if (bookmark.desc !== undefined && bookmark.desc.length > 0) {
+    if (bookmark.desc !== undefined && bookmark.desc !== null && bookmark.desc.length > 0) {
         queryParams.desc = bookmark.desc;
     }
 

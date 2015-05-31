@@ -124,7 +124,6 @@ Dialog {
 
             DialogHeader {
                 acceptText: qsTr("Save")
-                title: qsTr("Add bookmark")
             }
 
             TextField {

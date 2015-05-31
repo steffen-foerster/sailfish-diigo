@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.1">
 <context>
     <name></name>
     <message id="Recent bookmarks">
@@ -47,10 +47,6 @@
     <name>AddDialog</name>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -257,10 +253,6 @@ Sign in</source>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -472,10 +464,6 @@ Sign in</source>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

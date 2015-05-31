@@ -26,6 +26,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 import "../../js/Settings.js" as Settings
+import "../../js/Utils.js" as Utils
 
 /**
  * Page to save user settings for Pinboard service.
@@ -72,7 +73,6 @@ Dialog {
             DialogHeader {
                 id: header
                 acceptText: qsTr("Save")
-                title: qsTr("Settings")
             }
 
             Button {
@@ -99,7 +99,7 @@ Dialog {
                     EnterKey.enabled: text.length > 0
                     EnterKey.iconSource: "image://theme/icon-m-enter-close"
                     EnterKey.onClicked: focus = false
-                    text: Settings.get(getAppContext().service, Settings.keys.API_KEY)
+                    text: Utils.getBlankIfNull(Settings.get(getAppContext().service, Settings.keys.API_KEY))
                 }
 
                 Slider {
@@ -110,7 +110,7 @@ Dialog {
                     maximumValue: 100
                     stepSize: 5
                     valueText: value
-                    value: Settings.get(getAppContext().service, Settings.keys.COUNT_RECENT_BOOKMARKS)
+                    value: Utils.getZeroIfNull(Settings.get(getAppContext().service, Settings.keys.COUNT_RECENT_BOOKMARKS))
                 }
             }
         }
