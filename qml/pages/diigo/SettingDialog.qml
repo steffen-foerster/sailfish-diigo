@@ -127,7 +127,7 @@ Dialog {
 
             Slider {
                 id: recentBookmarks
-                label: qsTrId("Recent bookmarks")
+                label: qsTr("Recent bookmarks")
                 width: parent.width
                 minimumValue: 5
                 maximumValue: 100

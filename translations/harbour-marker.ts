@@ -2,17 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
-    <name></name>
-    <message id="Recent bookmarks">
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message id="Returned bookmarks">
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>AboutPage</name>
     <message>
         <source>About Bookmark</source>
@@ -428,6 +417,10 @@ Sign in</source>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Returned bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ServicePage</name>
@@ -488,6 +481,10 @@ Sign in</source>
     </message>
     <message>
         <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recent bookmarks</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

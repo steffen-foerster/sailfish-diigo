@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="1">
-    <paths>
-        <dir name="F:/sailfish-apps/diigo/src"/>
-    </paths>
-    <libraries>
-        <library>qt</library>
-    </libraries>
-</project>

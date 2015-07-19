@@ -110,7 +110,7 @@ Dialog {
             }
             Slider {
                 id: count
-                label: qsTrId("Returned bookmarks")
+                label: qsTr("Returned bookmarks")
                 width: parent.width
                 minimumValue: 5
                 maximumValue: 50
