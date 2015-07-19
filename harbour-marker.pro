@@ -68,7 +68,8 @@ OTHER_FILES += harbour-marker.desktop \
 # to disable building translations every time, comment out the
 # following CONFIG line
 CONFIG += sailfishapp_i18n
-#TRANSLATIONS += translations/harbour-marker-de.ts
+
+TRANSLATIONS += translations/harbour-marker-sv.ts
 
 HEADERS += \
     src/config.h \

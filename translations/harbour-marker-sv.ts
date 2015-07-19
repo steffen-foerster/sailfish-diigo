@@ -173,8 +173,13 @@
     <message>
         <source>Bookmark 
 Sign in</source>
-        <translation>Bokmärke 
+        <translation type="vanished">Bokmärke 
 Logga in</translation>
+    </message>
+    <message>
+        <source>Bookmark
+Sign in</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -525,4 +530,3 @@ Logga in</translation>
     </message>
 </context>
 </TS>
-

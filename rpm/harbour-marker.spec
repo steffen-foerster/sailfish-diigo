@@ -13,7 +13,7 @@ Name:       harbour-marker
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Native client for bookmark services Diigo and Pinboard
-Version:    0.5.4
+Version:    0.5.5
 Release:    1
 Group:      Qt/Qt
 License:    The MIT License (MIT)
