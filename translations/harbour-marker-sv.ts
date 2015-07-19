@@ -2,17 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="sv">
 <context>
-    <name></name>
-    <message id="Recent bookmarks">
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message id="Returned bookmarks">
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>AboutPage</name>
     <message>
         <source>About Bookmark</source>
@@ -182,9 +171,9 @@
 <context>
     <name>CoverPageInactive</name>
     <message>
-        <source>Bookmark
+        <source>Bookmark 
 Sign in</source>
-        <translation>Bokmärke
+        <translation>Bokmärke 
 Logga in</translation>
     </message>
 </context>
@@ -429,6 +418,10 @@ Logga in</translation>
         <source>Description</source>
         <translation>Beskrivning</translation>
     </message>
+    <message>
+        <source>Returned bookmarks</source>
+        <translation>Returnerade bokmärken</translation>
+    </message>
 </context>
 <context>
     <name>ServicePage</name>
@@ -491,6 +484,10 @@ Logga in</translation>
         <source>About</source>
         <translation>Om</translation>
     </message>
+    <message>
+        <source>Recent bookmarks</source>
+        <translation>Nyligen använda bokmärken</translation>
+    </message>
 </context>
 <context>
     <name>SignInPage</name>
@@ -528,3 +525,4 @@ Logga in</translation>
     </message>
 </context>
 </TS>
+
